@@ -4,24 +4,7 @@ import { CompanyCarousel } from "@/components/home/CompanyCarousel";
 import HeroSection from "@/components/home/HeroSection";
 import JobList from "@/components/home/JobList";
 import NewsletterSection from "@/components/home/NewsletterSection";
-
-// Metadata cho SEO trong React 19
-export const metadata = {
-  title: "HiRise - Nền tảng tuyển dụng IT hàng đầu Việt Nam",
-  description:
-    "Kết nối với hàng nghìn cơ hội việc làm IT từ các công ty công nghệ hàng đầu tại Việt Nam. Tìm kiếm công việc trong lĩnh vực ReactJS, Java, Python, DevOps và nhiều vị trí khác.",
-  keywords:
-    "tuyển dụng IT, việc làm IT, tuyển dụng lập trình viên, cơ hội việc làm công nghệ, frontend developer, backend developer, fullstack, HiRise",
-  openGraph: {
-    title: "HiRise - Nền tảng tuyển dụng IT hàng đầu Việt Nam",
-    description:
-      "Kết nối với hàng nghìn cơ hội việc làm IT từ các công ty công nghệ hàng đầu tại Việt Nam.",
-    image: "/og-image.png",
-    url: "https://hirise.vn",
-    type: "website",
-  },
-  canonical: "https://hirise.vn",
-};
+import { homeMetadata } from "./homeMetadata";
 
 // Dữ liệu mẫu (thực tế sẽ được lấy từ API/Redux/Context)
 const jobsData = [
@@ -169,7 +152,7 @@ const companiesData = [
 const HomePage: React.FC = () => {
   // Cập nhật title cho trang - React 19 approach
   useEffect(() => {
-    document.title = metadata.title;
+    document.title = homeMetadata.title;
   }, []);
 
   return (

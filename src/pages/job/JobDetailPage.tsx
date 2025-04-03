@@ -14,22 +14,8 @@ import {
 import { Link, useParams } from "react-router-dom";
 import JobCarousel from "@/components/job/JobCarousel";
 import { Button } from "@/components/ui/button";
-
-// Metadata cho SEO trong React 19
-export const metadata = {
-  title: "Chi tiết công việc | HiRise",
-  description:
-    "Tìm hiểu chi tiết về công việc IT và ứng tuyển ngay tại HiRise - Nền tảng tuyển dụng IT hàng đầu tại Việt Nam.",
-  keywords: "chi tiết công việc, ứng tuyển IT, việc làm công nghệ, tuyển dụng IT, HiRise",
-  openGraph: {
-    title: "Chi tiết công việc | HiRise",
-    description: "Tìm hiểu chi tiết về công việc IT và ứng tuyển ngay tại HiRise.",
-    image: "/og-image.png",
-    url: "https://hirise.vn/jobs",
-    type: "website",
-  },
-  canonical: "https://hirise.vn/jobs",
-};
+// Import metadata từ file riêng biệt
+import { jobDetailMetadata } from "./jobDetailMetadata";
 
 // Mẫu dữ liệu (sau này sẽ được lấy từ API)
 const jobsData = [
@@ -184,19 +170,22 @@ const JobDetailPage: React.FC = () => {
     if (jobDetail) {
       document.title = `${jobDetail.title} - ${jobDetail.company} | HiRise`;
 
+      // Sử dụng metadata từ file riêng trong trường hợp không có dữ liệu chi tiết
+      const metaDescriptionContent = `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. ${jobDetail.basicRequirements[0]}`;
+
       // Tạo meta description
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
         metaDescription.setAttribute(
           "content",
-          `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. ${jobDetail.basicRequirements[0]}`,
+          metaDescriptionContent || jobDetailMetadata.description,
         );
       } else {
         const newMetaDescription = document.createElement("meta");
         newMetaDescription.setAttribute("name", "description");
         newMetaDescription.setAttribute(
           "content",
-          `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. ${jobDetail.basicRequirements[0]}`,
+          metaDescriptionContent || jobDetailMetadata.description,
         );
         document.head.appendChild(newMetaDescription);
       }
@@ -378,12 +367,12 @@ const JobDetailPage: React.FC = () => {
           {/* 2. Chi tiết công việc */}
           <div className="lg:col-span-2">
             <div className="mb-8 rounded-xl bg-white p-6 shadow-md lg:p-8">
-              <h2 className="mb-6 text-2xl font-bold">Mô tả công việc</h2>
+              <h2 className="mb-6 text-2xl font-bold">Job Description</h2>
 
               {/* Responsibilities */}
               <div className="mb-8">
                 <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
-                  <span className="text-primary inline-block">📌</span> Trách nhiệm công việc
+                  <span className="text-primary inline-block">📌</span> Responsibilities
                 </h3>
                 <ul className="ml-6 list-disc space-y-2">
                   {job.responsibilities.map((item: string, index: number) => (
@@ -397,7 +386,7 @@ const JobDetailPage: React.FC = () => {
               {/* Requirements */}
               <div className="mb-8">
                 <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
-                  <span className="text-primary inline-block">📌</span> Yêu cầu
+                  <span className="text-primary inline-block">📌</span> Requirements
                 </h3>
 
                 <h4 className="mb-2 font-medium">Basic Requirements (Yêu cầu cơ bản):</h4>
@@ -424,7 +413,7 @@ const JobDetailPage: React.FC = () => {
               {/* Benefits */}
               <div>
                 <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
-                  <span className="text-primary inline-block">📌</span> Quyền lợi
+                  <span className="text-primary inline-block">📌</span> Benefits
                 </h3>
                 <ul className="ml-6 list-disc space-y-2">
                   {job.benefits.map((item: string, index: number) => (
