@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   Pagination,
   PaginationContent,
@@ -31,7 +31,7 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   //số lượng job hiển thị trên mỗi trang
   const jobsPerPage = 4;
-  
+
   const indexOfLastJob = currentPage * jobsPerPage;
   const indexOfFirstJob = indexOfLastJob - jobsPerPage;
   const currentJobs = jobs.slice(indexOfFirstJob, indexOfLastJob);

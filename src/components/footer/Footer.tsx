@@ -37,7 +37,7 @@ export function Footer() {
               </a>
             </div>
           </div>
-          
+
           {/* Phần các menu - đặt sang phải với md:col-span-3 */}
           <div className="md:col-span-3 md:pl-16">
             {/* Dùng flex để căn các cột menu ngang */}
@@ -83,7 +83,9 @@ export function Footer() {
 
               {/* Menu Nhà tuyển dụng - vẫn giữ căn trái văn bản */}
               <div>
-                <h3 className="text-foreground mb-3 text-sm font-semibold">Dành cho nhà tuyển dụng</h3>
+                <h3 className="text-foreground mb-3 text-sm font-semibold">
+                  Dành cho nhà tuyển dụng
+                </h3>
                 <ul className="space-y-2">
                   <li>
                     <Link

@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import JobCard from "@/components/home/JobCard";
 import {
   Carousel,
   CarouselContent,
@@ -6,7 +7,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import JobCard from "@/components/home/JobCard";
 
 interface Job {
   id: number;
@@ -25,7 +25,7 @@ interface JobCarouselProps {
 
 const JobCarousel: React.FC<JobCarouselProps> = ({ jobs }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
-  
+
   return (
     <Carousel
       ref={carouselRef}

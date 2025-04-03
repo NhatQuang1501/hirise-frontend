@@ -1,6 +1,6 @@
 import React from "react";
+import { Briefcase, DollarSign, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
-import { DollarSign, MapPin, Briefcase } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface JobCardProps {
@@ -77,7 +77,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
       {/* Phần button - luôn nằm dưới cùng */}
       <div className="mt-5 pt-3">
-        <Button variant="outline" size="lg" className="w-full hover:bg-secondary">
+        <Button variant="outline" size="lg" className="hover:bg-secondary w-full">
           Ứng tuyển ngay
         </Button>
       </div>

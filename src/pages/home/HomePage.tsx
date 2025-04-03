@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
+import BenefitsSection from "@/components/home/BenefitsSection";
+import { CompanyCarousel } from "@/components/home/CompanyCarousel";
 import HeroSection from "@/components/home/HeroSection";
 import JobList from "@/components/home/JobList";
-import { CompanyCarousel } from "@/components/home/CompanyCarousel";
-import BenefitsSection from "@/components/home/BenefitsSection";
 import NewsletterSection from "@/components/home/NewsletterSection";
 
 // Metadata cho SEO trong React 19
