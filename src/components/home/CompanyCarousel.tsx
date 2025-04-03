@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import {
   Carousel,
   CarouselContent,
@@ -10,13 +10,13 @@ import {
 } from "@/components/ui/carousel";
 
 interface CompanyCardProps {
-	company: {
-	  id: number;
-	  name: string;
-	  logo: string;
-	  jobCount: string;
-	  industry: string;
-	};
+  company: {
+    id: number;
+    name: string;
+    logo: string;
+    jobCount: string;
+    industry: string;
+  };
 }
 
 interface Company {
@@ -51,8 +51,6 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({ company }) => {
     </Link>
   );
 };
-  
-
 
 export const CompanyCarousel: React.FC<CompanyCarouselProps> = ({ companies }) => {
   return (

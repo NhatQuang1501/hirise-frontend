@@ -14,24 +14,35 @@ const HeroSection: React.FC = () => {
             <p className="mb-6 text-lg text-gray-600 md:text-xl">
               Kết nối bạn với hàng nghìn công việc từ những công ty công nghệ hàng đầu.
             </p>
-            
+
             <SearchBox />
-            
+
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <p>Phổ biến:</p>
               <div className="flex flex-wrap gap-2">
-                <Link to="/jobs?q=react" className="hover:text-primary">ReactJS</Link>,
-                <Link to="/jobs?q=java" className="hover:text-primary">Java</Link>,
-                <Link to="/jobs?q=python" className="hover:text-primary">Python</Link>,
-                <Link to="/jobs?q=devops" className="hover:text-primary">DevOps</Link>
+                <Link to="/jobs?q=react" className="hover:text-primary">
+                  ReactJS
+                </Link>
+                ,
+                <Link to="/jobs?q=java" className="hover:text-primary">
+                  Java
+                </Link>
+                ,
+                <Link to="/jobs?q=python" className="hover:text-primary">
+                  Python
+                </Link>
+                ,
+                <Link to="/jobs?q=devops" className="hover:text-primary">
+                  DevOps
+                </Link>
               </div>
             </div>
           </div>
-          
+
           <div className="hidden md:flex md:items-center md:justify-center">
-            <img 
-              src="/hero-image.svg" 
-              alt="IT Jobs Illustration" 
+            <img
+              src="/hero-image.svg"
+              alt="IT Jobs Illustration"
               className="max-w-md"
               loading="eager"
             />

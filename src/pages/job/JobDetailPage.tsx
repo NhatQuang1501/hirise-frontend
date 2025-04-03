@@ -1,34 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { useParams, Link } from "react-router-dom";
-import { 
-  MapPin, 
-  Clock, 
-  Award, 
-  Briefcase, 
-  Phone, 
-  Video, 
-  CheckCircle, 
-  Calendar, 
+import {
+  Award,
+  Briefcase,
+  Building,
+  Calendar,
+  CheckCircle,
+  Clock,
   Heart,
-  Building 
+  MapPin,
+  Phone,
+  Video,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Link, useParams } from "react-router-dom";
 import JobCarousel from "@/components/job/JobCarousel";
-
-// Metadata cho SEO trong React 19
-export const metadata = {
-  title: "Chi tiết công việc | HiRise",
-  description: "Tìm hiểu chi tiết về công việc IT và ứng tuyển ngay tại HiRise - Nền tảng tuyển dụng IT hàng đầu tại Việt Nam.",
-  keywords: "chi tiết công việc, ứng tuyển IT, việc làm công nghệ, tuyển dụng IT, HiRise",
-  openGraph: {
-    title: "Chi tiết công việc | HiRise",
-    description: "Tìm hiểu chi tiết về công việc IT và ứng tuyển ngay tại HiRise.",
-    image: "/og-image.png",
-    url: "https://hirise.vn/jobs",
-    type: "website",
-  },
-  canonical: "https://hirise.vn/jobs",
-};
+import { Button } from "@/components/ui/button";
+// Import metadata từ file riêng biệt
+import { jobDetailMetadata } from "./jobDetailMetadata";
 
 // Mẫu dữ liệu (sau này sẽ được lấy từ API)
 const jobsData = [
@@ -50,21 +37,21 @@ const jobsData = [
       "Cộng tác với nhóm backend để tích hợp API và tối ưu hóa hiệu suất",
       "Thiết kế và triển khai các giải pháp kỹ thuật phù hợp với yêu cầu kinh doanh",
       "Phát triển và duy trì kiến trúc frontend, đảm bảo khả năng mở rộng và bảo trì",
-      "Làm việc trong môi trường Agile/Scrum"
+      "Làm việc trong môi trường Agile/Scrum",
     ],
     basicRequirements: [
       "3-5 năm kinh nghiệm làm việc với React và các công nghệ frontend hiện đại",
       "Thành thạo JavaScript/TypeScript, HTML5, CSS3",
       "Hiểu biết sâu về React Hooks, Redux, và quản lý state",
       "Kinh nghiệm làm việc với RESTful APIs và GraphQL",
-      "Hiểu biết về tối ưu hóa hiệu suất web và các phương pháp tốt nhất"
+      "Hiểu biết về tối ưu hóa hiệu suất web và các phương pháp tốt nhất",
     ],
     preferredSkills: [
       "Kinh nghiệm với Next.js, Gatsby hoặc các framework React khác",
       "Hiểu biết về testing với Jest, React Testing Library, và Cypress",
       "Kinh nghiệm với CI/CD pipelines",
       "Kinh nghiệm với các thư viện UI như Material-UI, Ant Design, hoặc Tailwind CSS",
-      "Khả năng giao tiếp tiếng Anh tốt"
+      "Khả năng giao tiếp tiếng Anh tốt",
     ],
     benefits: [
       "Mức lương cạnh tranh và xét thưởng hiệu suất hàng năm",
@@ -72,9 +59,10 @@ const jobsData = [
       "Lịch làm việc linh hoạt và chính sách làm việc từ xa",
       "Môi trường làm việc quốc tế, năng động",
       "Đào tạo và phát triển nghề nghiệp liên tục",
-      "Các hoạt động team building và sự kiện công ty thường xuyên"
+      "Các hoạt động team building và sự kiện công ty thường xuyên",
     ],
-    companyDescription: "FPT Software là công ty công nghệ thông tin hàng đầu tại Việt Nam, chuyên cung cấp các dịch vụ và giải pháp phần mềm cho khách hàng toàn cầu."
+    companyDescription:
+      "FPT Software là công ty công nghệ thông tin hàng đầu tại Việt Nam, chuyên cung cấp các dịch vụ và giải pháp phần mềm cho khách hàng toàn cầu.",
   },
   // Thêm dữ liệu mẫu khác
   {
@@ -95,21 +83,21 @@ const jobsData = [
       "Quản lý và tối ưu hóa hệ thống trên AWS và Kubernetes",
       "Tự động hóa quy trình phát triển phần mềm",
       "Giám sát và đảm bảo tính khả dụng của hệ thống",
-      "Xây dựng các công cụ nội bộ để cải thiện quy trình phát triển"
+      "Xây dựng các công cụ nội bộ để cải thiện quy trình phát triển",
     ],
     basicRequirements: [
       "2-4 năm kinh nghiệm với DevOps và Cloud Infrastructure",
       "Kinh nghiệm với Docker, Kubernetes, và container orchestration",
       "Thành thạo AWS và các dịch vụ cloud khác",
       "Kinh nghiệm với các công cụ CI/CD như Jenkins, GitLab CI, GitHub Actions",
-      "Kiến thức vững về networking, bảo mật, và monitoring"
+      "Kiến thức vững về networking, bảo mật, và monitoring",
     ],
     preferredSkills: [
       "Chứng chỉ AWS, Google Cloud, hoặc Azure",
       "Kinh nghiệm với IaC sử dụng Terraform hoặc CloudFormation",
       "Kinh nghiệm với ELK stack hoặc các giải pháp logging/monitoring khác",
       "Kiến thức về microservices và kiến trúc cloud-native",
-      "Kỹ năng scripting với Python, Bash, hoặc Go"
+      "Kỹ năng scripting với Python, Bash, hoặc Go",
     ],
     benefits: [
       "Môi trường làm việc hiện đại và năng động",
@@ -117,10 +105,11 @@ const jobsData = [
       "Lương thưởng hấp dẫn và đánh giá hiệu suất định kỳ",
       "Bảo hiểm sức khỏe và các phúc lợi khác",
       "Các hoạt động đội nhóm và sự kiện công ty hàng quý",
-      "Lịch làm việc linh hoạt và chế độ làm việc từ xa"
+      "Lịch làm việc linh hoạt và chế độ làm việc từ xa",
     ],
-    companyDescription: "VNG là một trong những công ty internet và công nghệ hàng đầu Việt Nam, sở hữu hệ sinh thái các sản phẩm công nghệ và dịch vụ số với hàng triệu người dùng."
-  }
+    companyDescription:
+      "VNG là một trong những công ty internet và công nghệ hàng đầu Việt Nam, sở hữu hệ sinh thái các sản phẩm công nghệ và dịch vụ số với hàng triệu người dùng.",
+  },
 ];
 
 // Mẫu dữ liệu công việc mới nhất
@@ -180,37 +169,52 @@ const JobDetailPage: React.FC = () => {
     // Cập nhật tiêu đề trang và meta tags - React 19 approach
     if (jobDetail) {
       document.title = `${jobDetail.title} - ${jobDetail.company} | HiRise`;
-      
+
+      // Sử dụng metadata từ file riêng trong trường hợp không có dữ liệu chi tiết
+      const metaDescriptionContent = `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. ${jobDetail.basicRequirements[0]}`;
+
       // Tạo meta description
       const metaDescription = document.querySelector('meta[name="description"]');
       if (metaDescription) {
-        metaDescription.setAttribute('content', `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. ${jobDetail.basicRequirements[0]}`);
+        metaDescription.setAttribute(
+          "content",
+          metaDescriptionContent || jobDetailMetadata.description,
+        );
       } else {
-        const newMetaDescription = document.createElement('meta');
-        newMetaDescription.setAttribute('name', 'description');
-        newMetaDescription.setAttribute('content', `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. ${jobDetail.basicRequirements[0]}`);
+        const newMetaDescription = document.createElement("meta");
+        newMetaDescription.setAttribute("name", "description");
+        newMetaDescription.setAttribute(
+          "content",
+          metaDescriptionContent || jobDetailMetadata.description,
+        );
         document.head.appendChild(newMetaDescription);
       }
-      
+
       // Tạo meta OG title
       const ogTitle = document.querySelector('meta[property="og:title"]');
       if (ogTitle) {
-        ogTitle.setAttribute('content', `${jobDetail.title} - ${jobDetail.company} | HiRise`);
+        ogTitle.setAttribute("content", `${jobDetail.title} - ${jobDetail.company} | HiRise`);
       } else {
-        const newOgTitle = document.createElement('meta');
-        newOgTitle.setAttribute('property', 'og:title');
-        newOgTitle.setAttribute('content', `${jobDetail.title} - ${jobDetail.company} | HiRise`);
+        const newOgTitle = document.createElement("meta");
+        newOgTitle.setAttribute("property", "og:title");
+        newOgTitle.setAttribute("content", `${jobDetail.title} - ${jobDetail.company} | HiRise`);
         document.head.appendChild(newOgTitle);
       }
-      
+
       // Tạo meta OG description
       const ogDescription = document.querySelector('meta[property="og:description"]');
       if (ogDescription) {
-        ogDescription.setAttribute('content', `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. Mức lương: ${jobDetail.salary}`);
+        ogDescription.setAttribute(
+          "content",
+          `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. Mức lương: ${jobDetail.salary}`,
+        );
       } else {
-        const newOgDescription = document.createElement('meta');
-        newOgDescription.setAttribute('property', 'og:description');
-        newOgDescription.setAttribute('content', `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. Mức lương: ${jobDetail.salary}`);
+        const newOgDescription = document.createElement("meta");
+        newOgDescription.setAttribute("property", "og:description");
+        newOgDescription.setAttribute(
+          "content",
+          `Ứng tuyển vị trí ${jobDetail.title} tại ${jobDetail.company}. Mức lương: ${jobDetail.salary}`,
+        );
         document.head.appendChild(newOgDescription);
       }
     }
@@ -241,24 +245,27 @@ const JobDetailPage: React.FC = () => {
             {/* Logo và thông tin công ty */}
             <div className="md:col-span-2">
               <div className="mb-6 flex items-start gap-4">
-                <Link to={`/companies/${job.company.toLowerCase().replace(/\s+/g, '-')}`} className="group">
+                <Link
+                  to={`/companies/${job.company.toLowerCase().replace(/\s+/g, "-")}`}
+                  className="group"
+                >
                   <img
                     src={job.logo}
                     alt={job.company}
-                    className="h-20 w-20 rounded-lg border border-gray-200 object-contain p-2 transition-all group-hover:border-primary"
+                    className="group-hover:border-primary h-20 w-20 rounded-lg border border-gray-200 object-contain p-2 transition-all"
                     width="80"
                     height="80"
                   />
                 </Link>
                 <div>
-                  <Link 
-                    to={`/companies/${job.company.toLowerCase().replace(/\s+/g, '-')}`}
-                    className="text-lg font-medium hover:text-primary hover:underline"
+                  <Link
+                    to={`/companies/${job.company.toLowerCase().replace(/\s+/g, "-")}`}
+                    className="hover:text-primary text-lg font-medium hover:underline"
                   >
                     {job.company}
                   </Link>
                   <h1 className="mt-1 text-3xl font-bold">{job.title}</h1>
-                  <div className="mt-2 inline-block rounded-md bg-primary/10 px-4 py-2 text-lg font-semibold text-primary">
+                  <div className="bg-primary/10 text-primary mt-2 inline-block rounded-md px-4 py-2 text-lg font-semibold">
                     {job.salary}
                   </div>
                 </div>
@@ -273,7 +280,7 @@ const JobDetailPage: React.FC = () => {
                     <p className="font-medium">{job.experience}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <Briefcase className="h-5 w-5 text-gray-500" />
                   <div>
@@ -281,7 +288,7 @@ const JobDetailPage: React.FC = () => {
                     <p className="font-medium">{job.level}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <Calendar className="h-5 w-5 text-gray-500" />
                   <div>
@@ -289,7 +296,7 @@ const JobDetailPage: React.FC = () => {
                     <p className="font-medium">{job.contractType}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <MapPin className="h-5 w-5 text-gray-500" />
                   <div>
@@ -297,7 +304,7 @@ const JobDetailPage: React.FC = () => {
                     <p className="font-medium">{job.location}</p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   <Clock className="h-5 w-5 text-gray-500" />
                   <div>
@@ -333,15 +340,15 @@ const JobDetailPage: React.FC = () => {
               <Button size="lg" className="w-full md:w-auto">
                 Ứng tuyển ngay
               </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
+              <Button
+                variant="outline"
+                size="lg"
                 className="w-full md:w-auto"
                 onClick={handleSaveJob}
               >
                 {saved ? (
                   <span className="flex items-center gap-2">
-                    <Heart className="h-5 w-5 fill-primary text-primary" />
+                    <Heart className="fill-primary text-primary h-5 w-5" />
                     Đã lưu
                   </span>
                 ) : (
@@ -360,49 +367,59 @@ const JobDetailPage: React.FC = () => {
           {/* 2. Chi tiết công việc */}
           <div className="lg:col-span-2">
             <div className="mb-8 rounded-xl bg-white p-6 shadow-md lg:p-8">
-              <h2 className="mb-6 text-2xl font-bold">Mô tả công việc</h2>
-              
+              <h2 className="mb-6 text-2xl font-bold">Job Description</h2>
+
               {/* Responsibilities */}
               <div className="mb-8">
                 <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
-                  <span className="inline-block text-primary">📌</span> Trách nhiệm công việc
+                  <span className="text-primary inline-block">📌</span> Responsibilities
                 </h3>
                 <ul className="ml-6 list-disc space-y-2">
                   {job.responsibilities.map((item: string, index: number) => (
-                    <li key={index} className="text-gray-700">{item}</li>
+                    <li key={index} className="text-gray-700">
+                      {item}
+                    </li>
                   ))}
                 </ul>
               </div>
-              
+
               {/* Requirements */}
               <div className="mb-8">
                 <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
-                  <span className="inline-block text-primary">📌</span> Yêu cầu
+                  <span className="text-primary inline-block">📌</span> Requirements
                 </h3>
-                
+
                 <h4 className="mb-2 font-medium">Basic Requirements (Yêu cầu cơ bản):</h4>
                 <ul className="mb-6 ml-6 list-disc space-y-2">
                   {job.basicRequirements.map((item: string, index: number) => (
-                    <li key={index} className="text-gray-700">{item}</li>
+                    <li key={index} className="text-gray-700">
+                      {item}
+                    </li>
                   ))}
                 </ul>
-                
-                <h4 className="mb-2 font-medium">Nice to have / Preferred Skills (Ưu tiên nhưng không bắt buộc):</h4>
+
+                <h4 className="mb-2 font-medium">
+                  Nice to have / Preferred Skills (Ưu tiên nhưng không bắt buộc):
+                </h4>
                 <ul className="ml-6 list-disc space-y-2">
                   {job.preferredSkills.map((item: string, index: number) => (
-                    <li key={index} className="text-gray-700">{item}</li>
+                    <li key={index} className="text-gray-700">
+                      {item}
+                    </li>
                   ))}
                 </ul>
               </div>
-              
+
               {/* Benefits */}
               <div>
                 <h3 className="mb-4 flex items-center gap-2 text-xl font-semibold">
-                  <span className="inline-block text-primary">📌</span> Quyền lợi
+                  <span className="text-primary inline-block">📌</span> Benefits
                 </h3>
                 <ul className="ml-6 list-disc space-y-2">
                   {job.benefits.map((item: string, index: number) => (
-                    <li key={index} className="text-gray-700">{item}</li>
+                    <li key={index} className="text-gray-700">
+                      {item}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -414,13 +431,13 @@ const JobDetailPage: React.FC = () => {
             <div className="mb-8 rounded-xl bg-white p-6 shadow-md lg:p-8">
               <div className="mb-6">
                 <h3 className="mb-3 flex items-center gap-2 text-xl font-semibold">
-                  <Building className="h-5 w-5 text-primary" />
+                  <Building className="text-primary h-5 w-5" />
                   Về công ty
                 </h3>
                 <p className="text-gray-700">{job.companyDescription}</p>
-                <Link 
-                  to={`/companies/${job.company.toLowerCase().replace(/\s+/g, '-')}`}
-                  className="mt-3 inline-block text-primary hover:underline"
+                <Link
+                  to={`/companies/${job.company.toLowerCase().replace(/\s+/g, "-")}`}
+                  className="text-primary mt-3 inline-block hover:underline"
                 >
                   Xem chi tiết công ty
                 </Link>
@@ -430,14 +447,10 @@ const JobDetailPage: React.FC = () => {
                 <Button className="w-full text-lg" size="lg">
                   Ứng tuyển ngay
                 </Button>
-                <Button 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={handleSaveJob}
-                >
+                <Button variant="outline" className="w-full" onClick={handleSaveJob}>
                   {saved ? (
                     <span className="flex items-center justify-center gap-2">
-                      <Heart className="h-5 w-5 fill-primary text-primary" />
+                      <Heart className="fill-primary text-primary h-5 w-5" />
                       Đã lưu
                     </span>
                   ) : (
@@ -456,7 +469,7 @@ const JobDetailPage: React.FC = () => {
                 {job.skills.map((skill: string, index: number) => (
                   <span
                     key={index}
-                    className="rounded-full bg-primary/10 px-3 py-1.5 text-sm text-primary"
+                    className="bg-primary/10 text-primary rounded-full px-3 py-1.5 text-sm"
                   >
                     {skill}
                   </span>

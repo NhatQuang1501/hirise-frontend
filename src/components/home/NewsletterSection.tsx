@@ -28,12 +28,7 @@ const NewsletterSection: React.FC = () => {
           </div>
 
           <div className="mt-4 flex items-center justify-center gap-2">
-            <input
-              type="checkbox"
-              id="consent"
-              className="h-4 w-4"
-              aria-label="Consent checkbox"
-            />
+            <input type="checkbox" id="consent" className="h-4 w-4" aria-label="Consent checkbox" />
             <label htmlFor="consent" className="text-sm">
               Tôi đồng ý nhận thông tin tuyển dụng từ HiRise
             </label>
