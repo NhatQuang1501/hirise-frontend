@@ -46,7 +46,7 @@ export const CompanyCard: React.FC<CompanyCardProps> = ({ company }) => {
         height="80"
       />
       <h3 className="mb-2 text-lg font-medium">{company.name}</h3>
-      <p className="text-primary mb-1 text-base">{company.jobCount} việc làm</p>
+      <p className="text-primary mb-1 text-base">{company.jobCount} jobs</p>
       <p className="mt-1 text-sm text-gray-500">{company.industry}</p>
     </Link>
   );
@@ -57,9 +57,9 @@ export const CompanyCarousel: React.FC<CompanyCarouselProps> = ({ companies }) =
     <section className="border-y bg-gray-50 py-16">
       <div className="container mx-auto px-4">
         <div className="mb-10 flex items-center justify-between">
-          <h2 className="text-3xl font-bold">Công ty IT hàng đầu</h2>
+          <h2 className="text-3xl font-bold">Top IT companies</h2>
           <Link to="/companies" className="text-primary flex items-center hover:underline">
-            Xem tất cả <ChevronRight className="h-4 w-4" />
+            View all <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 

@@ -12,7 +12,7 @@ export function Footer() {
               <span className="text-primary text-xl font-bold">HiRise</span>
             </Link>
             <p className="text-muted-foreground mb-4 text-sm">
-              Kết nối tài năng với cơ hội việc làm tốt nhất trong ngành công nghệ
+              Connect talent with the best job opportunities in the technology industry
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-foreground hover:text-primary transition-colors">
@@ -44,14 +44,14 @@ export function Footer() {
             <div className="flex flex-col space-y-8 sm:flex-row sm:space-y-0 sm:space-x-16 md:justify-end">
               {/* Menu Ứng viên - vẫn giữ căn trái văn bản */}
               <div>
-                <h3 className="text-foreground mb-3 text-sm font-semibold">Dành cho ứng viên</h3>
+                <h3 className="text-foreground mb-3 text-sm font-semibold">For candidates</h3>
                 <ul className="space-y-2">
                   <li>
                     <Link
                       to="/jobs"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Tìm việc làm
+                      Find jobs
                     </Link>
                   </li>
                   <li>
@@ -59,7 +59,7 @@ export function Footer() {
                       to="/career-advice"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Cẩm nang nghề nghiệp
+                      Career advice
                     </Link>
                   </li>
                   <li>
@@ -67,7 +67,7 @@ export function Footer() {
                       to="/salary"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Tra cứu lương
+                      Salary search
                     </Link>
                   </li>
                   <li>
@@ -75,7 +75,7 @@ export function Footer() {
                       to="/companies"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Công ty hàng đầu
+                      Top companies
                     </Link>
                   </li>
                 </ul>
@@ -83,16 +83,14 @@ export function Footer() {
 
               {/* Menu Nhà tuyển dụng - vẫn giữ căn trái văn bản */}
               <div>
-                <h3 className="text-foreground mb-3 text-sm font-semibold">
-                  Dành cho nhà tuyển dụng
-                </h3>
+                <h3 className="text-foreground mb-3 text-sm font-semibold">For employers</h3>
                 <ul className="space-y-2">
                   <li>
                     <Link
                       to="/employer/post-job"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Đăng tin tuyển dụng
+                      Post a job
                     </Link>
                   </li>
                   <li>
@@ -100,7 +98,7 @@ export function Footer() {
                       to="/employer/pricing"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Bảng giá dịch vụ
+                      Pricing
                     </Link>
                   </li>
                   <li>
@@ -108,7 +106,7 @@ export function Footer() {
                       to="/employer/testimonials"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Khách hàng của chúng tôi
+                      Testimonials
                     </Link>
                   </li>
                 </ul>
@@ -116,14 +114,14 @@ export function Footer() {
 
               {/* Menu Về HiRise - vẫn giữ căn trái văn bản */}
               <div>
-                <h3 className="text-foreground mb-3 text-sm font-semibold">Về HiRise</h3>
+                <h3 className="text-foreground mb-3 text-sm font-semibold">About HiRise</h3>
                 <ul className="space-y-2">
                   <li>
                     <Link
                       to="/about"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Giới thiệu
+                      Introduction
                     </Link>
                   </li>
                   <li>
@@ -131,7 +129,7 @@ export function Footer() {
                       to="/contact"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Liên hệ
+                      Contact
                     </Link>
                   </li>
                   <li>
@@ -139,7 +137,7 @@ export function Footer() {
                       to="/terms"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Điều khoản dịch vụ
+                      Terms of service
                     </Link>
                   </li>
                   <li>
@@ -147,7 +145,7 @@ export function Footer() {
                       to="/privacy"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
-                      Chính sách bảo mật
+                      Privacy policy
                     </Link>
                   </li>
                 </ul>
@@ -158,7 +156,7 @@ export function Footer() {
 
         <div className="border-border mt-8 flex flex-col justify-between border-t pt-6 md:flex-row">
           <p className="text-muted-foreground text-sm">
-            &copy; {new Date().getFullYear()} HiRise. Tất cả quyền được bảo lưu.
+            &copy; {new Date().getFullYear()} HiRise. All rights reserved.
           </p>
         </div>
       </div>

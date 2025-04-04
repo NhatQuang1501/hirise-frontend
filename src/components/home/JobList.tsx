@@ -9,7 +9,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import JobCard from "./JobCard";
+import JobCard from "../job/JobCard";
 import JobFilterButtons from "./JobFilterButtons";
 
 interface Job {
@@ -46,9 +46,9 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
     <section id="jobs-section" className="py-16">
       <div className="container mx-auto px-4">
         <div className="mb-10 flex items-center justify-between">
-          <h2 className="text-3xl font-bold">Việc làm IT mới nhất</h2>
+          <h2 className="text-3xl font-bold">Latest IT jobs</h2>
           <Link to="/jobs" className="text-primary flex items-center hover:underline">
-            Xem tất cả <ChevronRight className="h-4 w-4" />
+            View all <ChevronRight className="h-4 w-4" />
           </Link>
         </div>
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Bell, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -19,33 +19,37 @@ export function Header() {
             {/* Desktop Navigation */}
             <nav className="ml-12 hidden items-center space-x-10 md:flex">
               <Link to="/" className="text-foreground hover:text-primary transition-colors">
-                Trang chủ
+                Home
               </Link>
               <Link to="/jobs" className="text-foreground hover:text-primary transition-colors">
-                Việc làm
+                Jobs
               </Link>
               <Link
                 to="/companies"
                 className="text-foreground hover:text-primary transition-colors"
               >
-                Công ty
+                Companies
               </Link>
               <Link to="/about" className="text-foreground hover:text-primary transition-colors">
-                Giới thiệu
+                About
               </Link>
             </nav>
           </div>
 
+          {/* Notification */}
+          <div className="hidden md:flex md:items-center md:gap-4">
+            <Bell className="text-foreground hover:text-secondary m-7 h-6 w-6 transition-colors" />
+          </div>
           {/* Desktop Auth Buttons */}
           <div className="hidden items-center gap-3 md:flex">
             <Link to="/login">
               <Button variant="ghost" className="bg-primary hover:bg-secondary text-white">
-                Đăng nhập
+                Login
               </Button>
             </Link>
             {/* <Link to="/register">
               <Button variant="default" className="bg-primary hover:bg-secondary text-white">
-                Đăng ký
+                Register
               </Button>
             </Link> */}
           </div>
@@ -55,7 +59,7 @@ export function Header() {
             className="text-foreground hover:bg-accent/10 hover:text-accent inline-flex items-center justify-center rounded-md p-2 focus:outline-none md:hidden"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
-            <span className="sr-only">Mở menu</span>
+            <span className="sr-only">Open menu</span>
             {isMenuOpen ? (
               <X className="h-6 w-6" aria-hidden="true" />
             ) : (
@@ -74,28 +78,28 @@ export function Header() {
               className="text-foreground hover:text-primary block py-2 text-base font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Trang chủ
+              Home
             </Link>
             <Link
               to="/jobs"
               className="text-foreground hover:text-primary block py-2 text-base font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Việc làm
+              Jobs
             </Link>
             <Link
               to="/companies"
               className="text-foreground hover:text-primary block py-2 text-base font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Công ty
+              Companies
             </Link>
             <Link
               to="/about"
               className="text-foreground hover:text-primary block py-2 text-base font-medium"
               onClick={() => setIsMenuOpen(false)}
             >
-              Giới thiệu
+              About
             </Link>
             <div className="mt-4 flex w-1/3 flex-col space-y-2">
               <Link
@@ -103,14 +107,14 @@ export function Header() {
                 className="bg-primary hover:bg-secondary w-full rounded-md py-2 text-center text-base font-medium text-white"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Đăng nhập
+                Login
               </Link>
               {/* <Link
                 to="/register"
                 className="bg-primary hover:bg-secondary w-full rounded-md py-2 text-center text-base font-medium text-white"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Đăng ký
+                Register
               </Link> */}
             </div>
           </div>

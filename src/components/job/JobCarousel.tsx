@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import JobCard from "@/components/home/JobCard";
+import JobCard from "@/components/job/JobCard";
 import {
   Carousel,
   CarouselContent,

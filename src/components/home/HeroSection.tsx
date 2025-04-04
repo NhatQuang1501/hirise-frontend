@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import SearchBox from "./SearchBox";
+import SearchBox from "../search/SearchBox";
 
 const HeroSection: React.FC = () => {
   return (
@@ -9,16 +9,16 @@ const HeroSection: React.FC = () => {
         <div className="grid gap-8 md:grid-cols-2 md:gap-12">
           <div className="flex flex-col justify-center">
             <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-              Tìm kiếm công việc <span className="text-primary">IT mơ ước</span> của bạn
+              Find your dream <span className="text-primary">IT job</span>
             </h1>
             <p className="mb-6 text-lg text-gray-600 md:text-xl">
-              Kết nối bạn với hàng nghìn công việc từ những công ty công nghệ hàng đầu.
+              Connect you with thousands of jobs from top technology companies.
             </p>
 
             <SearchBox />
 
             <div className="flex items-center gap-2 text-sm text-gray-500">
-              <p>Phổ biến:</p>
+              <p>Popular:</p>
               <div className="flex flex-wrap gap-2">
                 <Link to="/jobs?q=react" className="hover:text-primary">
                   ReactJS

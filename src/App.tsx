@@ -3,6 +3,7 @@ import { Route, BrowserRouter as Router, Routes, useLocation } from "react-route
 import { Footer } from "./components/footer/Footer";
 import { Header } from "./components/header/Header";
 
+const JobListPage = lazy(() => import("./pages/job/JobListPage"));
 const HomePage = lazy(() => import("./pages/home/HomePage"));
 const LoginPage = lazy(() => import("./pages/authentication/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/authentication/RegisterPage"));
@@ -30,7 +31,9 @@ function AppLayout() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/jobs" element={<JobListPage />} />
             <Route path="/jobs/:id" element={<JobDetailPage />} />
+            
           </Routes>
         </Suspense>
       </main>

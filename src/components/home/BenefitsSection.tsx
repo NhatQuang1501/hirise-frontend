@@ -21,8 +21,8 @@ const BenefitsSection: React.FC = () => {
           />
         </svg>
       ),
-      title: "10,000+ việc làm IT",
-      description: "Hàng nghìn công việc IT chất lượng từ các công ty hàng đầu.",
+      title: "10,000+ jobs in IT",
+      description: "Thousands of quality IT jobs from top companies.",
     },
     {
       icon: (
@@ -42,8 +42,8 @@ const BenefitsSection: React.FC = () => {
           />
         </svg>
       ),
-      title: "Cập nhật hàng ngày",
-      description: "Chúng tôi cập nhật việc làm mới mỗi ngày từ các nhà tuyển dụng.",
+      title: "Daily updates",
+      description: "We update job listings daily from top employers.",
     },
     {
       icon: (
@@ -63,8 +63,8 @@ const BenefitsSection: React.FC = () => {
           />
         </svg>
       ),
-      title: "Bộ lọc thông minh",
-      description: "Tìm việc nhanh chóng với các bộ lọc thông minh theo nhu cầu của bạn.",
+      title: "Smart filters",
+      description: "Find jobs quickly with smart filters tailored to your needs.",
     },
     {
       icon: (
@@ -84,15 +84,15 @@ const BenefitsSection: React.FC = () => {
           />
         </svg>
       ),
-      title: "Hỗ trợ viết CV",
-      description: "Hỗ trợ ứng viên xây dựng CV chuẩn IT để tăng cơ hội việc làm.",
+      title: "CV support",
+      description: "Support candidates to build a standard IT CV to increase job opportunities.",
     },
   ];
 
   return (
     <section className="py-12">
       <div className="container mx-auto px-4">
-        <h2 className="mb-8 text-center text-3xl font-bold">Tại sao chọn HiRise?</h2>
+        <h2 className="mb-8 text-center text-3xl font-bold">Why choose HiRise?</h2>
 
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {benefits.map((benefit, index) => (

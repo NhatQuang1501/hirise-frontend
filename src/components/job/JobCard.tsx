@@ -1,19 +1,11 @@
 import React from "react";
 import { Briefcase, DollarSign, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { JobCardData } from "@/types/job";
 import { Button } from "@/components/ui/button";
 
 interface JobCardProps {
-  job: {
-    id: number;
-    company: string;
-    logo: string;
-    title: string;
-    salary: string;
-    location: string;
-    time: string;
-    skills: string[];
-  };
+  job: JobCardData;
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
@@ -78,7 +70,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       {/* Phần button - luôn nằm dưới cùng */}
       <div className="mt-5 pt-3">
         <Button variant="outline" size="lg" className="hover:bg-secondary w-full">
-          Ứng tuyển ngay
+          Apply now
         </Button>
       </div>
     </div>

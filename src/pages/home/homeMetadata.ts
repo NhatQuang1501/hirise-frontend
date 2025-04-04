@@ -1,17 +1,17 @@
 // Metadata cho SEO trong React 19
 export const homeMetadata = {
-  title: "HiRise - Nền tảng tuyển dụng IT hàng đầu Việt Nam",
+  title: "HiRise - Top IT job platform in Vietnam",
   description:
-    "Kết nối với hàng nghìn cơ hội việc làm IT từ các công ty công nghệ hàng đầu tại Việt Nam. Tìm kiếm công việc trong lĩnh vực ReactJS, Java, Python, DevOps và nhiều vị trí khác.",
+    "Connect with thousands of IT job opportunities from top technology companies in Vietnam. Search for jobs in ReactJS, Java, Python, DevOps, and many other positions.",
   keywords:
-    "tuyển dụng IT, việc làm IT, tuyển dụng lập trình viên, cơ hội việc làm công nghệ, frontend developer, backend developer, fullstack, HiRise",
+    "IT recruitment, IT job, IT recruitment, IT job opportunities, IT jobs, IT job platform, IT job opportunities in Vietnam, IT job opportunities in Vietnam, IT job opportunities in Vietnam, IT job opportunities in Vietnam",
   openGraph: {
-    title: "HiRise - Nền tảng tuyển dụng IT hàng đầu Việt Nam",
+    title: "HiRise - Top IT job platform in Vietnam",
     description:
-      "Kết nối với hàng nghìn cơ hội việc làm IT từ các công ty công nghệ hàng đầu tại Việt Nam.",
+      "Connect with thousands of IT job opportunities from top technology companies in Vietnam.",
     image: "/og-image.png",
-    url: "https://hirise.vn",
+    url: `${import.meta.env.VITE_BASE_URL}`,
     type: "website",
   },
-  canonical: "https://hirise.vn",
+  canonical: `${import.meta.env.VITE_BASE_URL}`,
 };

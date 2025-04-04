@@ -19,16 +19,16 @@ import { Input } from "@/components/ui/input";
 // Định nghĩa schema validation
 const registerSchema = z
   .object({
-    fullName: z.string().min(2, { message: "Họ tên phải có ít nhất 2 ký tự" }),
-    email: z.string().email({ message: "Email không hợp lệ" }),
-    password: z.string().min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" }),
+    fullName: z.string().min(2, { message: "Full name must be at least 2 characters" }),
+    email: z.string().email({ message: "Email is not valid" }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
     confirmPassword: z.string(),
     acceptTerms: z.boolean().refine((val) => val === true, {
-      message: "Bạn phải đồng ý với điều khoản dịch vụ",
+      message: "You must agree to the terms of service",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Mật khẩu xác nhận không khớp",
+    message: "Password confirmation does not match",
     path: ["confirmPassword"],
   });
 
@@ -56,11 +56,11 @@ export function RegisterForm() {
     setIsLoading(true);
     try {
       // Gọi API đăng ký ở đây
-      console.log("Đăng ký với:", data);
+      console.log("Register with:", data);
       // await registerUser(data);
       // Chuyển hướng sau khi đăng ký thành công
     } catch (error) {
-      console.error("Lỗi đăng ký:", error);
+      console.error("Register error:", error);
     } finally {
       setIsLoading(false);
     }
@@ -69,9 +69,9 @@ export function RegisterForm() {
   return (
     <div className="bg-card mx-auto w-full max-w-md space-y-6 rounded-lg p-8 px-4 shadow-md sm:p-10 sm:px-0">
       <div className="mx-2 text-center">
-        <h1 className="text-foreground text-xl font-bold sm:text-2xl">Đăng ký tài khoản</h1>
+        <h1 className="text-foreground text-xl font-bold sm:text-2xl">Register</h1>
         <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-          Tạo tài khoản để bắt đầu sử dụng dịch vụ của chúng tôi
+          Create an account to start using our services
         </p>
       </div>
 
@@ -82,10 +82,10 @@ export function RegisterForm() {
             name="fullName"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">Họ và tên</FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Full name</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Nguyễn Văn A"
+                    placeholder="Nguyen Van A"
                     className="border-input bg-background text-foreground mx-0.5 h-11 rounded-md px-4 py-2 shadow-sm"
                     {...field}
                   />
@@ -118,7 +118,7 @@ export function RegisterForm() {
             name="password"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">Mật khẩu</FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Password</FormLabel>
                 <FormControl>
                   <div className="relative mx-0.5">
                     <Input
@@ -140,7 +140,7 @@ export function RegisterForm() {
                         <EyeIcon className="h-4 w-4" />
                       )}
                       <span className="sr-only">
-                        {showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                        {showPassword ? "Hide password" : "Show password"}
                       </span>
                     </Button>
                   </div>
@@ -155,9 +155,7 @@ export function RegisterForm() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">
-                  Xác nhận mật khẩu
-                </FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Confirm password</FormLabel>
                 <FormControl>
                   <div className="relative mx-0.5">
                     <Input
@@ -179,7 +177,7 @@ export function RegisterForm() {
                         <EyeIcon className="h-4 w-4" />
                       )}
                       <span className="sr-only">
-                        {showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                        {showConfirmPassword ? "Hide password" : "Show password"}
                       </span>
                     </Button>
                   </div>
@@ -201,11 +199,11 @@ export function RegisterForm() {
                   <div className="text-foreground flex flex-wrap text-sm">
                     Tôi đồng ý với{" "}
                     <Link to="/terms" className="text-primary hover:text-primary/80 mx-1">
-                      điều khoản dịch vụ
+                      terms of service
                     </Link>{" "}
-                    và{" "}
+                    and{" "}
                     <Link to="/privacy" className="text-primary hover:text-primary/80 mx-1">
-                      chính sách bảo mật
+                      privacy policy
                     </Link>
                     .
                   </div>
@@ -220,15 +218,15 @@ export function RegisterForm() {
             className="bg-primary hover:bg-primary/90 text-primary-foreground mx-0.5 mt-3 h-11 w-full rounded-md font-medium"
             disabled={isLoading}
           >
-            {isLoading ? "Đang đăng ký..." : "Đăng ký"}
+            {isLoading ? "Registering..." : "Register"}
           </Button>
         </form>
       </Form>
 
       <div className="mx-2 mt-6 text-center text-sm">
-        <span className="text-muted-foreground">Bạn đã có tài khoản? </span>
+        <span className="text-muted-foreground">Already have an account? </span>
         <Link to="/login" className="text-primary hover:text-primary/80 font-medium">
-          Đăng nhập
+          Login
         </Link>
       </div>
     </div>

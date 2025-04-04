@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
+import { CompanyCarousel } from "@/components/company/CompanyCarousel";
 import BenefitsSection from "@/components/home/BenefitsSection";
-import { CompanyCarousel } from "@/components/home/CompanyCarousel";
 import HeroSection from "@/components/home/HeroSection";
 import JobList from "@/components/home/JobList";
 import NewsletterSection from "@/components/home/NewsletterSection";
@@ -14,8 +14,8 @@ const jobsData = [
     logo: "/company-logos/fpt.png",
     title: "Senior Frontend Developer",
     salary: "$1,500 - $2,500",
-    location: "Hà Nội",
-    time: "2 giờ trước",
+    location: "Hanoi",
+    time: "2 hours ago",
     skills: ["ReactJS", "TypeScript", "TailwindCSS"],
   },
   {
@@ -24,8 +24,8 @@ const jobsData = [
     logo: "/company-logos/vng.png",
     title: "Backend Engineer - Python",
     salary: "$1,800 - $3,000",
-    location: "TP. Hồ Chí Minh",
-    time: "5 giờ trước",
+    location: "Ho Chi Minh City",
+    time: "5 hours ago",
     skills: ["Python", "Django", "PostgreSQL"],
   },
   {
@@ -35,7 +35,7 @@ const jobsData = [
     title: "DevOps Engineer",
     salary: "$2,000 - $3,500",
     location: "Remote",
-    time: "1 ngày trước",
+    time: "1 day ago",
     skills: ["Docker", "Kubernetes", "AWS"],
   },
   {
@@ -44,8 +44,8 @@ const jobsData = [
     logo: "/company-logos/shopee.png",
     title: "Data Engineer",
     salary: "$1,500 - $2,800",
-    location: "TP. Hồ Chí Minh",
-    time: "2 ngày trước",
+    location: "Ho Chi Minh City",
+    time: "2 days ago",
     skills: ["Python", "Spark", "SQL"],
   },
   {
@@ -54,8 +54,8 @@ const jobsData = [
     logo: "/company-logos/zalo.png",
     title: "Mobile Developer (iOS)",
     salary: "$1,700 - $2,700",
-    location: "TP. Hồ Chí Minh",
-    time: "3 ngày trước",
+    location: "Ho Chi Minh City",
+    time: "3 days ago",
     skills: ["Swift", "iOS", "UIKit"],
   },
   {
@@ -64,8 +64,8 @@ const jobsData = [
     logo: "/company-logos/grab.png",
     title: "QA Engineer",
     salary: "$1,200 - $2,200",
-    location: "Hà Nội",
-    time: "3 ngày trước",
+    location: "Hanoi",
+    time: "3 days ago",
     skills: ["Selenium", "Cypress", "Automation"],
   },
   {
@@ -74,8 +74,8 @@ const jobsData = [
     logo: "/company-logos/nashtech.png",
     title: "Solution Architect",
     salary: "$3,000 - $5,000",
-    location: "TP. Hồ Chí Minh",
-    time: "4 ngày trước",
+    location: "Ho Chi Minh City",
+    time: "4 days ago",
     skills: ["AWS", "Microservices", "System Design"],
   },
   {
@@ -84,8 +84,8 @@ const jobsData = [
     logo: "/company-logos/sendo.png",
     title: "UI/UX Designer",
     salary: "$1,300 - $2,300",
-    location: "TP. Hồ Chí Minh",
-    time: "5 ngày trước",
+    location: "Ho Chi Minh City",
+    time: "5 days ago",
     skills: ["Figma", "Adobe XD", "UI Design"],
   },
 ];
