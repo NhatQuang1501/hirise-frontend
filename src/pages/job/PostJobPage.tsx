@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AlertTriangle, Eye, FileText, Info, Save, Send, Upload, X } from "lucide-react";
+import { AlertTriangle, Eye, FileText, Save, Send, Upload, X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -38,7 +38,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Job } from "../../types/job";
 
 // Define form schema with Zod
 const postJobSchema = z.object({
@@ -54,7 +53,8 @@ const postJobSchema = z.object({
   responsibilities: z.string().min(50, "Please provide detailed responsibilities"),
   requirements: z.string().min(50, "Please provide detailed requirements"),
   preferredSkills: z.string().optional(),
-  benefits: z.array(z.string()),
+  // benefits: z.array(z.string()),
+  benefits: z.string().min(1, "Please provide some benefits information"),
   howtoapply: z.string().min(1, "Please specify how to apply"),
   interviewProcess: z.array(z.string()),
   deadline: z.string().optional(),
@@ -92,7 +92,7 @@ const PostJobPage: React.FC = () => {
       location: "",
       salaryMin: "",
       salaryMax: "",
-      currency: "USD",
+      currency: "VND",
       jobType: "",
       jobLevel: "",
       experience: "",
@@ -132,7 +132,7 @@ const PostJobPage: React.FC = () => {
       if (isDirty) {
         saveFormData(true);
       }
-    }, 30000); // Autosave every 30 seconds if form is dirty
+    }, 60000); // Autosave every 60 seconds if form is dirty
 
     setAutosaveInterval(interval);
 
@@ -255,7 +255,7 @@ const PostJobPage: React.FC = () => {
 
       {isDirty && (
         <Alert className="mb-6">
-          <AlertTriangle className="h-4 w-4" />
+          <AlertTriangle className="size-4" />
           <AlertTitle>Unsaved changes</AlertTitle>
           <AlertDescription>
             You have unsaved changes. Make sure to save your draft or post the job before leaving
@@ -269,8 +269,8 @@ const PostJobPage: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="flex items-center gap-2 text-xl font-semibold">
-                  <FileText className="text-primary h-5 w-5" />
+                <h2 className="flex items-center gap-2 text-xl font-bold">
+                  <FileText className="text-primary size-5" />
                   Basic Information
                 </h2>
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -424,9 +424,9 @@ const PostJobPage: React.FC = () => {
                           </FormControl>
                           <SelectContent>
                             <SelectItem value="intern">Intern</SelectItem>
-                            <SelectItem value="entry">Entry Level</SelectItem>
+                            <SelectItem value="fresher">Fresher</SelectItem>
                             <SelectItem value="junior">Junior</SelectItem>
-                            <SelectItem value="mid">Mid-Level</SelectItem>
+                            <SelectItem value="middle">Middle</SelectItem>
                             <SelectItem value="senior">Senior</SelectItem>
                             <SelectItem value="lead">Team Lead</SelectItem>
                             <SelectItem value="manager">Manager</SelectItem>
@@ -486,7 +486,7 @@ const PostJobPage: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="flex items-center gap-2 text-xl font-semibold">
+                <h2 className="flex items-center gap-2 text-xl font-bold">
                   <FileText className="text-primary h-5 w-5" />
                   Job Description
                 </h2>
@@ -554,7 +554,7 @@ const PostJobPage: React.FC = () => {
                   )}
                 />
 
-                <FormField
+                {/* <FormField
                   control={form.control}
                   name="benefits"
                   render={({ field }) => (
@@ -568,6 +568,27 @@ const PostJobPage: React.FC = () => {
                       </FormControl>
                       <FormDescription>
                         Select the benefits offered with this position
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /> */}
+                <FormField
+                  control={form.control}
+                  name="benefits"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Benefits & Perks*</FormLabel>
+                      <FormControl>
+                        <RichTextEditor
+                          value={field.value}
+                          onChange={field.onChange}
+                          placeholder="Describe the benefits and perks offered with this position (e.g. Healthcare coverage, Annual leave policy, Training opportunities...)."
+                          minHeight="200px"
+                        />
+                      </FormControl>
+                      <FormDescription>
+                        Be specific about what you offer to attract the best candidates
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -597,7 +618,7 @@ const PostJobPage: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="flex items-center gap-2 text-xl font-semibold">
+                <h2 className="flex items-center gap-2 text-xl font-bold">
                   <FileText className="text-primary h-5 w-5" />
                   Application Process
                 </h2>
@@ -655,7 +676,7 @@ const PostJobPage: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="flex items-center gap-2 text-xl font-semibold">
+                <h2 className="flex items-center gap-2 text-xl font-bold">
                   <FileText className="text-primary h-5 w-5" />
                   Additional Settings
                 </h2>
@@ -809,23 +830,20 @@ const PostJobPage: React.FC = () => {
                     <h3 className="mb-2 font-semibold">Preferred Skills</h3>
                     <div
                       className="prose max-w-none text-sm"
-                      dangerouslySetInnerHTML={{ __html: form.watch("preferredSkills") }}
+                      dangerouslySetInnerHTML={{ __html: form.watch("preferredSkills") ?? "" }}
                     />
                   </div>
                 )}
               </TabsContent>
               <TabsContent value="company" className="space-y-4">
                 <div>
-                  <h3 className="mb-2 font-semibold">Benefits</h3>
-                  {form.watch("benefits").length > 0 ? (
-                    <ul className="list-disc space-y-1 pl-5">
-                      {form.watch("benefits").map((benefit, index) => (
-                        <li key={index}>{benefit}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm">No benefits specified</p>
-                  )}
+                  <h3 className="mb-2 font-semibold">Benefits & Perks</h3>
+                  <div
+                    className="prose max-w-none text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: form.watch("benefits") || "No benefits specified",
+                    }}
+                  />
                 </div>
               </TabsContent>
             </Tabs>

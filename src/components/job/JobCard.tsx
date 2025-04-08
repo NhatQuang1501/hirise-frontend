@@ -18,7 +18,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <img
             src={job.logo}
             alt={job.company}
-            className="h-14 w-14 rounded-md" // Tăng kích thước logo
+            className="size-14 rounded-md" // Tăng kích thước logo
             loading="lazy"
             width="56"
             height="56"
@@ -38,18 +38,18 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
         {/* Tăng không gian và kích thước text */}
         <div className="mb-4 space-y-3">
-          <div className="flex items-center gap-2 text-base text-gray-600">
-            <DollarSign className="h-5 w-5" />
+          <div className="text-primary flex items-center gap-2 text-base">
+            <DollarSign className="size-5" />
             <span>{job.salary}</span>
           </div>
 
           <div className="flex items-center gap-2 text-base text-gray-600">
-            <MapPin className="h-5 w-5" />
+            <MapPin className="size-5" />
             <span>{job.location}</span>
           </div>
 
           <div className="flex items-center gap-2 text-base text-gray-600">
-            <Briefcase className="h-5 w-5" />
+            <Briefcase className="size-5" />
             <span>{job.time}</span>
           </div>
         </div>
@@ -67,7 +67,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
         </div>
       </div>
 
-      {/* Phần button - luôn nằm dưới cùng */}
+      {/* Button */}
       <div className="mt-5 pt-3">
         <Button variant="outline" size="lg" className="hover:bg-secondary w-full">
           Apply now

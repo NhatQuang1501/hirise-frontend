@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { JobCardData } from "@/types/job";
 import FeaturedJobs from "@/components/job/FeaturedJobs";
 import JobListView from "@/components/job/JobListView";
 import AdvancedFilters from "@/components/search/AdvancedFilters";
 import SearchBar from "@/components/search/SearchBar";
+import { Button } from "@/components/ui/button";
 import { jobListMetadata } from "./joblMetadata";
 
 // Định nghĩa kiểu cho salaryRange
@@ -389,10 +391,20 @@ const JobListPage: React.FC = () => {
       <section className="from-primary/10 to-primary-foreground/5 bg-gradient-to-r py-16">
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="mb-6 text-4xl font-bold">Tìm công việc mơ ước của bạn</h1>
-            <p className="text-muted-foreground mb-8 text-xl">
-              Khám phá hàng nghìn cơ hội việc làm từ các công ty công nghệ hàng đầu
-            </p>
+            {/* Thêm div wrapper cho phần header để có thể thêm button */}
+            <div className="mb-8 flex items-center justify-between">
+              <div>
+                <h1 className="mb-6 text-4xl font-bold">Find your dream job</h1>
+                <p className="text-muted-foreground text-xl">
+                  Explore thousands of job opportunities from top tech companies
+                </p>
+              </div>
+              <Link to="/post-jobs">
+                <Button size="lg" className="hover:bg-secondary active:bg-accent gap-2">
+                  Post a Job
+                </Button>
+              </Link>
+            </div>
           </div>
 
           {/* Thanh tìm kiếm */}
@@ -415,7 +427,7 @@ const JobListPage: React.FC = () => {
             {isLoading ? (
               <div className="flex h-64 items-center justify-center">
                 <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
-                <span className="ml-2">Đang tải...</span>
+                <span className="ml-2">Loading...</span>
               </div>
             ) : (
               <>
@@ -423,9 +435,9 @@ const JobListPage: React.FC = () => {
                   <JobListView jobs={filteredJobs} />
                 ) : (
                   <div className="rounded-lg border border-dashed p-8 text-center">
-                    <h3 className="mb-2 text-xl font-semibold">Không tìm thấy công việc phù hợp</h3>
+                    <h3 className="mb-2 text-xl font-semibold">No matching jobs found</h3>
                     <p className="text-muted-foreground">
-                      Hãy thử tìm kiếm với từ khóa khác hoặc điều chỉnh bộ lọc của bạn
+                      Try seaching with different keywords or filters.
                     </p>
                   </div>
                 )}

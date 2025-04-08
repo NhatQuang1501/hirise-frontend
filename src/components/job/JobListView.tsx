@@ -82,7 +82,7 @@ const JobListView: React.FC<JobListViewProps> = ({ jobs }) => {
                 <img
                   src={job.logo}
                   alt={job.company}
-                  className="h-16 w-16 rounded-md object-contain"
+                  className="size-16 rounded-md object-contain"
                 />
               </div>
               <div className="flex-1">
