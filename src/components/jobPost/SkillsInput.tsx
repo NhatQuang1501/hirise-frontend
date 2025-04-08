@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
 
 interface SkillsInputProps {
   skills: string[];
@@ -13,12 +13,42 @@ const SkillsInput: React.FC<SkillsInputProps> = ({
   skills,
   onChange,
   suggestions = [
-    "React", "Vue", "Angular", "JavaScript", "TypeScript", "Python",
-    "Java", "C#", "Node.js", "Express", "Django", "Flask",
-    "SQL", "NoSQL", "MongoDB", "PostgreSQL", "AWS", "Azure",
-    "Docker", "Kubernetes", "Git", "CI/CD", "REST API", "GraphQL",
-    "CSS", "HTML", "SASS", "LESS", "Tailwind CSS", "Bootstrap",
-    "React Native", "Flutter", "iOS", "Android", "Swift", "Kotlin"
+    "React",
+    "Vue",
+    "Angular",
+    "JavaScript",
+    "TypeScript",
+    "Python",
+    "Java",
+    "C#",
+    "Node.js",
+    "Express",
+    "Django",
+    "Flask",
+    "SQL",
+    "NoSQL",
+    "MongoDB",
+    "PostgreSQL",
+    "AWS",
+    "Azure",
+    "Docker",
+    "Kubernetes",
+    "Git",
+    "CI/CD",
+    "REST API",
+    "GraphQL",
+    "CSS",
+    "HTML",
+    "SASS",
+    "LESS",
+    "Tailwind CSS",
+    "Bootstrap",
+    "React Native",
+    "Flutter",
+    "iOS",
+    "Android",
+    "Swift",
+    "Kotlin",
   ],
 }) => {
   const [inputValue, setInputValue] = useState("");
@@ -38,7 +68,7 @@ const SkillsInput: React.FC<SkillsInputProps> = ({
       .filter(
         (suggestion) =>
           suggestion.toLowerCase().includes(inputValue.toLowerCase()) &&
-          !skills.includes(suggestion)
+          !skills.includes(suggestion),
       )
       .slice(0, 6); // Limit to 6 suggestions
 
@@ -103,20 +133,20 @@ const SkillsInput: React.FC<SkillsInputProps> = ({
 
   return (
     <div className="w-full">
-      <div className="flex flex-wrap gap-2 p-2 border border-input rounded-md min-h-[42px]">
+      <div className="border-input flex min-h-[42px] flex-wrap gap-2 rounded-md border p-2">
         {skills.map((skill, index) => (
-          <Badge key={index} variant="secondary" className="px-2 py-1 h-7">
+          <Badge key={index} variant="secondary" className="h-7 px-2 py-1">
             {skill}
             <button
               type="button"
               onClick={() => removeSkill(index)}
-              className="ml-1 text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground ml-1"
             >
               <X className="h-3 w-3" />
             </button>
           </Badge>
         ))}
-        <div className="relative flex-1 min-w-[120px]">
+        <div className="relative min-w-[120px] flex-1">
           <Input
             ref={inputRef}
             type="text"
@@ -124,18 +154,18 @@ const SkillsInput: React.FC<SkillsInputProps> = ({
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
             onFocus={() => setShowSuggestions(true)}
-            className="border-0 shadow-none h-7 px-1 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="h-7 border-0 px-1 shadow-none focus-visible:ring-0 focus-visible:ring-offset-0"
             placeholder={skills.length === 0 ? "Add skills (e.g., React, Python)" : ""}
           />
           {showSuggestions && filteredSuggestions.length > 0 && (
             <div
               ref={suggestionsRef}
-              className="absolute z-10 w-full mt-1 bg-background border border-input rounded-md shadow-md max-h-[200px] overflow-y-auto"
+              className="bg-background border-input absolute z-10 mt-1 max-h-[200px] w-full overflow-y-auto rounded-md border shadow-md"
             >
               {filteredSuggestions.map((suggestion, index) => (
                 <div
                   key={index}
-                  className="px-3 py-2 cursor-pointer hover:bg-muted text-sm"
+                  className="hover:bg-muted cursor-pointer px-3 py-2 text-sm"
                   onClick={() => selectSuggestion(suggestion)}
                 >
                   {suggestion}

@@ -8,6 +8,7 @@ const HomePage = lazy(() => import("./pages/home/HomePage"));
 const LoginPage = lazy(() => import("./pages/authentication/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/authentication/RegisterPage"));
 const JobDetailPage = lazy(() => import("./pages/job/JobDetailPage"));
+const PostJobPageContent = lazy(() => import("./pages/job/PostJobPage"));
 
 const Loading = () => (
   <div className="flex min-h-screen items-center justify-center">
@@ -33,7 +34,7 @@ function AppLayout() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/jobs" element={<JobListPage />} />
             <Route path="/jobs/:id" element={<JobDetailPage />} />
-            
+            <Route path="/post-jobs" element={<PostJobPageContent />} />
           </Routes>
         </Suspense>
       </main>

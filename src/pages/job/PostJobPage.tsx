@@ -1,22 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { AlertTriangle, Eye, FileText, Info, Save, Send, Upload, X } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import { useRouter } from "next/router";
-import { toast } from "sonner";
-import {
-  Save,
-  Eye,
-  Send,
-  FileText,
-  Upload,
-  Info,
-  X,
-  AlertTriangle,
-} from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import BenefitsSelector from "@/components/jobPost/BenefitsSelector";
+import InterviewProcessBuilder from "@/components/jobPost/InterviewProcessBuilder";
+import RichTextEditor from "@/components/jobPost/RichTextEditor";
+import SkillsInput from "@/components/jobPost/SkillsInput";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -34,23 +37,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-
-import RichTextEditor from "@/components/editor/RichTextEditor";
-import SkillsInput from "@/components/job/SkillsInput";
-import BenefitsSelector from "@/components/job/BenefitsSelector";
-import InterviewProcessBuilder from "@/components/job/InterviewProcessBuilder";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Job } from "../../types/job";
 
 // Define form schema with Zod
 const postJobSchema = z.object({
@@ -86,7 +74,7 @@ const mockCompanies = [
 ];
 
 const PostJobPage: React.FC = () => {
-  const router = useRouter();
+  const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [autosaveInterval, setAutosaveInterval] = useState<NodeJS.Timeout | null>(null);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -128,12 +116,12 @@ const PostJobPage: React.FC = () => {
       try {
         const draftData = JSON.parse(savedDraft);
         // Exclude file attachment when loading from localStorage
-        const { attachment, ...rest } = draftData;
+        const { attachment: _, ...rest } = draftData;
         form.reset(rest);
-        toast.info("Draft loaded successfully");
+        console.info("Draft loaded successfully");
       } catch (error) {
         console.error("Error loading draft:", error);
-        toast.error("Failed to load draft");
+        console.error("Failed to load draft");
       }
     }
   }, [form]);
@@ -191,12 +179,12 @@ const PostJobPage: React.FC = () => {
       setIsDirty(false);
 
       if (!isAutoSave) {
-        toast.success("Draft saved successfully");
+        console.log("Draft saved successfully");
       }
     } catch (error) {
       console.error("Error saving draft:", error);
       if (!isAutoSave) {
-        toast.error("Failed to save draft");
+        console.error("Failed to save draft");
       }
     }
   };
@@ -205,28 +193,18 @@ const PostJobPage: React.FC = () => {
   const onSubmit = async (data: PostJobFormValues) => {
     try {
       console.log("Submitting job post:", data);
-      
+
       // This would be replaced with an actual API call
       // await postJobAPI(data);
-      
+
       // Clear draft after successful submission
       localStorage.removeItem("jobPostDraft");
-      
-      toast.success("Job posted successfully!");
-      router.push("/employer/jobs");
+
+      console.log("Job posted successfully!");
+      navigate("/employer/jobs");
     } catch (error) {
       console.error("Error posting job:", error);
-      toast.error("Failed to post job. Please try again.");
-    }
-  };
-
-  // Navigate with confirmation if form is dirty
-  const navigateWithConfirmation = (path: string) => {
-    if (isDirty) {
-      setNavigationPath(path);
-      setLeaveDialogOpen(true);
-    } else {
-      router.push(path);
+      console.error("Failed to post job. Please try again.");
     }
   };
 
@@ -235,51 +213,40 @@ const PostJobPage: React.FC = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.type !== "application/pdf") {
-        toast.error("Only PDF files are allowed");
+        console.error("Only PDF files are allowed");
         return;
       }
-      
-      if (file.size > 5 * 1024 * 1024) { // 5MB limit
-        toast.error("File size should not exceed 5MB");
+
+      if (file.size > 5 * 1024 * 1024) {
+        // 5MB limit
+        console.error("File size should not exceed 5MB");
         return;
       }
-      
+
       form.setValue("attachment", file, { shouldDirty: true });
-      toast.success(`File "${file.name}" uploaded successfully`);
+      console.log(`File "${file.name}" uploaded successfully`);
     }
   };
 
   return (
-    <div className="container mx-auto py-8 px-4 max-w-6xl">
-      <div className="flex items-center justify-between mb-8">
+    <div className="container mx-auto max-w-6xl px-4 py-8">
+      <div className="mb-8 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Post a Job</h1>
         <div className="flex items-center gap-2">
           {lastSaved && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               Last saved: {lastSaved.toLocaleTimeString()}
             </p>
           )}
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => saveFormData()}
-          >
+          <Button variant="outline" size="sm" onClick={() => saveFormData()}>
             <Save className="mr-2 h-4 w-4" />
             Save Draft
           </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setPreviewOpen(true)}
-          >
+          <Button variant="outline" size="sm" onClick={() => setPreviewOpen(true)}>
             <Eye className="mr-2 h-4 w-4" />
             Preview
           </Button>
-          <Button
-            variant="default"
-            size="sm"
-            onClick={form.handleSubmit(onSubmit)}
-          >
+          <Button variant="default" size="sm" onClick={form.handleSubmit(onSubmit)}>
             <Send className="mr-2 h-4 w-4" />
             Post Job
           </Button>
@@ -291,7 +258,8 @@ const PostJobPage: React.FC = () => {
           <AlertTriangle className="h-4 w-4" />
           <AlertTitle>Unsaved changes</AlertTitle>
           <AlertDescription>
-            You have unsaved changes. Make sure to save your draft or post the job before leaving this page.
+            You have unsaved changes. Make sure to save your draft or post the job before leaving
+            this page.
           </AlertDescription>
         </Alert>
       )}
@@ -299,13 +267,13 @@ const PostJobPage: React.FC = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <Card>
-		  <CardContent className="pt-6">
+            <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                <h2 className="flex items-center gap-2 text-xl font-semibold">
+                  <FileText className="text-primary h-5 w-5" />
                   Basic Information
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   <FormField
                     control={form.control}
                     name="title"
@@ -518,8 +486,8 @@ const PostJobPage: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                <h2 className="flex items-center gap-2 text-xl font-semibold">
+                  <FileText className="text-primary h-5 w-5" />
                   Job Description
                 </h2>
 
@@ -629,8 +597,8 @@ const PostJobPage: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                <h2 className="flex items-center gap-2 text-xl font-semibold">
+                  <FileText className="text-primary h-5 w-5" />
                   Application Process
                 </h2>
 
@@ -641,14 +609,9 @@ const PostJobPage: React.FC = () => {
                     <FormItem>
                       <FormLabel>How to Apply*</FormLabel>
                       <FormControl>
-                        <Input
-                          placeholder="e.g. Email your resume to hr@company.com"
-                          {...field}
-                        />
+                        <Input placeholder="e.g. Email your resume to hr@company.com" {...field} />
                       </FormControl>
-                      <FormDescription>
-                        Provide clear instructions on how to apply
-                      </FormDescription>
+                      <FormDescription>Provide clear instructions on how to apply</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -661,10 +624,7 @@ const PostJobPage: React.FC = () => {
                     <FormItem>
                       <FormLabel>Interview Process</FormLabel>
                       <FormControl>
-                        <InterviewProcessBuilder
-                          steps={field.value}
-                          onChange={field.onChange}
-                        />
+                        <InterviewProcessBuilder steps={field.value} onChange={field.onChange} />
                       </FormControl>
                       <FormDescription>
                         Let candidates know what to expect during the hiring process
@@ -683,9 +643,7 @@ const PostJobPage: React.FC = () => {
                       <FormControl>
                         <Input type="date" {...field} />
                       </FormControl>
-                      <FormDescription>
-                        Leave blank if there's no deadline
-                      </FormDescription>
+                      <FormDescription>Leave blank if there's no deadline</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -697,8 +655,8 @@ const PostJobPage: React.FC = () => {
           <Card>
             <CardContent className="pt-6">
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold flex items-center gap-2">
-                  <FileText className="h-5 w-5 text-primary" />
+                <h2 className="flex items-center gap-2 text-xl font-semibold">
+                  <FileText className="text-primary h-5 w-5" />
                   Additional Settings
                 </h2>
 
@@ -715,9 +673,7 @@ const PostJobPage: React.FC = () => {
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="public">
-                            Public - Visible to everyone
-                          </SelectItem>
+                          <SelectItem value="public">Public - Visible to everyone</SelectItem>
                           <SelectItem value="private">
                             Private - Visible only with direct link
                           </SelectItem>
@@ -726,9 +682,7 @@ const PostJobPage: React.FC = () => {
                           </SelectItem>
                         </SelectContent>
                       </Select>
-                      <FormDescription>
-                        Control who can see your job posting
-                      </FormDescription>
+                      <FormDescription>Control who can see your job posting</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -754,7 +708,7 @@ const PostJobPage: React.FC = () => {
                         onChange={handleFileUpload}
                       />
                       {form.watch("attachment") && (
-                        <div className="bg-muted px-3 py-2 rounded-md text-sm flex items-center gap-2">
+                        <div className="bg-muted flex items-center gap-2 rounded-md px-3 py-2 text-sm">
                           <FileText className="h-4 w-4" />
                           {(form.watch("attachment") as File).name}
                           <button
@@ -767,9 +721,7 @@ const PostJobPage: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    <p className="text-sm text-muted-foreground mt-2">
-                      Max file size: 5MB
-                    </p>
+                    <p className="text-muted-foreground mt-2 text-sm">Max file size: 5MB</p>
                   </div>
                 </div>
               </div>
@@ -791,7 +743,7 @@ const PostJobPage: React.FC = () => {
 
       {/* Preview Dialog */}
       <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="sm:max-w-[900px] max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[900px]">
           <DialogHeader>
             <DialogTitle>Job Preview</DialogTitle>
             <DialogDescription>
@@ -802,9 +754,9 @@ const PostJobPage: React.FC = () => {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <h2 className="text-2xl font-bold">{form.watch("title") || "Job Title"}</h2>
-              <div className="flex flex-wrap gap-2 text-sm text-muted-foreground">
+              <div className="text-muted-foreground flex flex-wrap gap-2 text-sm">
                 <div className="flex items-center gap-1">
-                  {mockCompanies.find(c => c.id === form.watch("companyId"))?.name || "Company"}
+                  {mockCompanies.find((c) => c.id === form.watch("companyId"))?.name || "Company"}
                 </div>
                 <div>•</div>
                 <div>{form.watch("location") || "Location"}</div>
@@ -817,7 +769,7 @@ const PostJobPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap gap-2 my-4">
+            <div className="my-4 flex flex-wrap gap-2">
               {form.watch("skills").map((skill, index) => (
                 <Badge key={index} variant="secondary">
                   {skill}
@@ -826,34 +778,47 @@ const PostJobPage: React.FC = () => {
             </div>
 
             <Tabs defaultValue="description">
-              <TabsList className="grid grid-cols-3 mb-4">
+              <TabsList className="mb-4 grid grid-cols-3">
                 <TabsTrigger value="description">Description</TabsTrigger>
                 <TabsTrigger value="requirements">Requirements</TabsTrigger>
                 <TabsTrigger value="company">Company & Benefits</TabsTrigger>
               </TabsList>
               <TabsContent value="description" className="space-y-4">
                 <div>
-                  <h3 className="font-semibold mb-2">Responsibilities</h3>
-                  <div className="prose max-w-none text-sm" dangerouslySetInnerHTML={{ __html: form.watch("responsibilities") || "No responsibilities specified" }} />
+                  <h3 className="mb-2 font-semibold">Responsibilities</h3>
+                  <div
+                    className="prose max-w-none text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: form.watch("responsibilities") || "No responsibilities specified",
+                    }}
+                  />
                 </div>
               </TabsContent>
               <TabsContent value="requirements" className="space-y-4">
                 <div>
-                  <h3 className="font-semibold mb-2">Basic Requirements</h3>
-                  <div className="prose max-w-none text-sm" dangerouslySetInnerHTML={{ __html: form.watch("requirements") || "No requirements specified" }} />
+                  <h3 className="mb-2 font-semibold">Basic Requirements</h3>
+                  <div
+                    className="prose max-w-none text-sm"
+                    dangerouslySetInnerHTML={{
+                      __html: form.watch("requirements") || "No requirements specified",
+                    }}
+                  />
                 </div>
                 {form.watch("preferredSkills") && (
                   <div>
-                    <h3 className="font-semibold mb-2">Preferred Skills</h3>
-                    <div className="prose max-w-none text-sm" dangerouslySetInnerHTML={{ __html: form.watch("preferredSkills") }} />
+                    <h3 className="mb-2 font-semibold">Preferred Skills</h3>
+                    <div
+                      className="prose max-w-none text-sm"
+                      dangerouslySetInnerHTML={{ __html: form.watch("preferredSkills") }}
+                    />
                   </div>
                 )}
               </TabsContent>
               <TabsContent value="company" className="space-y-4">
                 <div>
-                  <h3 className="font-semibold mb-2">Benefits</h3>
+                  <h3 className="mb-2 font-semibold">Benefits</h3>
                   {form.watch("benefits").length > 0 ? (
-                    <ul className="list-disc pl-5 space-y-1">
+                    <ul className="list-disc space-y-1 pl-5">
                       {form.watch("benefits").map((benefit, index) => (
                         <li key={index}>{benefit}</li>
                       ))}
@@ -865,21 +830,21 @@ const PostJobPage: React.FC = () => {
               </TabsContent>
             </Tabs>
 
-            <div className="bg-muted p-4 rounded-md mt-6">
-              <h3 className="font-semibold mb-2">How to Apply</h3>
+            <div className="bg-muted mt-6 rounded-md p-4">
+              <h3 className="mb-2 font-semibold">How to Apply</h3>
               <p>{form.watch("howtoapply") || "Application instructions not provided"}</p>
-              
+
               {form.watch("interviewProcess").length > 0 && (
                 <div className="mt-4">
-                  <h3 className="font-semibold mb-2">Interview Process</h3>
-                  <ol className="list-decimal pl-5 space-y-1">
+                  <h3 className="mb-2 font-semibold">Interview Process</h3>
+                  <ol className="list-decimal space-y-1 pl-5">
                     {form.watch("interviewProcess").map((step, index) => (
                       <li key={index}>{step}</li>
                     ))}
                   </ol>
                 </div>
               )}
-              
+
               {form.watch("deadline") && (
                 <div className="mt-4">
                   <h3 className="font-semibold">Application Deadline</h3>
@@ -888,7 +853,7 @@ const PostJobPage: React.FC = () => {
               )}
             </div>
           </div>
-          
+
           <DialogFooter>
             <Button type="button" onClick={() => setPreviewOpen(false)}>
               Close Preview
@@ -914,7 +879,7 @@ const PostJobPage: React.FC = () => {
               variant="destructive"
               onClick={() => {
                 setLeaveDialogOpen(false);
-                router.push(navigationPath);
+                navigate(navigationPath);
               }}
             >
               Leave without saving
@@ -923,7 +888,7 @@ const PostJobPage: React.FC = () => {
               onClick={() => {
                 saveFormData();
                 setLeaveDialogOpen(false);
-                router.push(navigationPath);
+                navigate(navigationPath);
               }}
             >
               Save and leave

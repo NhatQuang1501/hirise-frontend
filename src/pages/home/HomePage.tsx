@@ -11,7 +11,7 @@ const jobsData = [
   {
     id: 1,
     company: "FPT Software",
-    logo: "/company-logos/fpt.png",
+    logo: "src/assets/images/fpt.png",
     title: "Senior Frontend Developer",
     salary: "$1,500 - $2,500",
     location: "Hanoi",
@@ -41,7 +41,7 @@ const jobsData = [
   {
     id: 4,
     company: "Shopee",
-    logo: "/company-logos/shopee.png",
+    logo: "src/assets/images/shopee.png",
     title: "Data Engineer",
     salary: "$1,500 - $2,800",
     location: "Ho Chi Minh City",
@@ -115,7 +115,7 @@ const companiesData = [
   {
     id: 4,
     name: "Tiki",
-    logo: "/company-logos/tiki.png",
+    logo: "src/assets/images/tiki.png",
     jobCount: "45+",
     industry: "E-commerce",
   },

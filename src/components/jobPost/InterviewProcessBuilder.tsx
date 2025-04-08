@@ -1,7 +1,7 @@
 import React, { useState } from "react";
+import { MoveDown, MoveUp, PlusCircle, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { PlusCircle, Trash2, MoveUp, MoveDown } from "lucide-react";
 
 interface InterviewProcessBuilderProps {
   steps: string[];
@@ -47,15 +47,17 @@ const InterviewProcessBuilder: React.FC<InterviewProcessBuilderProps> = ({ steps
   return (
     <div className="space-y-4">
       {steps.length === 0 ? (
-        <div className="bg-muted/40 p-6 text-center rounded-md">
+        <div className="bg-muted/40 rounded-md p-6 text-center">
           <p className="text-muted-foreground">No interview steps added yet</p>
-          <p className="text-xs text-muted-foreground mt-1">Add steps to describe your interview process</p>
+          <p className="text-muted-foreground mt-1 text-xs">
+            Add steps to describe your interview process
+          </p>
         </div>
       ) : (
         <div className="space-y-2">
           {steps.map((step, index) => (
             <div key={index} className="flex items-center gap-2">
-              <div className="bg-muted flex items-center justify-center w-8 h-8 rounded-full shrink-0">
+              <div className="bg-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
                 {index + 1}
               </div>
               <Input
@@ -89,7 +91,7 @@ const InterviewProcessBuilder: React.FC<InterviewProcessBuilderProps> = ({ steps
                   variant="ghost"
                   size="icon"
                   onClick={() => handleRemoveStep(index)}
-                  className="h-8 w-8 text-destructive hover:text-destructive"
+                  className="text-destructive hover:text-destructive h-8 w-8"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -99,7 +101,7 @@ const InterviewProcessBuilder: React.FC<InterviewProcessBuilderProps> = ({ steps
         </div>
       )}
 
-      <div className="flex gap-2 mt-4">
+      <div className="mt-4 flex gap-2">
         <Input
           placeholder="Add new interview step"
           value={newStep}
