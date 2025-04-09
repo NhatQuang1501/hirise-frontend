@@ -1,92 +1,92 @@
 import React from "react";
-import { ChevronRight } from "lucide-react";
+import { Building2, MapPin, Users } from "lucide-react";
 import { Link } from "react-router-dom";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-
-interface CompanyCardProps {
-  company: {
-    id: number;
-    name: string;
-    logo: string;
-    jobCount: string;
-    industry: string;
-  };
-}
-
-interface Company {
-  id: number;
-  name: string;
-  logo: string;
-  jobCount: string;
-  industry: string;
-}
+import { Company } from "@/types/company";
+import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
+import { BaseCarousel } from "../section/BaseCarousel";
 
 interface CompanyCarouselProps {
   companies: Company[];
+  title?: string;
+  description?: string;
+  viewAllLink?: string;
 }
 
-export const CompanyCard: React.FC<CompanyCardProps> = ({ company }) => {
-  return (
+const CompanyCarousel = ({
+  companies,
+  title = "Top Companies",
+  description = "Leading employers in the tech industry",
+  viewAllLink = "/companies",
+}: CompanyCarouselProps) => {
+  const renderCompany = (company: Company) => (
     <Link
       to={`/companies/${company.id}`}
-      className="flex h-full flex-col items-center rounded-lg bg-white p-6 text-center shadow-sm transition-all hover:shadow-md"
+      className="group block rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
     >
-      <img
-        src={company.logo}
-        alt={company.name}
-        className="mb-4 h-20 w-20 rounded-md object-contain" // Tăng kích thước logo
-        loading="lazy"
-        width="80"
-        height="80"
-      />
-      <h3 className="mb-2 text-lg font-medium">{company.name}</h3>
-      <p className="text-primary mb-1 text-base">{company.jobCount} jobs</p>
-      <p className="mt-1 text-sm text-gray-500">{company.industry}</p>
+      <div className="mb-4 flex items-start justify-between">
+        <img
+          src={company.logo}
+          alt={company.name}
+          className="h-16 w-16 rounded-lg object-contain"
+        />
+        {company.newJobsToday > 0 && (
+          <Badge variant="secondary" className="bg-green-100 text-green-800">
+            {company.newJobsToday} new jobs
+          </Badge>
+        )}
+      </div>
+
+      <h3 className="group-hover:text-primary mb-2 text-lg font-bold transition-colors">
+        {company.name}
+      </h3>
+
+      <div className="mb-3 flex items-center gap-2">
+        <Building2 className="text-muted-foreground h-4 w-4" />
+        <span className="text-muted-foreground text-sm">{company.industry}</span>
+      </div>
+
+      <div className="mb-3 flex items-center gap-2">
+        <MapPin className="text-muted-foreground h-4 w-4" />
+        <span className="text-muted-foreground text-sm">{company.location}</span>
+      </div>
+
+      <div className="mb-4 flex items-center justify-between">
+        {/* <div className="flex items-center gap-2">
+          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+          <span className="font-medium">{company.rating}</span>
+          <span className="text-muted-foreground text-sm">
+            ({company.reviewCount.toLocaleString()})
+          </span>
+        </div> */}
+        <div className="flex items-center gap-1">
+          <Users className="text-primary size-4" />
+          <span className="text-muted-foreground text-sm">
+            {company.followerCount.toLocaleString()}
+          </span>
+        </div>
+      </div>
+
+      <div className={cn("border-border mt-4 border-t pt-4", "flex items-center justify-between")}>
+        {/* <span className="text-primary font-medium">{company.jobCount} open positions</span> */}
+        <span className="text-muted-foreground group-hover:text-primary text-sm transition-colors">
+          View company →
+        </span>
+      </div>
     </Link>
   );
-};
 
-export const CompanyCarousel: React.FC<CompanyCarouselProps> = ({ companies }) => {
   return (
-    <section className="border-y bg-gray-50 py-16">
-      <div className="container mx-auto px-4">
-        <div className="mb-10 flex items-center justify-between">
-          <h2 className="text-3xl font-bold">Top IT companies</h2>
-          <Link to="/companies" className="text-primary flex items-center hover:underline">
-            View all <ChevronRight className="h-4 w-4" />
-          </Link>
-        </div>
-
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
-          }}
-          className="w-full"
-        >
-          <CarouselContent className="-ml-4">
-            {companies.map((company) => (
-              <CarouselItem
-                key={company.id}
-                // Thay đổi basis cho các breakpoint để hiển thị ít công ty hơn nhưng to hơn
-                className="pl-4 sm:basis-1/2 md:basis-1/3 lg:basis-1/4"
-              >
-                <CompanyCard company={company} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <div className="mt-6 flex justify-center gap-2">
-            <CarouselPrevious className="static translate-y-0" />
-            <CarouselNext className="static translate-y-0" />
-          </div>
-        </Carousel>
-      </div>
-    </section>
+    <BaseCarousel
+      items={companies}
+      renderItem={renderCompany}
+      title={title}
+      description={description}
+      viewAllLink={viewAllLink}
+      breakpoints={{ sm: 1, md: 2, lg: 3, xl: 3 }}
+      autoplayInterval={10000}
+    />
   );
 };
+
+export default CompanyCarousel;

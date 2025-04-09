@@ -2,14 +2,18 @@ import { Suspense, lazy } from "react";
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
 import { Footer } from "./components/footer/Footer";
 import { Header } from "./components/header/Header";
+import { Toaster } from "sonner"; // 👉 Thêm dòng này
 
-const JobListPage = lazy(() => import("./pages/job/JobListPage"));
 const HomePage = lazy(() => import("./pages/home/HomePage"));
 const LoginPage = lazy(() => import("./pages/authentication/LoginPage"));
 const RegisterPage = lazy(() => import("./pages/authentication/RegisterPage"));
+const JobListPage = lazy(() => import("./pages/job/JobListPage"));
 const JobDetailPage = lazy(() => import("./pages/job/JobDetailPage"));
 const PostJobPage = lazy(() => import("./pages/job/PostJobPage"));
-const CompaniesPage = lazy(() => import("./pages/company/CompaniesPage"));
+const CompanyListPage = lazy(() => import("./pages/company/CompanyListPage"));
+const CompanyDetailPage = lazy(() => import("./pages/company/CompanyDetailPage"));
+const AboutPage = lazy(() => import("./pages/static/AboutPage"));
+const ContactPage = lazy(() => import("./pages/static/ContactPage"));
 
 const Loading = () => (
   <div className="flex min-h-screen items-center justify-center">
@@ -17,7 +21,6 @@ const Loading = () => (
   </div>
 );
 
-// Pages require authentication
 const AUTH_PAGES = ["/login", "/register"];
 
 function AppLayout() {
@@ -36,11 +39,14 @@ function AppLayout() {
             <Route path="/jobs" element={<JobListPage />} />
             <Route path="/jobs/:id" element={<JobDetailPage />} />
             <Route path="/post-jobs" element={<PostJobPage />} />
-            <Route path="/companies" element={<CompaniesPage />} />
+            <Route path="/companies" element={<CompanyListPage />} />
+            <Route path="/companies/:id" element={<CompanyDetailPage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/contact" element={<ContactPage />} />
           </Routes>
         </Suspense>
       </main>
-      {/* {!isAuthPage && <Footer />} */}
+      <Toaster position="bottom-right" richColors closeButton />
       <Footer />
     </div>
   );

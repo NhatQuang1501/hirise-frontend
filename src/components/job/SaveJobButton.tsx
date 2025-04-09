@@ -13,7 +13,7 @@ const SaveJobButton: React.FC<SaveJobButtonProps> = ({ saved, onSaveJob, classNa
     <Button variant="outline" size="lg" className={className} onClick={onSaveJob}>
       {saved ? (
         <span className="flex items-center gap-2">
-          <Heart className="fill-primary text-primary h-5 w-5" />
+          <Heart className="fill-primary text-primary size-5" />
           Saved
         </span>
       ) : (

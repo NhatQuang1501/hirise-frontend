@@ -4,7 +4,6 @@ import { AlertTriangle, Eye, FileText, Save, Send, Upload, X } from "lucide-reac
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
-import BenefitsSelector from "@/components/jobPost/BenefitsSelector";
 import InterviewProcessBuilder from "@/components/jobPost/InterviewProcessBuilder";
 import RichTextEditor from "@/components/jobPost/RichTextEditor";
 import SkillsInput from "@/components/jobPost/SkillsInput";
@@ -99,7 +98,7 @@ const PostJobPage: React.FC = () => {
       responsibilities: "",
       requirements: "",
       preferredSkills: "",
-      benefits: [],
+      benefits: "",
       howtoapply: "",
       interviewProcess: [],
       deadline: "",

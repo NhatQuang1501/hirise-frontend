@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { JobCardData } from "@/types/job";
+import { sampleJobs } from "@/types/mockData";
 import FeaturedJobs from "@/components/job/FeaturedJobs";
-import JobListView from "@/components/job/JobListView";
+import JobListingSection from "@/components/job/JobListingSection";
 import AdvancedFilters from "@/components/search/AdvancedFilters";
 import SearchBar from "@/components/search/SearchBar";
 import { Button } from "@/components/ui/button";
@@ -21,130 +22,6 @@ interface FilterType {
   experience: string;
   postDate: string;
 }
-
-// Dữ liệu mẫu cho trang
-const sampleJobs: JobCardData[] = [
-  {
-    id: 1,
-    company: "FPT Software",
-    logo: "/company-logos/fpt.png",
-    title: "Senior React Developer",
-    salary: "25.000.000 - 35.000.000",
-    location: "Hanoi",
-    time: "1 day ago",
-    skills: ["React", "TypeScript", "NodeJS"],
-  },
-  {
-    id: 2,
-    company: "VNG Corporation",
-    logo: "/company-logos/vng.png",
-    title: "DevOps Engineer",
-    salary: "20.000.000 - 30.000.000",
-    location: "HCM",
-    time: "2 days ago",
-    skills: ["Docker", "Kubernetes", "AWS"],
-  },
-  {
-    id: 3,
-    company: "Shopee",
-    logo: "/company-logos/shopee.png",
-    title: "Frontend Developer",
-    salary: "18.000.000 - 25.000.000",
-    location: "HCM",
-    time: "3 days ago",
-    skills: ["JavaScript", "React", "CSS"],
-  },
-  {
-    id: 4,
-    company: "Tiki",
-    logo: "/company-logos/tiki.png",
-    title: "Product Manager",
-    salary: "20.000.000 - 30.000.000",
-    location: "HCM",
-    time: "4 days ago",
-    skills: ["Agile", "Scrum", "Product Development"],
-  },
-  {
-    id: 5,
-    company: "Momo",
-    logo: "/company-logos/momo.png",
-    title: "Backend Engineer",
-    salary: "22.000.000 - 32.000.000",
-    location: "HCM",
-    time: "2 days ago",
-    skills: ["Java", "Spring Boot", "Microservices"],
-  },
-  {
-    id: 6,
-    company: "VNPAY",
-    logo: "/company-logos/vnpay.png",
-    title: "Data Engineer",
-    salary: "20.000.000 - 28.000.000",
-    location: "Hanoi",
-    time: "3 days ago",
-    skills: ["Python", "SQL", "Data Pipeline"],
-  },
-  {
-    id: 7,
-    company: "Microsoft",
-    logo: "/company-logos/microsoft.png",
-    title: "Software Engineer",
-    salary: "30.000.000 - 45.000.000",
-    location: "HCM",
-    time: "1 week ago",
-    skills: ["C#", ".NET", "Azure"],
-  },
-  {
-    id: 8,
-    company: "Amazon",
-    logo: "/company-logos/amazon.png",
-    title: "Data Scientist",
-    salary: "35.000.000 - 50.000.000",
-    location: "Remote",
-    time: "5 days ago",
-    skills: ["Python", "Machine Learning", "AWS"],
-  },
-  {
-    id: 9,
-    company: "Google",
-    logo: "/company-logos/google.png",
-    title: "UX/UI Designer",
-    salary: "28.000.000 - 40.000.000",
-    location: "HCM",
-    time: "2 weeks ago",
-    skills: ["Figma", "Adobe XD", "User Research"],
-  },
-  {
-    id: 10,
-    company: "Grab",
-    logo: "/company-logos/grab.png",
-    title: "Mobile Developer",
-    salary: "25.000.000 - 38.000.000",
-    location: "Hanoi",
-    time: "6 days ago",
-    skills: ["Flutter", "React Native", "iOS/Android"],
-  },
-  {
-    id: 11,
-    company: "Agoda",
-    logo: "/company-logos/agoda.png",
-    title: "QA Engineer",
-    salary: "18.000.000 - 28.000.000",
-    location: "HCM",
-    time: "1 week ago",
-    skills: ["Selenium", "TestNG", "Automation"],
-  },
-  {
-    id: 12,
-    company: "Netflix",
-    logo: "/company-logos/netflix.png",
-    title: "Backend Developer",
-    salary: "32.000.000 - 46.000.000",
-    location: "Remote",
-    time: "3 days ago",
-    skills: ["Java", "Spring Boot", "Microservices"],
-  },
-];
 
 // Dữ liệu mẫu cho các mục nổi bật
 const featuredJobs = sampleJobs.slice(0, 4);
@@ -432,7 +309,14 @@ const JobListPage: React.FC = () => {
             ) : (
               <>
                 {filteredJobs.length > 0 ? (
-                  <JobListView jobs={filteredJobs} />
+                  <JobListingSection
+                    jobs={filteredJobs}
+                    title="Featured Jobs"
+                    defaultView="grid"
+                    itemsPerPage={12}
+                    showViewToggle={true}
+                    className="my-8"
+                  />
                 ) : (
                   <div className="rounded-lg border border-dashed p-8 text-center">
                     <h3 className="mb-2 text-xl font-semibold">No matching jobs found</h3>

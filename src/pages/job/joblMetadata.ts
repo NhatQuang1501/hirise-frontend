@@ -1,4 +1,3 @@
-// Metadata cho SEO trong React 19
 export const jobDetailMetadata = {
   title: "Job detail | HiRise",
   description:

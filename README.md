@@ -26,22 +26,26 @@ A modern job platform specifically designed for the tech industry, built with Re
 ## 📦 Installation
 
 1. Clone the repository:
+
 ```bash
 git clone https://github.com/NhatQuang1501/hirise-frontend.git
 cd hirise-frontend
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 ```
 
 3. Set up environment variables:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Start the development server:
+
 ```bash
 npm run dev
 ```
@@ -86,7 +90,7 @@ npm test
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Developed by @[NhatQuang1501](https://github.com/NhatQuang1501)
+## 👥 Developed by [NhatQuang1501](https://github.com/NhatQuang1501)
 
 ## 🙏 Acknowledgments
 

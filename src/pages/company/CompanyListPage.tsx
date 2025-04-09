@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Search } from "lucide-react";
+import { Company } from "@/types/company";
+import { topCompaniesData } from "@/types/mockData";
+import CompanyCarousel from "@/components/company/CompanyCarousel";
 import NewJobsCompanyGrid from "@/components/company/NewJobsCompanyGrid";
 import PopularCompaniesCarousel from "@/components/company/PopularCompaniesCarousel";
-import TopCompaniesCarousel from "@/components/company/TopCompaniesCarousel";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -14,7 +16,7 @@ import {
 } from "@/components/ui/select";
 import { companiesMetadata } from "./companyMetadata";
 
-const CompaniesPage = () => {
+const CompanyListPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [industry, setIndustry] = useState("");
   const [location, setLocation] = useState("");
@@ -87,7 +89,11 @@ const CompaniesPage = () => {
       {/* Top Companies */}
       <section className="py-16">
         <div className="container mx-auto px-4">
-          <TopCompaniesCarousel />
+          <CompanyCarousel
+            companies={topCompaniesData}
+            title="Top Companies"
+            description="Leading employers in the tech industry"
+          />
         </div>
       </section>
 
@@ -108,4 +114,4 @@ const CompaniesPage = () => {
   );
 };
 
-export default CompaniesPage;
+export default CompanyListPage;

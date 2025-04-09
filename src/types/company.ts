@@ -4,8 +4,6 @@ export interface Company {
   logo: string;
   industry: string;
   location: string;
-  rating: number;
-  reviewCount: number;
   jobCount: number;
   followerCount: number;
   isFollowing: boolean;
@@ -16,4 +14,20 @@ export interface Company {
 export interface CompanyCardProps {
   company: Company;
   onFollowToggle?: (companyId: string) => void;
+}
+
+export interface CompanyDetails extends Company {
+  size: string;
+  founded: string;
+  type: string;
+  website: string;
+  email?: string;
+  phone?: string;
+  address: string;
+  socialMedia?: {
+    linkedin?: string;
+    facebook?: string;
+    twitter?: string;
+  };
+  openPositions: number;
 }
