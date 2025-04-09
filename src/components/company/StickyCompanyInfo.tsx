@@ -1,8 +1,8 @@
 import React from "react";
 import { MapPin, Users } from "lucide-react";
 import { CompanyDetails } from "@/types/company";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface StickyCompanyInfoProps {
   company: CompanyDetails;
@@ -17,14 +17,14 @@ const StickyCompanyInfo = ({
   isFollowing,
   onFollow,
   isVisible,
-  className
+  className,
 }: StickyCompanyInfoProps) => {
   return (
     <div
       className={cn(
-        "bg-white border-b transition-all duration-300",
+        "border-b bg-white transition-all duration-300",
         isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0",
-        className
+        className,
       )}
     >
       <div className="container mx-auto px-4">
@@ -37,7 +37,7 @@ const StickyCompanyInfo = ({
             />
             <div>
               <h2 className="text-lg font-semibold">{company.name}</h2>
-              <div className="flex items-center gap-4 text-sm text-muted-foreground">
+              <div className="text-muted-foreground flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
                   <MapPin className="h-4 w-4" />
                   <span>{company.location}</span>
@@ -49,11 +49,7 @@ const StickyCompanyInfo = ({
               </div>
             </div>
           </div>
-          <Button
-            onClick={onFollow}
-            variant={isFollowing ? "secondary" : "default"}
-            size="sm"
-          >
+          <Button onClick={onFollow} variant={isFollowing ? "secondary" : "default"} size="sm">
             {isFollowing ? "Following" : "Follow"}
           </Button>
         </div>

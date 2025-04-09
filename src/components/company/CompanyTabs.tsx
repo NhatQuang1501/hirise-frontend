@@ -11,17 +11,17 @@ interface CompanyTabsProps {
   className?: string;
 }
 
-const CompanyTabs = ({ 
-  companyName, 
+const CompanyTabs = ({
+  companyName,
   companyLocation,
   followerCount,
-  activeSection, 
+  activeSection,
   onTabClick,
-  className 
+  className,
 }: CompanyTabsProps) => {
   return (
     <div className={cn("border-b", className)}>
-      <div className="lg:col-span-8 mx-auto max-w-screen-xl px-4">
+      <div className="mx-auto max-w-screen-xl px-4 lg:col-span-8">
         {/* Remove company info since it's now in the sticky header */}
         <div className="flex space-x-8">
           {[
@@ -35,8 +35,8 @@ const CompanyTabs = ({
                 "relative py-4 text-sm font-medium transition-colors",
                 "hover:text-primary focus-visible:outline-none",
                 activeSection === tab.id
-                  ? "text-primary border-b-2 border-primary"
-                  : "text-muted-foreground"
+                  ? "text-primary border-primary border-b-2"
+                  : "text-muted-foreground",
               )}
             >
               {tab.label}

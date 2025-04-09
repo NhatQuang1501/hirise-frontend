@@ -1,8 +1,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Send } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { toast } from "sonner";
+import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -41,19 +41,19 @@ const ContactForm = () => {
       console.log("Form data:", data);
 
       toast.success("Message sent successfully!", {
-		description: "We'll get back to you soon.",
-		className: "bg-green-500 text-white font-bold rounded-xl",
-		duration: 3000,
-	  });
+        description: "We'll get back to you soon.",
+        className: "bg-green-500 text-white font-bold rounded-xl",
+        duration: 3000,
+      });
 
       form.reset();
     } catch (error) {
-    console.error("Error submitting form:", error);
-    toast.error("Error sending message", {
-      description: "Please try again later.",
-	  className: "bg-red-500 text-white font-bold rounded-xl",
-	  duration: 5000,
-  });
+      console.error("Error submitting form:", error);
+      toast.error("Error sending message", {
+        description: "Please try again later.",
+        className: "bg-red-500 text-white font-bold rounded-xl",
+        duration: 5000,
+      });
     }
   };
 

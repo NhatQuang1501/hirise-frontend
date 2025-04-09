@@ -5,46 +5,16 @@ import MissionVisionSection from "@/components/staticComponents/MissionVisionSec
 import StorySection from "@/components/staticComponents/StorySection";
 import TeamSection from "@/components/staticComponents/TeamSection";
 import { aboutMetadata } from "./aboutMetadata";
+import { updatePageMetadata } from "./metadataUtils";
 
 const AboutPage = () => {
+  // Cập nhật metadata khi component mount
   useEffect(() => {
-    // Update metadata
-    document.title = aboutMetadata.title;
-    updateMetaTags();
+    updatePageMetadata(aboutMetadata);
   }, []);
 
-  const updateMetaTags = () => {
-    // Update meta description
-    const metaDescription = document.querySelector('meta[name="description"]');
-    if (metaDescription) {
-      metaDescription.setAttribute("content", aboutMetadata.description);
-    }
-
-    // Update OG tags
-    updateOGTag("title", aboutMetadata.openGraph.title);
-    updateOGTag("description", aboutMetadata.openGraph.description);
-    updateOGTag("image", aboutMetadata.openGraph.image);
-    updateOGTag("url", aboutMetadata.openGraph.url);
-
-    // Update canonical
-    let canonical = document.querySelector('link[rel="canonical"]');
-    if (!canonical) {
-      canonical = document.createElement("link");
-      canonical.setAttribute("rel", "canonical");
-      document.head.appendChild(canonical);
-    }
-    canonical.setAttribute("href", aboutMetadata.canonical);
-  };
-
-  const updateOGTag = (property: string, content: string) => {
-    const tag = document.querySelector(`meta[property="og:${property}"]`);
-    if (tag) {
-      tag.setAttribute("content", content);
-    }
-  };
-
   return (
-    <div className="min-h-screen">
+    <main className="min-h-screen">
       <AboutHeroSection />
       <StorySection />
       <MissionVisionSection />
@@ -61,7 +31,7 @@ const AboutPage = () => {
           href: "/contact",
         }}
       />
-    </div>
+    </main>
   );
 };
 

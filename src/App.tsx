@@ -1,27 +1,10 @@
-import { Suspense, lazy } from "react";
+import { Suspense } from "react";
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
+import Loading from "@/components/staticComponents/loading";
+import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "./components/footer/Footer";
 import { Header } from "./components/header/Header";
-import { Toaster } from "sonner"; // 👉 Thêm dòng này
-
-const HomePage = lazy(() => import("./pages/home/HomePage"));
-const LoginPage = lazy(() => import("./pages/authentication/LoginPage"));
-const RegisterPage = lazy(() => import("./pages/authentication/RegisterPage"));
-const JobListPage = lazy(() => import("./pages/job/JobListPage"));
-const JobDetailPage = lazy(() => import("./pages/job/JobDetailPage"));
-const PostJobPage = lazy(() => import("./pages/job/PostJobPage"));
-const CompanyListPage = lazy(() => import("./pages/company/CompanyListPage"));
-const CompanyDetailPage = lazy(() => import("./pages/company/CompanyDetailPage"));
-const AboutPage = lazy(() => import("./pages/static/AboutPage"));
-const ContactPage = lazy(() => import("./pages/static/ContactPage"));
-
-const Loading = () => (
-  <div className="flex min-h-screen items-center justify-center">
-    <div className="border-primary h-16 w-16 animate-spin rounded-full border-4 border-t-transparent"></div>
-  </div>
-);
-
-const AUTH_PAGES = ["/login", "/register"];
+import { AUTH_PAGES, routes } from "./index";
 
 function AppLayout() {
   const { pathname } = useLocation();
@@ -31,23 +14,16 @@ function AppLayout() {
     <div className="flex min-h-screen flex-col">
       {!isAuthPage && <Header />}
       <main className="flex-1">
-        <Suspense fallback={<Loading />}>
+        <Suspense fallback={<Loading fullScreen size="lg" />}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/jobs" element={<JobListPage />} />
-            <Route path="/jobs/:id" element={<JobDetailPage />} />
-            <Route path="/post-jobs" element={<PostJobPage />} />
-            <Route path="/companies" element={<CompanyListPage />} />
-            <Route path="/companies/:id" element={<CompanyDetailPage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="/contact" element={<ContactPage />} />
+            {routes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element} />
+            ))}
           </Routes>
         </Suspense>
       </main>
       <Toaster position="bottom-right" richColors closeButton />
-      <Footer />
+      {!isAuthPage && <Footer />}
     </div>
   );
 }

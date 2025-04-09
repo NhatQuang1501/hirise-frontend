@@ -1,18 +1,18 @@
 import React from "react";
-import { 
-  Building2, 
-  Calendar, 
-  Globe, 
-  Mail, 
-  MapPin, 
-  Phone, 
-  Users,
-  Linkedin,
+import {
+  Building2,
+  Calendar,
   Facebook,
-  Twitter,
   Github,
+  Globe,
   Instagram,
-  Youtube
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Twitter,
+  Users,
+  Youtube,
 } from "lucide-react";
 import { CompanyDetails } from "@/types/company";
 
@@ -27,7 +27,7 @@ const socialIcons = {
   twitter: { icon: Twitter, color: "hover:text-[#1DA1F2]" },
   github: { icon: Github, color: "hover:text-[#333]" },
   instagram: { icon: Instagram, color: "hover:text-[#E4405F]" },
-  youtube: { icon: Youtube, color: "hover:text-[#FF0000]" }
+  youtube: { icon: Youtube, color: "hover:text-[#FF0000]" },
 } as const;
 
 const CompanySidebar = ({ company }: CompanySidebarProps) => {
@@ -119,9 +119,9 @@ const CompanySidebar = ({ company }: CompanySidebarProps) => {
             {Object.entries(company.socialMedia).map(([platform, url]) => {
               if (!url) return null;
               const socialType = platform.toLowerCase() as keyof typeof socialIcons;
-              const { icon: Icon, color } = socialIcons[socialType] || { 
-                icon: Globe, 
-                color: "hover:text-primary" 
+              const { icon: Icon, color } = socialIcons[socialType] || {
+                icon: Globe,
+                color: "hover:text-primary",
               };
 
               return (
@@ -133,7 +133,7 @@ const CompanySidebar = ({ company }: CompanySidebarProps) => {
                   className={`text-muted-foreground transition-colors ${color}`}
                   title={`Visit our ${platform}`}
                 >
-                  <Icon className="size-8" /> 
+                  <Icon className="size-8" />
                 </a>
               );
             })}

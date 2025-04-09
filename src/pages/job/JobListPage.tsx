@@ -313,6 +313,7 @@ const JobListPage: React.FC = () => {
                     jobs={filteredJobs}
                     title="Featured Jobs"
                     defaultView="grid"
+                    viewType="list"
                     itemsPerPage={12}
                     showViewToggle={true}
                     className="my-8"
@@ -329,13 +330,21 @@ const JobListPage: React.FC = () => {
             )}
 
             {/* Các mục nổi bật */}
-            <div className="mt-16">
-              <FeaturedJobs
-                featuredJobs={featuredJobs}
-                mostAppliedJobs={mostAppliedJobs}
-                recentlyViewedJobs={recentlyViewedJobs}
-                recommendedJobs={recommendedJobs}
-              />
+            <div className="border-primary/20 from-primary/5 to-secondary/5 mt-16 rounded-xl border bg-gradient-to-br shadow-lg">
+              <div className="border-primary/10 border-b px-6 py-4">
+                <h2 className="text-secondary text-2xl font-bold">Featured jobs</h2>
+                <p className="text-muted-foreground">
+                  Discover top job opportunities that match your skills
+                </p>
+              </div>
+              <div className="p-6">
+                <FeaturedJobs
+                  featuredJobs={featuredJobs}
+                  mostAppliedJobs={mostAppliedJobs}
+                  recentlyViewedJobs={recentlyViewedJobs}
+                  recommendedJobs={recommendedJobs}
+                />
+              </div>
             </div>
           </div>
         </div>

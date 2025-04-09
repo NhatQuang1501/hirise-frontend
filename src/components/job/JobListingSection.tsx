@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { Grid, List } from "lucide-react";
 import { JobCardData } from "@/types/job";
-import { Button } from "@/components/ui/button";
 import { ResponsivePagination } from "@/components/section/ResponsivePagination";
+import { Button } from "@/components/ui/button";
 import JobCard from "./JobCard";
 
 interface JobListingSectionProps {
   jobs: JobCardData[];
-  viewType: 'list' | 'grid';
+  viewType: "list" | "grid";
   title?: string;
   defaultView?: "grid" | "list";
   itemsPerPage?: number;

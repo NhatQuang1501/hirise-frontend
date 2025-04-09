@@ -1,14 +1,14 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
-import CompanyHeader from "@/components/company/CompanyHeader";
-import CompanySidebar from "@/components/company/CompanySidebar";
-import JobListingSection from "@/components/job/JobListingSection";
-import SocialMediaLinks from "@/components/section/SocialMediaLinks";
-import CompanyTabs from "@/components/company/CompanyTabs";
 import { CompanyDetails } from "@/types/company";
 import { jobsData, mockCompanyData } from "@/types/mockData";
 import { cn } from "@/lib/utils";
+import CompanyHeader from "@/components/company/CompanyHeader";
+import CompanySidebar from "@/components/company/CompanySidebar";
+import CompanyTabs from "@/components/company/CompanyTabs";
 import StickyCompanyInfo from "@/components/company/StickyCompanyInfo";
+import JobListingSection from "@/components/job/JobListingSection";
+import SocialMediaLinks from "@/components/section/SocialMediaLinks";
 
 const CompanyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -44,7 +44,7 @@ const CompanyDetailPage = () => {
 
       const headerHeight = 64; // Approximate height of the main header
       const scrollPosition = window.scrollY;
-      
+
       // Show/hide sticky header based on scroll position
       setShowStickyHeader(scrollPosition > headerHeight);
 
@@ -74,16 +74,16 @@ const CompanyDetailPage = () => {
 
     window.scrollTo({
       top: elementPosition,
-      behavior: "smooth"
+      behavior: "smooth",
     });
   };
 
   // Update metadata
   const updateMetadata = (company: CompanyDetails) => {
     document.title = `${company.name} - Company Profile | HiRise`;
-    
+
     const description = `Explore career opportunities at ${company.name}. ${company.openPositions} open positions. ${company.description.slice(0, 150)}...`;
-    
+
     // Update meta tags
     updateMetaTag("description", description);
     updateOGTag("title", document.title);
@@ -121,7 +121,7 @@ const CompanyDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       {/* Main Company Header */}
       <CompanyHeader
         company={company}
@@ -137,15 +137,17 @@ const CompanyDetailPage = () => {
           isFollowing={isFollowing}
           onFollow={() => setIsFollowing(!isFollowing)}
           isVisible={showStickyHeader}
-          className="fixed top-16 left-0 right-0 z-30"
+          className="fixed top-16 right-0 left-0 z-30"
         />
 
         {/* Navigation Tabs */}
-        <div className={cn(
-          "sticky top-16 z-20 transition-all duration-300",
-          showStickyHeader ? "top-32" : "top-16",
-          "bg-background" // Match background color with the page
-        )}>
+        <div
+          className={cn(
+            "sticky top-16 z-20 transition-all duration-300",
+            showStickyHeader ? "top-32" : "top-16",
+            "bg-background", // Match background color with the page
+          )}
+        >
           <div className="container mx-auto px-4">
             <div className="grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-8">
@@ -164,13 +166,13 @@ const CompanyDetailPage = () => {
         <div className="container mx-auto px-4 py-8">
           <div className="grid gap-8 lg:grid-cols-12">
             {/* Main Content */}
-            <div className="lg:col-span-8 space-y-8">
+            <div className="space-y-8 lg:col-span-8">
               {/* About Section */}
               <section
                 ref={aboutRef}
                 className={cn(
                   "scroll-mt-48 rounded-xl bg-white p-6 shadow-sm lg:p-8",
-                  "transition-shadow duration-300 hover:shadow-md"
+                  "transition-shadow duration-300 hover:shadow-md",
                 )}
               >
                 <h2 className="mb-4 text-2xl font-bold">About {company.name}</h2>
@@ -180,16 +182,13 @@ const CompanyDetailPage = () => {
               </section>
 
               {/* Jobs Section */}
-              <section
-                ref={jobsRef}
-                className="scroll-mt-48"
-              >
+              <section ref={jobsRef} className="scroll-mt-48">
                 <JobListingSection
                   title={`Opening Jobs (${company.openPositions})`}
                   jobs={jobsData}
                   viewType="list"
                   itemsPerPage={5}
-                  className="rounded-xl bg-white p-6 shadow-sm lg:p-8 transition-shadow duration-300 hover:shadow-md"
+                  className="rounded-xl bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md lg:p-8"
                 />
               </section>
             </div>

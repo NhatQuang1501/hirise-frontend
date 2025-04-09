@@ -1,8 +1,8 @@
 import React from "react";
-import { Users, MapPin } from "lucide-react";
+import { MapPin, Users } from "lucide-react";
 import { CompanyDetails } from "@/types/company";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface CompanyHeaderProps {
   company: CompanyDetails;
