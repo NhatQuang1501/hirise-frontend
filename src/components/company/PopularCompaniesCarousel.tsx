@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronRight, Users } from "lucide-react";
+import { Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
 import { cn } from "@/lib/utils";

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { CompanyDetails } from "@/types/company";
 import { jobsData, mockCompanyData } from "@/types/mockData";

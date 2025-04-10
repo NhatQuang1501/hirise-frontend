@@ -4,7 +4,7 @@ import Loading from "@/components/staticComponents/loading";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "./components/footer/Footer";
 import { Header } from "./components/header/Header";
-import { AUTH_PAGES, routes } from "./index";
+import { AUTH_PAGES, userRoutes } from "./routes/userRoute";
 
 function AppLayout() {
   const { pathname } = useLocation();
@@ -16,7 +16,7 @@ function AppLayout() {
       <main className="flex-1">
         <Suspense fallback={<Loading fullScreen size="lg" />}>
           <Routes>
-            {routes.map((route) => (
+            {userRoutes.map((route) => (
               <Route key={route.path} path={route.path} element={route.element} />
             ))}
           </Routes>

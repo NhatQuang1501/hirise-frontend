@@ -352,8 +352,8 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
     <Card className="bg-card border-border w-full border shadow-md">
       <CardHeader className="p-4">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-secondary flex items-center gap-2 text-3xl font-medium">
-            <Filter className="h-7 w-7" />
+          <CardTitle className="text-secondary flex items-center gap-2 text-2xl font-medium">
+            <Filter className="size-10" />
             <span>Advanced filters</span>
             {activeFiltersCount > 0 && (
               <Badge variant="secondary" className="ml-2 py-0 text-xs">
@@ -369,11 +369,11 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
           >
             {isExpanded ? (
               <span className="flex items-center">
-                Collapse <ChevronUp className="ml-1 h-3 w-3" />
+                Collapse <ChevronUp className="ml-1 size-3" />
               </span>
             ) : (
               <span className="flex items-center">
-                Expand <ChevronDown className="ml-1 h-3 w-3" />
+                Expand <ChevronDown className="ml-1 size-3" />
               </span>
             )}
           </Button>

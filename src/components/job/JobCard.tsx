@@ -70,7 +70,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
       {/* Button */}
       <div className="mt-5 pt-3">
         <Button variant="outline" size="lg" className="hover:bg-secondary w-full">
-          Apply now
+          Apply
         </Button>
       </div>
     </div>

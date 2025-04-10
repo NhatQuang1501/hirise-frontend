@@ -7,7 +7,7 @@ import JobListingSection from "@/components/job/JobListingSection";
 import AdvancedFilters from "@/components/search/AdvancedFilters";
 import SearchBar from "@/components/search/SearchBar";
 import { Button } from "@/components/ui/button";
-import { jobListMetadata } from "./joblMetadata";
+import { jobListMetadata } from "../../utils/joblMetadata";
 
 // Định nghĩa kiểu cho salaryRange
 type SalaryRangeKey = "500-1000" | "1000-2000" | "2000-3000" | "3000+";

@@ -1,4 +1,3 @@
-import React from "react";
 import { Facebook, Github, Linkedin, Twitter } from "lucide-react";
 import { cn } from "@/lib/utils";
 
