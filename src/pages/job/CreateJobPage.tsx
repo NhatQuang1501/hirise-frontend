@@ -72,7 +72,7 @@ const mockCompanies = [
   { id: "3", name: "Stark Industries" },
 ];
 
-const PostJobPage: React.FC = () => {
+const CreateJobPage: React.FC = () => {
   const navigate = useNavigate();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [autosaveInterval, setAutosaveInterval] = useState<NodeJS.Timeout | null>(null);
@@ -917,4 +917,4 @@ const PostJobPage: React.FC = () => {
   );
 };
 
-export default PostJobPage;
+export default CreateJobPage;

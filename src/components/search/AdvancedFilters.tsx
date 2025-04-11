@@ -351,12 +351,12 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
   return (
     <Card className="bg-card border-border w-full border shadow-md">
       <CardHeader className="p-4">
-        <div className="flex items-center justify-between">
-          <CardTitle className="text-secondary flex items-center gap-2 text-2xl font-medium">
-            <Filter className="size-10" />
-            <span>Advanced filters</span>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <CardTitle className="text-secondary flex flex-wrap items-center gap-2 text-2xl font-medium">
+            <Filter className="size-6 sm:size-10" />
+            <span className="text-xl sm:text-2xl">Advanced filters</span>
             {activeFiltersCount > 0 && (
-              <Badge variant="secondary" className="ml-2 py-0 text-xs">
+              <Badge variant="secondary" className="ml-0 py-0 text-xs sm:ml-2">
                 {activeFiltersCount}
               </Badge>
             )}
@@ -365,14 +365,14 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
             variant="ghost"
             size="sm"
             onClick={() => setIsExpanded(!isExpanded)}
-            className="hover:bg-foreground h-8 px-2 text-sm"
+            className="hover:bg-foreground h-8 w-full px-2 text-sm sm:w-auto"
           >
             {isExpanded ? (
-              <span className="flex items-center">
+              <span className="flex items-center justify-center">
                 Collapse <ChevronUp className="ml-1 size-3" />
               </span>
             ) : (
-              <span className="flex items-center">
+              <span className="flex items-center justify-center">
                 Expand <ChevronDown className="ml-1 size-3" />
               </span>
             )}

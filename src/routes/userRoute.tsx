@@ -4,16 +4,17 @@ import { RouteObject } from "react-router-dom";
 const HomePage = lazy(() => import("@/pages/home/HomePage"));
 const LoginPage = lazy(() => import("@/pages/authentication/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/authentication/RegisterPage"));
+const OTPPage = lazy(() => import("@/pages/authentication/OTPPage"));
 const JobListPage = lazy(() => import("@/pages/job/JobListPage"));
 const JobDetailPage = lazy(() => import("@/pages/job/JobDetailPage"));
-const PostJobPage = lazy(() => import("@/pages/job/PostJobPage"));
+const CreateJobPage = lazy(() => import("@/pages/job/CreateJobPage"));
 const CompanyListPage = lazy(() => import("@/pages/company/CompanyListPage"));
 const CompanyDetailPage = lazy(() => import("@/pages/company/CompanyDetailPage"));
 const AboutPage = lazy(() => import("@/pages/static/AboutPage"));
 const ContactPage = lazy(() => import("@/pages/static/ContactPage"));
 const ProfilePage = lazy(() => import("@/pages/user/applicant/ProfilePage"));
 
-export const AUTH_PAGES = ["/login", "/register"];
+export const AUTH_PAGES = ["/login", "/register", "/register/otp"];
 
 export const userRoutes: RouteObject[] = [
   {
@@ -29,6 +30,10 @@ export const userRoutes: RouteObject[] = [
     element: <RegisterPage />,
   },
   {
+    path: "/verify-email",
+    element: <OTPPage />,
+  },
+  {
     path: "/jobs",
     element: <JobListPage />,
   },
@@ -37,8 +42,8 @@ export const userRoutes: RouteObject[] = [
     element: <JobDetailPage />,
   },
   {
-    path: "/post-jobs",
-    element: <PostJobPage />,
+    path: "/jobs/create",
+    element: <CreateJobPage />,
   },
   {
     path: "/companies",

@@ -8,7 +8,7 @@ const NewsletterSection: React.FC = () => {
     <section className="bg-primary py-12 text-white">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
-          <Mail className="mx-auto mb-4 h-12 w-12" aria-hidden="true" />
+          <Mail className="mx-auto mb-4 size-12" aria-hidden="true" />
           <h2 className="mb-3 text-3xl font-bold">Receive job offers via email</h2>
           <p className="mb-6">
             Register to receive the latest IT job opportunities tailored to your skills.
@@ -22,13 +22,13 @@ const NewsletterSection: React.FC = () => {
               aria-label="Email address"
             />
             <Button variant="secondary" className="flex items-center gap-2">
-              <Send className="h-4 w-4" aria-hidden="true" />
+              <Send className="size-4" aria-hidden="true" />
               Register now
             </Button>
           </div>
 
           <div className="mt-4 flex items-center justify-center gap-2">
-            <input type="checkbox" id="consent" className="h-4 w-4" aria-label="Consent checkbox" />
+            <input type="checkbox" id="consent" className="size-4" aria-label="Consent checkbox" />
             <label htmlFor="consent" className="text-sm">
               I agree to receive job offers from HiRise
             </label>

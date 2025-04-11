@@ -102,11 +102,11 @@ export function NotificationItem({ notification, onRead }: NotificationItemProps
               onClick={(e) => e.stopPropagation()}
             >
               <Button
-                variant="ghost"
+                variant="link"
                 size="sm"
-                className="text-primary hover:bg-secondary/80 h-auto px-2 py-1 text-xs font-medium"
+                className="text-primary h-auto cursor-pointer px-2 py-1 text-xs font-medium"
               >
-                View <ArrowRight className="ml-1 size-3" />
+                View <ArrowRight className="-ml-0.5 size-3" />
               </Button>
             </Link>
           )}

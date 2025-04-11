@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-// Định nghĩa schema validation
+// Schema validation using Zod
 const loginSchema = z.object({
   email: z.string().email({ message: "Email is not valid" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
@@ -27,7 +27,7 @@ export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Khởi tạo form
+  // Create form instance using react-hook-form
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -36,7 +36,7 @@ export function LoginForm() {
     },
   });
 
-  // Xử lý submit form
+  // Process form submission
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true);
     try {
