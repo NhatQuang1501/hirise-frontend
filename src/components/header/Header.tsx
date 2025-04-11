@@ -1,13 +1,25 @@
 import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { Bell, Check, Eye, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import { useNotification } from "@/hooks/useNotification";
 import { NotificationPopover } from "@/components/notification/NotificationPopover";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { NotificationBadge } from "../notification/NotificationBadge";
+import { NotificationList } from "../notification/NotificationList";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const location = useLocation();
+  const { unreadCount, markAllAsRead, notifications } = useNotification();
 
   const isActiveRoute = (path: string) => {
     if (path === "/") {
@@ -52,10 +64,11 @@ export function Header() {
             </nav>
           </div>
 
-          {/* Notification */}
-          <div className="hidden md:flex md:items-center md:gap-4">
+          {/* Notification - Desktop */}
+          <div className="mr-3 hidden md:flex md:items-center md:gap-4">
             <NotificationPopover />
           </div>
+
           {/* Desktop Auth Buttons */}
           <div className="hidden items-center gap-3 md:flex">
             <Link to="/login">
@@ -68,6 +81,66 @@ export function Header() {
                 Register
               </Button>
             </Link> */}
+          </div>
+
+          {/* Mobile Notification Icon */}
+          <div className="mr-2 flex items-center md:hidden">
+            <Dialog open={notificationOpen} onOpenChange={setNotificationOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "relative transition-colors",
+                    unreadCount > 0 && "text-primary hover:text-primary/90",
+                  )}
+                >
+                  <Bell className="size-5" />
+                  {unreadCount > 0 && <NotificationBadge count={unreadCount} />}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="flex h-[80vh] flex-col p-0 sm:max-w-[425px]">
+                <DialogHeader className="bg-muted/30 flex-row items-center justify-between border-b px-4 py-3.5">
+                  <div className="flex items-center gap-2">
+                    <Bell className="text-primary size-4" />
+                    <DialogTitle className="text-primary">Notifications</DialogTitle>
+                    {unreadCount > 0 && (
+                      <span className="bg-primary/15 text-primary rounded-full px-2.5 py-0.5 text-xs font-medium">
+                        {unreadCount} new
+                      </span>
+                    )}
+                  </div>
+                  {notifications.length > 0 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className={cn(
+                        "hover:bg-primary/5 text-xs font-medium",
+                        unreadCount > 0
+                          ? "text-muted-foreground hover:text-primary"
+                          : "text-green-600 hover:text-green-700",
+                      )}
+                      onClick={markAllAsRead}
+                    >
+                      {unreadCount > 0 ? (
+                        <>
+                          <Eye className="mr-1.5 size-3.5" />
+                          Mark all as read
+                        </>
+                      ) : (
+                        <>
+                          <Check className="mr-1.5 size-3.5" />
+                          All caught up!
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </DialogHeader>
+                <div className="flex-1 overflow-auto">
+                  <NotificationList />
+                </div>
+              </DialogContent>
+            </Dialog>
           </div>
 
           {/* Mobile Menu Button */}
@@ -102,6 +175,7 @@ export function Header() {
                 {link.label}
               </Link>
             ))}
+
             <div className="mt-4 flex flex-col space-y-2">
               <Link
                 to="/login"
