@@ -200,7 +200,7 @@ const CreateJobPage: React.FC = () => {
       localStorage.removeItem("jobPostDraft");
 
       console.log("Job posted successfully!");
-      navigate("/employer/jobs");
+      navigate("/jobs");
     } catch (error) {
       console.error("Error posting job:", error);
       console.error("Failed to post job. Please try again.");

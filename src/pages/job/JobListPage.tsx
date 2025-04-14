@@ -276,7 +276,7 @@ const JobListPage: React.FC = () => {
                   Explore thousands of job opportunities from top tech companies
                 </p>
               </div>
-              <Link to="jobs/create">
+              <Link to="/jobs/create">
                 <Button size="lg" className="hover:bg-secondary active:bg-accent gap-2">
                   Post a Job
                 </Button>

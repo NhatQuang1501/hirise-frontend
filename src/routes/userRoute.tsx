@@ -37,13 +37,14 @@ export const userRoutes: RouteObject[] = [
     path: "/jobs",
     element: <JobListPage />,
   },
-  {
-    path: "/jobs/:id",
-    element: <JobDetailPage />,
-  },
+  // Đặt route cụ thể trước route có tham số
   {
     path: "/jobs/create",
     element: <CreateJobPage />,
+  },
+  {
+    path: "/jobs/:id",
+    element: <JobDetailPage />,
   },
   {
     path: "/companies",
