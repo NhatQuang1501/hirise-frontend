@@ -64,56 +64,56 @@ const RichTextEditor = ({
           onClick={() => editor.chain().focus().toggleBold().run()}
           active={editor.isActive("bold")}
         >
-          <Bold className="h-5 w-5" />
+          <Bold className="size-5" />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleItalic().run()}
           active={editor.isActive("italic")}
         >
-          <Italic className="h-5 w-5" />
+          <Italic className="size-5" />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           active={editor.isActive("heading", { level: 2 })}
         >
-          <Heading2 className="h-5 w-5" />
+          <Heading2 className="size-5" />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           active={editor.isActive("heading", { level: 3 })}
         >
-          <Heading3 className="h-5 w-5" />
+          <Heading3 className="size-5" />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           active={editor.isActive("bulletList")}
         >
-          <List className="h-5 w-5" />
+          <List className="size-5" />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           active={editor.isActive("orderedList")}
         >
-          <ListOrdered className="h-5 w-5" />
+          <ListOrdered className="size-5" />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={() => editor.chain().focus().undo().run()}
           disabled={!editor.can().undo()}
         >
-          <Undo className="h-5 w-5" />
+          <Undo className="size-5" />
         </ToolbarButton>
 
         <ToolbarButton
           onClick={() => editor.chain().focus().redo().run()}
           disabled={!editor.can().redo()}
         >
-          <Redo className="h-5 w-5" />
+          <Redo className="size-5" />
         </ToolbarButton>
       </div>
 

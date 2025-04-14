@@ -1,12 +1,6 @@
 import { X } from "lucide-react";
+import { TagInputProps } from "@/types/interfaces";
 import { Input } from "@/components/ui/input";
-
-interface TagInputProps {
-  placeholder?: string;
-  tags: string[];
-  setTags: (tags: string[]) => void;
-  className?: string;
-}
 
 export const TagInput = ({ placeholder, tags, setTags, className }: TagInputProps) => {
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {

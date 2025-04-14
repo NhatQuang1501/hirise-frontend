@@ -59,7 +59,7 @@ const TeamSection = () => {
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      <Linkedin className="h-5 w-5" />
+                      <Linkedin className="size-5" />
                     </a>
                   )}
                   {member.social.github && (
@@ -69,7 +69,7 @@ const TeamSection = () => {
                       rel="noopener noreferrer"
                       className="text-muted-foreground hover:text-primary transition-colors"
                     >
-                      <Github className="h-5 w-5" />
+                      <Github className="size-5" />
                     </a>
                   )}
                 </div>

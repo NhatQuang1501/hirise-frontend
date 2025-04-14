@@ -39,11 +39,11 @@ const StickyCompanyInfo = ({
               <h2 className="text-lg font-semibold">{company.name}</h2>
               <div className="text-muted-foreground flex items-center gap-4 text-sm">
                 <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
+                  <MapPin className="size-4" />
                   <span>{company.location}</span>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Users className="h-4 w-4" />
+                  <Users className="size-4" />
                   <span>{company.followerCount.toLocaleString()} followers</span>
                 </div>
               </div>

@@ -15,7 +15,7 @@ const SearchBox: React.FC = () => {
   return (
     <div className="mb-6 rounded-lg bg-white p-4 shadow-lg">
       <div className="mb-4 flex items-center gap-2">
-        <Search className="h-5 w-5 text-gray-400" />
+        <Search className="size-5 text-gray-400" />
         <Input
           type="text"
           placeholder="Enter job keywords (e.g. Frontend Developer, Python)"
@@ -25,7 +25,7 @@ const SearchBox: React.FC = () => {
 
       <div className="mb-4 grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex items-center gap-2">
-          <MapPin className="h-5 w-5 text-gray-400" />
+          <MapPin className="size-5 text-gray-400" />
           <Select>
             <SelectTrigger className="w-full border-0 bg-gray-50">
               <SelectValue placeholder="Location" />
@@ -43,7 +43,7 @@ const SearchBox: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <DollarSign className="h-5 w-5 text-gray-400" />
+          <DollarSign className="size-5 text-gray-400" />
           <Select>
             <SelectTrigger className="w-full border-0 bg-gray-50">
               <SelectValue placeholder="Salary" />

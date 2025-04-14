@@ -1,4 +1,5 @@
 import React from "react";
+import { ROUTES } from "@/routes/routes";
 import { Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
@@ -81,7 +82,7 @@ const PopularCompaniesCarousel = () => {
 
   const renderCompanyCard = (company: Company) => (
     <div className="rounded-lg bg-white p-6 shadow-sm transition-all hover:shadow-md">
-      <Link to={`/companies/${company.id}`} className="group block">
+      <Link to={ROUTES.PUBLIC.COMPANIES.DETAIL.replace(":id", company.id)} className="group block">
         <img
           src={company.logo}
           alt={company.name}
@@ -89,7 +90,7 @@ const PopularCompaniesCarousel = () => {
         />
         <h3 className="mb-2 text-center text-lg font-bold">{company.name}</h3>
         <div className="text-muted-foreground mb-4 flex items-center justify-center gap-2">
-          <Users className="h-4 w-4" />
+          <Users className="size-4" />
           <span>{company.followerCount.toLocaleString()} followers</span>
         </div>
       </Link>

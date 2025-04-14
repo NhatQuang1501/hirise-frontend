@@ -1,4 +1,6 @@
-export type JobStatus = 'Draft' | 'Published' | 'Closed';
+import { Job } from "./job";
+
+export type JobStatus = "Draft" | "Published" | "Closed";
 
 export interface RecruiterJob extends Job {
   status: JobStatus;
@@ -16,5 +18,5 @@ export interface Applicant {
   cvLink: string;
   matchingScore?: number;
   applyDate: string;
-  status: 'New' | 'Reviewing' | 'Interviewed' | 'Offered' | 'Rejected';
+  status: "New" | "Reviewing" | "Interviewed" | "Offered" | "Rejected";
 }

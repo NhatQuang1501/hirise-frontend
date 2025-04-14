@@ -38,21 +38,21 @@ const CompanySidebar = ({ company }: CompanySidebarProps) => {
         <h3 className="mb-4 text-lg font-semibold">General Information</h3>
         <div className="space-y-4">
           <div className="flex items-start gap-3">
-            <Building2 className="text-primary mt-1 h-5 w-5" />
+            <Building2 className="text-primary mt-1 size-5" />
             <div>
               <p className="text-sm font-medium">Industry</p>
               <p className="text-muted-foreground">{company.industry}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Users className="text-primary mt-1 h-5 w-5" />
+            <Users className="text-primary mt-1 size-5" />
             <div>
               <p className="text-sm font-medium">Company size</p>
               <p className="text-muted-foreground">{company.size}</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
-            <Calendar className="text-primary mt-1 h-5 w-5" />
+            <Calendar className="text-primary mt-1 size-5" />
             <div>
               <p className="text-sm font-medium">Founded</p>
               <p className="text-muted-foreground">{company.founded}</p>
@@ -66,7 +66,7 @@ const CompanySidebar = ({ company }: CompanySidebarProps) => {
         <h3 className="mb-4 text-lg font-semibold">Contact Information</h3>
         <div className="space-y-4">
           <div className="flex items-start gap-3">
-            <Globe className="text-primary mt-1 h-5 w-5" />
+            <Globe className="text-primary mt-1 size-5" />
             <div>
               <p className="text-sm font-medium">Website</p>
               <a
@@ -81,7 +81,7 @@ const CompanySidebar = ({ company }: CompanySidebarProps) => {
           </div>
           {company.email && (
             <div className="flex items-start gap-3">
-              <Mail className="text-primary mt-1 h-5 w-5" />
+              <Mail className="text-primary mt-1 size-5" />
               <div>
                 <p className="text-sm font-medium">Email</p>
                 <a href={`mailto:${company.email}`} className="text-primary hover:underline">
@@ -92,7 +92,7 @@ const CompanySidebar = ({ company }: CompanySidebarProps) => {
           )}
           {company.phone && (
             <div className="flex items-start gap-3">
-              <Phone className="text-primary mt-1 h-5 w-5" />
+              <Phone className="text-primary mt-1 size-5" />
               <div>
                 <p className="text-sm font-medium">Phone</p>
                 <a href={`tel:${company.phone}`} className="text-primary hover:underline">
@@ -102,7 +102,7 @@ const CompanySidebar = ({ company }: CompanySidebarProps) => {
             </div>
           )}
           <div className="flex items-start gap-3">
-            <MapPin className="text-primary mt-1 h-5 w-5" />
+            <MapPin className="text-primary mt-1 size-5" />
             <div>
               <p className="text-sm font-medium">Address</p>
               <p className="text-muted-foreground">{company.address}</p>

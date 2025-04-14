@@ -1,13 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
+import { SkillsInputProps } from "@/types/interfaces";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-
-interface SkillsInputProps {
-  skills: string[];
-  onChange: (skills: string[]) => void;
-  suggestions?: string[];
-}
 
 const SkillsInput: React.FC<SkillsInputProps> = ({
   skills,
@@ -142,7 +137,7 @@ const SkillsInput: React.FC<SkillsInputProps> = ({
               onClick={() => removeSkill(index)}
               className="text-muted-foreground hover:text-foreground ml-1"
             >
-              <X className="h-3 w-3" />
+              <X className="size-3 text-white" />
             </button>
           </Badge>
         ))}

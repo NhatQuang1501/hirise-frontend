@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -135,9 +136,9 @@ export function RegisterForm() {
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="size-4" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="size-4" />
                       )}
                       <span className="sr-only">
                         {showPassword ? "Hide password" : "Show password"}
@@ -172,9 +173,9 @@ export function RegisterForm() {
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
                       {showConfirmPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="size-4" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="size-4" />
                       )}
                       <span className="sr-only">
                         {showConfirmPassword ? "Hide password" : "Show password"}
@@ -198,11 +199,17 @@ export function RegisterForm() {
                 <div className="space-y-1 leading-none">
                   <div className="text-foreground flex flex-wrap text-sm">
                     Tôi đồng ý với{" "}
-                    <Link to="/terms" className="text-primary hover:text-primary/80 mx-1">
+                    <Link
+                      to={ROUTES.PUBLIC.TERMS}
+                      className="text-primary hover:text-primary/80 mx-1"
+                    >
                       terms of service
                     </Link>{" "}
                     and{" "}
-                    <Link to="/privacy" className="text-primary hover:text-primary/80 mx-1">
+                    <Link
+                      to={ROUTES.PUBLIC.PRIVACY}
+                      className="text-primary hover:text-primary/80 mx-1"
+                    >
                       privacy policy
                     </Link>
                     .
@@ -225,7 +232,7 @@ export function RegisterForm() {
 
       <div className="mx-2 mt-6 text-center text-sm">
         <span className="text-muted-foreground">Already have an account? </span>
-        <Link to="/login" className="text-primary hover:text-primary/80 font-medium">
+        <Link to={ROUTES.AUTH.LOGIN} className="text-primary hover:text-primary/80 font-medium">
           Login
         </Link>
       </div>

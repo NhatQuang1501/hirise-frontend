@@ -1,4 +1,5 @@
 import React from "react";
+import { ROUTES } from "@/routes/routes";
 import { Award, Briefcase, Calendar, CheckCircle, Clock, MapPin, Phone, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Job } from "@/types/job";
@@ -19,7 +20,10 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
         <div className="md:col-span-2">
           <div className="mb-6 flex items-start gap-4">
             <Link
-              to={`/companies/${job.company.toLowerCase().replace(/\s+/g, "-")}`}
+              to={ROUTES.PUBLIC.COMPANIES.JOBS.replace(
+                ":id",
+                job.company.toLowerCase().replace(/\s+/g, "-"),
+              )}
               className="group"
             >
               <img
@@ -32,7 +36,10 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
             </Link>
             <div>
               <Link
-                to={`/companies/${job.company.toLowerCase().replace(/\s+/g, "-")}`}
+                to={ROUTES.PUBLIC.COMPANIES.JOBS.replace(
+                  ":id",
+                  job.company.toLowerCase().replace(/\s+/g, "-"),
+                )}
                 className="hover:text-primary text-lg font-medium hover:underline"
               >
                 {job.company}
@@ -47,7 +54,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
           {/* Thông tin cơ bản dạng form/item */}
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             <div className="flex items-center gap-2">
-              <Award className="h-5 w-5 text-gray-500" />
+              <Award className="size-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Experience</p>
                 <p className="font-medium">{job.experience}</p>
@@ -55,7 +62,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5 text-gray-500" />
+              <Briefcase className="size-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Job Level</p>
                 <p className="font-medium">{job.level}</p>
@@ -63,7 +70,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Calendar className="h-5 w-5 text-gray-500" />
+              <Calendar className="size-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Contract type</p>
                 <p className="font-medium">{job.contractType}</p>
@@ -71,7 +78,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-gray-500" />
+              <MapPin className="size-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Location</p>
                 <p className="font-medium">{job.location}</p>
@@ -79,7 +86,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
             </div>
 
             <div className="flex items-center gap-2">
-              <Clock className="h-5 w-5 text-gray-500" />
+              <Clock className="size-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Posted</p>
                 <p className="font-medium">{job.time}</p>
@@ -94,9 +101,9 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
               {job.interviewProcess.map((step: string, index: number) => (
                 <React.Fragment key={index}>
                   <div className="flex items-center gap-1">
-                    {index === 0 && <Phone className="h-4 w-4 text-gray-500" />}
-                    {index === 1 && <Video className="h-4 w-4 text-gray-500" />}
-                    {index === 2 && <CheckCircle className="h-4 w-4 text-gray-500" />}
+                    {index === 0 && <Phone className="size-4 text-gray-500" />}
+                    {index === 1 && <Video className="size-4 text-gray-500" />}
+                    {index === 2 && <CheckCircle className="size-4 text-gray-500" />}
                     <span className="text-sm">{step}</span>
                   </div>
                   {index < job.interviewProcess.length - 1 && (

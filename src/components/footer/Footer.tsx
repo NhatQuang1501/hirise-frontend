@@ -1,3 +1,4 @@
+import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
 
 export function Footer() {
@@ -7,7 +8,7 @@ export function Footer() {
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           {/* Logo và social links - chiếm 1 cột */}
           <div>
-            <Link to="/" className="mb-4 flex items-center gap-2">
+            <Link to={ROUTES.PUBLIC.HOME} className="mb-4 flex items-center gap-2">
               <img src="/logo.svg" alt="HiRise Logo" className="h-8 w-auto" />
               <span className="text-primary text-xl font-bold">HiRise</span>
             </Link>
@@ -48,7 +49,7 @@ export function Footer() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      to="/jobs"
+                      to={ROUTES.PUBLIC.JOBS.LIST}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Find jobs
@@ -56,7 +57,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/career-advice"
+                      to={ROUTES.PUBLIC.CAREERADVICE}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Career advice
@@ -64,7 +65,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/salary"
+                      to={ROUTES.PUBLIC.SALARY}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Salary search
@@ -72,7 +73,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/companies"
+                      to={ROUTES.PUBLIC.COMPANIES.LIST}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Top companies
@@ -87,7 +88,7 @@ export function Footer() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      to="/jobs/create"
+                      to={ROUTES.RECRUITER.JOBS.CREATE}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Post a job
@@ -95,7 +96,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/employer/pricing"
+                      to="#"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Pricing
@@ -103,7 +104,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/employer/testimonials"
+                      to="#"
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Testimonials
@@ -118,7 +119,7 @@ export function Footer() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      to="/about"
+                      to={ROUTES.PUBLIC.ABOUT}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Introduction
@@ -126,7 +127,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/contact"
+                      to={ROUTES.PUBLIC.CONTACT}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Contact
@@ -134,7 +135,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/terms"
+                      to={ROUTES.PUBLIC.TERMS}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Terms of service
@@ -142,7 +143,7 @@ export function Footer() {
                   </li>
                   <li>
                     <Link
-                      to="/privacy"
+                      to={ROUTES.PUBLIC.PRIVACY}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Privacy policy

@@ -1,10 +1,10 @@
 import React from "react";
 import { Calendar, Download, ExternalLink, Mail, Phone, UserCircle } from "lucide-react";
+import { Applicant } from "@/types/recruiter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Applicant } from "@/types/recruiter";
 
 interface ApplicantListSectionProps {
   applicants: Applicant[];
@@ -32,7 +32,7 @@ const ApplicantListSection: React.FC<ApplicantListSectionProps> = ({ applicants 
     return (
       <Card>
         <CardContent className="p-6 text-center">
-          <UserCircle className="mx-auto h-12 w-12 text-gray-400" />
+          <UserCircle className="mx-auto size-12 text-gray-400" />
           <h3 className="mt-2 text-lg font-medium">Chưa có ứng viên nào</h3>
           <p className="text-muted-foreground mt-1">
             Công việc của bạn chưa có ứng viên nào ứng tuyển.
@@ -44,8 +44,8 @@ const ApplicantListSection: React.FC<ApplicantListSectionProps> = ({ applicants 
 
   return (
     <div className="space-y-4">
-      <h2 className="mb-4 text-xl font-bold">Danh sách ứng viên ({applicants.length})</h2>
-      
+      <h2 className="mb-4 text-xl font-bold">Applicant list ({applicants.length})</h2>
+
       {applicants.map((applicant) => (
         <Card key={applicant.id}>
           <CardContent className="p-0">
@@ -55,22 +55,22 @@ const ApplicantListSection: React.FC<ApplicantListSectionProps> = ({ applicants 
                   <h3 className="text-lg font-semibold">{applicant.name}</h3>
                   <Badge className={getStatusColor(applicant.status)}>{applicant.status}</Badge>
                 </div>
-                
+
                 <div className="mb-4 flex flex-wrap gap-4 text-sm text-gray-600">
                   <div className="flex items-center gap-1">
-                    <Mail className="h-4 w-4" />
+                    <Mail className="size-4" />
                     <span>{applicant.email}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Phone className="h-4 w-4" />
+                    <Phone className="size-4" />
                     <span>{applicant.phone}</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
+                    <Calendar className="size-4" />
                     <span>Applied: {applicant.applyDate}</span>
                   </div>
                 </div>
-                
+
                 {applicant.matchingScore && (
                   <div className="mt-2">
                     <div className="mb-1 flex items-center justify-between">
@@ -81,41 +81,26 @@ const ApplicantListSection: React.FC<ApplicantListSectionProps> = ({ applicants 
                   </div>
                 )}
               </div>
-              
-              <div className="flex items-center justify-center gap-2 border-t bg-gray-50 p-4 md:border-l md:border-t-0">
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="gap-2"
-                  asChild
-                >
+
+              <div className="flex items-center justify-center gap-2 border-t bg-gray-50 p-4 md:border-t-0 md:border-l">
+                <Button size="sm" variant="outline" className="gap-2" asChild>
                   <a href={applicant.cvLink} target="_blank" rel="noopener noreferrer">
-                    <ExternalLink className="h-4 w-4" />
-                    <span>Xem CV</span>
+                    <ExternalLink className="size-4" />
+                    <span>View CV</span>
                   </a>
                 </Button>
-                
-                <Button
-                  size="sm"
-                  variant="outline"
-                  className="gap-2"
-                  asChild
-                >
+
+                <Button size="sm" variant="outline" className="gap-2" asChild>
                   <a href={applicant.cvLink} download>
-                    <Download className="h-4 w-4" />
-                    <span>Tải CV</span>
+                    <Download className="size-4" />
+                    <span>Download CV</span>
                   </a>
                 </Button>
-                
-                <Button
-                  size="sm"
-                  variant="default"
-                  className="gap-2"
-                  asChild
-                >
+
+                <Button size="sm" variant="default" className="gap-2" asChild>
                   <a href={`mailto:${applicant.email}`}>
-                    <Mail className="h-4 w-4" />
-                    <span>Liên hệ</span>
+                    <Mail className="size-4" />
+                    <span>Contact</span>
                   </a>
                 </Button>
               </div>

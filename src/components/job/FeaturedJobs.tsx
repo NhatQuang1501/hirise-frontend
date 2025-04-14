@@ -75,7 +75,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
             )}
           >
             <Star
-              className={cn("h-6 w-6", tabColors.featured.icon, "data-[state=active]:text-white")}
+              className={cn("size-6", tabColors.featured.icon, "data-[state=active]:text-white")}
             />
             <span>Featured</span>
           </TabsTrigger>
@@ -91,11 +91,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
             )}
           >
             <Users
-              className={cn(
-                "h-6 w-6",
-                tabColors.mostApplied.icon,
-                "data-[state=active]:text-white",
-              )}
+              className={cn("size-6", tabColors.mostApplied.icon, "data-[state=active]:text-white")}
             />
             <span>Most Applied</span>
           </TabsTrigger>
@@ -112,7 +108,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
           >
             <Clock
               className={cn(
-                "h-6 w-6",
+                "size-6",
                 tabColors.recentlyViewed.icon,
                 "data-[state=active]:text-white",
               )}
@@ -131,11 +127,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
             )}
           >
             <Sparkles
-              className={cn(
-                "h-6 w-6",
-                tabColors.recommended.icon,
-                "data-[state=active]:text-white",
-              )}
+              className={cn("size-6", tabColors.recommended.icon, "data-[state=active]:text-white")}
             />
             <span>Recommended</span>
           </TabsTrigger>
@@ -144,7 +136,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
         <TabsContent value="featured">
           <TabContentSection
             title="Featured Jobs"
-            icon={<Star className="h-5 w-5" />}
+            icon={<Star className="size-5" />}
             iconColor={tabColors.featured.icon}
           >
             <JobGrid jobs={featuredJobs} />
@@ -154,7 +146,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
         <TabsContent value="mostApplied">
           <TabContentSection
             title="Most Applied Jobs"
-            icon={<Users className="h-5 w-5" />}
+            icon={<Users className="size-5" />}
             iconColor={tabColors.mostApplied.icon}
           >
             <JobGrid jobs={mostAppliedJobs} />
@@ -164,7 +156,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
         <TabsContent value="recentlyViewed">
           <TabContentSection
             title="Recently Viewed Jobs"
-            icon={<Clock className="h-5 w-5" />}
+            icon={<Clock className="size-5" />}
             iconColor={tabColors.recentlyViewed.icon}
           >
             <JobGrid jobs={recentlyViewedJobs} />
@@ -174,7 +166,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({
         <TabsContent value="recommended">
           <TabContentSection
             title="Recommended Jobs"
-            icon={<Sparkles className="h-5 w-5" />}
+            icon={<Sparkles className="size-5" />}
             iconColor={tabColors.recommended.icon}
           >
             <JobGrid jobs={recommendedJobs} />

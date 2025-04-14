@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ROUTES } from "@/routes/routes";
 import { Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -16,7 +17,7 @@ const ProfilePage = () => {
     const confirmed = window.confirm("Are you sure you want to cancel? All changes will be lost.");
     // If the user confirms, navigate to the profile page
     if (confirmed) {
-      navigate("/profile");
+      navigate(ROUTES.APPLICANT.PROFILE);
     }
   };
 
@@ -27,7 +28,7 @@ const ProfilePage = () => {
       duration: 3000,
     });
     // Redirect to the profile page after successful submission
-    navigate("/profile");
+    navigate(ROUTES.APPLICANT.PROFILE);
   };
 
   const handleSubmitError = () => {

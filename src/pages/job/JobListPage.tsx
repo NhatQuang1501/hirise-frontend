@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { JobCardData } from "@/types/job";
 import { sampleJobs } from "@/types/mockData";
 import FeaturedJobs from "@/components/job/FeaturedJobs";
 import JobListingSection from "@/components/job/JobListingSection";
 import AdvancedFilters from "@/components/search/AdvancedFilters";
 import SearchBar from "@/components/search/SearchBar";
-import { Button } from "@/components/ui/button";
 import { jobListMetadata } from "../../utils/joblMetadata";
 
 // Định nghĩa kiểu cho salaryRange
@@ -269,18 +267,11 @@ const JobListPage: React.FC = () => {
         <div className="container mx-auto px-4">
           <div className="mx-auto max-w-3xl text-center">
             {/* Thêm div wrapper cho phần header để có thể thêm button */}
-            <div className="mb-8 flex items-center justify-between">
-              <div>
-                <h1 className="mb-6 text-4xl font-bold">Find your dream job</h1>
-                <p className="text-muted-foreground text-xl">
-                  Explore thousands of job opportunities from top tech companies
-                </p>
-              </div>
-              <Link to="/jobs/create">
-                <Button size="lg" className="hover:bg-secondary active:bg-accent gap-2">
-                  Post a Job
-                </Button>
-              </Link>
+            <div className="mb-8 flex flex-col items-center">
+              <h1 className="mb-6 text-4xl font-bold">Find your dream job</h1>
+              <p className="text-muted-foreground text-xl">
+                Explore thousands of job opportunities from top tech companies
+              </p>
             </div>
           </div>
 

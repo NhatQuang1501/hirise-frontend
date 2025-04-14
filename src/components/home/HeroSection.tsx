@@ -1,4 +1,5 @@
 import React from "react";
+import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
 import SearchBox from "../search/SearchBox";
 
@@ -20,19 +21,19 @@ const HeroSection: React.FC = () => {
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <p>Popular:</p>
               <div className="flex flex-wrap gap-2">
-                <Link to="/jobs?q=react" className="hover:text-primary">
+                <Link to={ROUTES.PUBLIC.JOBS.SEARCH("react")} className="hover:text-primary">
                   ReactJS
                 </Link>
                 ,
-                <Link to="/jobs?q=java" className="hover:text-primary">
+                <Link to={ROUTES.PUBLIC.JOBS.SEARCH("java")} className="hover:text-primary">
                   Java
                 </Link>
                 ,
-                <Link to="/jobs?q=python" className="hover:text-primary">
+                <Link to={ROUTES.PUBLIC.JOBS.SEARCH("python")} className="hover:text-primary">
                   Python
                 </Link>
                 ,
-                <Link to="/jobs?q=devops" className="hover:text-primary">
+                <Link to={ROUTES.PUBLIC.JOBS.SEARCH("devops")} className="hover:text-primary">
                   DevOps
                 </Link>
               </div>

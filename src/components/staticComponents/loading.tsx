@@ -7,9 +7,9 @@ interface LoadingProps {
 
 const Loading: React.FC<LoadingProps> = ({ size = "md", fullScreen = false }) => {
   const sizeClasses = {
-    sm: "h-8 w-8",
-    md: "h-12 w-12",
-    lg: "h-16 w-16",
+    sm: "size-8",
+    md: "size-12",
+    lg: "size-16",
   };
 
   return (

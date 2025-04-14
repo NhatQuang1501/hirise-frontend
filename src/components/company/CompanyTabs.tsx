@@ -1,15 +1,7 @@
 import React from "react";
 import { MapPin, Users } from "lucide-react";
+import { CompanyTabsProps } from "@/types/interfaces";
 import { cn } from "@/lib/utils";
-
-interface CompanyTabsProps {
-  companyName: string;
-  companyLocation: string;
-  followerCount: number;
-  activeSection: string;
-  onTabClick: (section: string) => void;
-  className?: string;
-}
 
 const CompanyTabs = ({
   companyName,

@@ -1,4 +1,4 @@
-import React from "react";
+import { ROUTES } from "@/routes/routes";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -15,7 +15,7 @@ const AboutHeroSection = () => {
             We're building the bridge between talented tech professionals and innovative companies,
             creating meaningful careers and driving industry growth.
           </p>
-          <Link to="/jobs">
+          <Link to={ROUTES.PUBLIC.JOBS.LIST}>
             <Button size="lg" className="gap-2">
               View Open Roles
               <ArrowRight className="size5" />

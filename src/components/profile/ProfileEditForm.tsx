@@ -112,7 +112,7 @@ const ProfileEditForm = ({ onSubmitSuccess, onSubmitError, onCancel }: ProfileEd
         <div className="bg-card rounded-xl border p-6 shadow-sm transition-all hover:shadow-md">
           <div className="mb-6 flex items-center gap-3">
             <div className="bg-primary/10 rounded-xl p-2.5">
-              <User className="text-primary h-6 w-6" />
+              <User className="text-primary size-6" />
             </div>
             <div>
               <h2 className="text-xl font-semibold">Personal Information</h2>
@@ -270,7 +270,7 @@ const ProfileEditForm = ({ onSubmitSuccess, onSubmitError, onCancel }: ProfileEd
         <div className="bg-card rounded-xl border p-6 shadow-sm transition-all hover:shadow-md">
           <div className="mb-6 flex items-center gap-3">
             <div className="bg-primary/10 rounded-xl p-2.5">
-              <Briefcase className="text-primary h-6 w-6" />
+              <Briefcase className="text-primary size-6" />
             </div>
             <div>
               <h2 className="text-xl font-semibold">Career Information</h2>

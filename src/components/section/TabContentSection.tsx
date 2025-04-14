@@ -32,7 +32,7 @@ const TabContentSection: React.FC<TabContentSectionProps> = ({
           className="text-primary flex items-center gap-1"
           onClick={onViewAll}
         >
-          View all <ChevronRight className="h-4 w-4" />
+          View all <ChevronRight className="size-4" />
         </Button>
       </div>
       {children}

@@ -84,7 +84,7 @@ const BenefitsSelector: React.FC<BenefitsSelectorProps> = ({ selectedBenefits, o
             className="flex-1"
           />
           <Button type="button" onClick={handleAddCustomBenefit} size="sm" variant="outline">
-            <PlusCircle className="mr-2 h-4 w-4" />
+            <PlusCircle className="mr-2 size-4" />
             Add
           </Button>
         </div>

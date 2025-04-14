@@ -1,230 +1,3 @@
-// import React, { useState } from "react";
-// import {
-//   Briefcase,
-//   Calendar,
-//   DollarSign,
-//   GraduationCap,
-//   MapPin,
-//   Clock,
-//   Filter
-// } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import { Checkbox } from "@/components/ui/checkbox";
-// import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// interface AdvancedFiltersProps {
-//   onFilterChange: (filters: any) => void;
-// }
-// const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => {
-//   const [isExpanded, setIsExpanded] = useState(false);
-//   const [filters, setFilters] = useState({
-//     jobCategory: "",
-//     location: "",
-//     salaryRange: "",
-//     jobLevel: "",
-//     contractType: "",
-//     experience: "",
-//     company: "",
-//     postDate: "",
-//   });
-//   const handleFilterChange = (key: string, value: string) => {
-//     const updatedFilters = { ...filters, [key]: value };
-//     setFilters(updatedFilters);
-//     onFilterChange(updatedFilters);
-//   };
-//   return (
-//     <Card className="bg-card w-full">
-//       <CardHeader className="pb-3">
-//         <div className="flex items-center justify-between">
-//           <CardTitle className="text-xl flex items-center gap-2">
-//             <Filter className="h-5 w-5" /> Advanced filters
-//           </CardTitle>
-//           <Button
-//             variant="ghost"
-//             size="sm"
-//             onClick={() => setIsExpanded(!isExpanded)}
-//           >
-//             {isExpanded ? "Collapse" : "Expand"}
-//           </Button>
-//         </div>
-//       </CardHeader>
-//       {isExpanded && (
-//         <CardContent className="pt-2">
-//           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-1">
-//             {/* Ngành nghề */}
-//             <div className="space-y-2">
-//               <label className="text-sm font-medium flex items-center gap-1">
-//                 <Briefcase className="h-4 w-4" /> Job category
-//               </label>
-//               <div className="space-y-1">
-//                 {["IT & Software", "Marketing", "Sales", "Design", "Data Science"].map((category) => (
-//                   <div key={category} className="flex items-center gap-2">
-//                     <Checkbox
-//                       id={`category-${category}`}
-//                       onCheckedChange={(checked) =>
-//                         handleFilterChange("jobCategory", checked ? category : "")
-//                       }
-//                     />
-//                     <label
-//                       htmlFor={`category-${category}`}
-//                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-//                     >
-//                       {category}
-//                     </label>
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-//             {/* Địa điểm */}
-//             <div className="space-y-2">
-//               <label className="text-sm font-medium flex items-center gap-1">
-//                 <MapPin className="h-4 w-4" /> Location
-//               </label>
-//               <div className="space-y-1">
-//                 {["Hanoi", "Ho Chi Minh", "Da Nang", "Remote"].map((location) => (
-//                   <div key={location} className="flex items-center gap-2">
-//                     <Checkbox
-//                       id={`location-${location}`}
-//                       onCheckedChange={(checked) =>
-//                         handleFilterChange("location", checked ? location : "")
-//                       }
-//                     />
-//                     <label
-//                       htmlFor={`location-${location}`}
-//                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-//                     >
-//                       {location}
-//                     </label>
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-//             {/* Mức lương */}
-//             <div className="space-y-2">
-//               <label className="text-sm font-medium flex items-center gap-1">
-//                 <DollarSign className="h-4 w-4" /> Salary
-//               </label>
-//               <Select onValueChange={(value) => handleFilterChange("salaryRange", value)}>
-//                 <SelectTrigger>
-//                   <span>Select salary</span>
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectItem value="500-1000">Below 10.000.000</SelectItem>
-//                   <SelectItem value="1000-2000">10.000.000 - 20.000.000</SelectItem>
-//                   <SelectItem value="2000-3000">20.000.000 - 30.000.000</SelectItem>
-//                   <SelectItem value="3000+">Above 30.000.000</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//             {/* Cấp bậc */}
-//             <div className="space-y-2">
-//               <label className="text-sm font-medium flex items-center gap-1">
-//                 <GraduationCap className="h-4 w-4" /> Job level
-//               </label>
-//               <div className="space-y-1">
-//                 {["Intern", "Junior", "Middle", "Senior", "Lead", "Manager"].map((level) => (
-//                   <div key={level} className="flex items-center gap-2">
-//                     <Checkbox
-//                       id={`level-${level}`}
-//                       onCheckedChange={(checked) =>
-//                         handleFilterChange("jobLevel", checked ? level : "")
-//                       }
-//                     />
-//                     <label
-//                       htmlFor={`level-${level}`}
-//                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-//                     >
-//                       {level}
-//                     </label>
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-//             {/* Loại hợp đồng */}
-//             <div className="space-y-2">
-//               <label className="text-sm font-medium flex items-center gap-1">
-//                 <Clock className="h-4 w-4" /> Contract type
-//               </label>
-//               <div className="space-y-1">
-//                 {["Full-time", "Part-time", "Freelance", "Contract"].map((type) => (
-//                   <div key={type} className="flex items-center gap-2">
-//                     <Checkbox
-//                       id={`contract-${type}`}
-//                       onCheckedChange={(checked) =>
-//                         handleFilterChange("contractType", checked ? type : "")
-//                       }
-//                     />
-//                     <label
-//                       htmlFor={`contract-${type}`}
-//                       className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-//                     >
-//                       {type}
-//                     </label>
-//                   </div>
-//                 ))}
-//               </div>
-//             </div>
-//             {/* Kinh nghiệm */}
-//             <div className="space-y-2">
-//               <label className="text-sm font-medium flex items-center gap-1">
-//                 <Briefcase className="h-4 w-4" /> Experience
-//               </label>
-//               <Select onValueChange={(value) => handleFilterChange("experience", value)}>
-//                 <SelectTrigger>
-//                   <span>Select years of experience</span>
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectItem value="0-1">0-1 years</SelectItem>
-//                   <SelectItem value="1-3">1-3 years</SelectItem>
-//                   <SelectItem value="3-5">3-5 years</SelectItem>
-//                   <SelectItem value="5+">5+ years</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//             {/* Ngày đăng tuyển */}
-//             <div className="space-y-2">
-//               <label className="text-sm font-medium flex items-center gap-1">
-//                 <Calendar className="h-4 w-4" /> Post date
-//               </label>
-//               <Select onValueChange={(value) => handleFilterChange("postDate", value)}>
-//                 <SelectTrigger>
-//                   <span>Select post date</span>
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   <SelectItem value="today">Today</SelectItem>
-//                   <SelectItem value="week">This week</SelectItem>
-//                   <SelectItem value="month">This month</SelectItem>
-//                   <SelectItem value="any">Any</SelectItem>
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//           </div>
-//           <div className="mt-6 flex justify-end gap-3">
-//             <Button variant="outline" onClick={() => {
-//               setFilters({
-//                 jobCategory: "",
-//                 location: "",
-//                 salaryRange: "",
-//                 jobLevel: "",
-//                 contractType: "",
-//                 experience: "",
-//                 company: "",
-//                 postDate: "",
-//               });
-//               onFilterChange({});
-//             }}>
-//               Clear filters
-//             </Button>
-//             <Button onClick={() => onFilterChange(filters)}>
-//               Apply
-//             </Button>
-//           </div>
-//         </CardContent>
-//       )}
-//     </Card>
-//   );
-// };
-// export default AdvancedFilters;
 import React, { useState } from "react";
 import {
   Briefcase,
@@ -406,7 +179,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <Briefcase className="text-primary h-4 w-4" />
+                      <Briefcase className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Field</h3>
                     </div>
                     {isFilterActive("jobCategory") && (
@@ -416,7 +189,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                         onClick={() => clearSingleFilter("jobCategory")}
                         className="h-6 p-0 px-1"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     )}
                   </div>
@@ -448,7 +221,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="text-primary h-4 w-4" />
+                      <MapPin className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Location</h3>
                     </div>
                     {isFilterActive("location") && (
@@ -458,7 +231,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                         onClick={() => clearSingleFilter("location")}
                         className="h-6 p-0 px-1"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     )}
                   </div>
@@ -495,7 +268,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <DollarSign className="text-primary h-4 w-4" />
+                      <DollarSign className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Salary</h3>
                     </div>
                     {isFilterActive("salaryRange") && (
@@ -505,7 +278,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                         onClick={() => clearSingleFilter("salaryRange")}
                         className="h-6 p-0 px-1"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     )}
                   </div>
@@ -537,7 +310,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <GraduationCap className="text-primary h-4 w-4" />
+                      <GraduationCap className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Job level</h3>
                     </div>
                     {isFilterActive("jobLevel") && (
@@ -547,7 +320,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                         onClick={() => clearSingleFilter("jobLevel")}
                         className="h-6 p-0 px-1"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     )}
                   </div>
@@ -583,7 +356,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <Clock className="text-primary h-4 w-4" />
+                      <Clock className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Contract type</h3>
                     </div>
                     {isFilterActive("contractType") && (
@@ -593,7 +366,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                         onClick={() => clearSingleFilter("contractType")}
                         className="h-6 p-0 px-1"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     )}
                   </div>
@@ -628,7 +401,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <Briefcase className="text-primary h-4 w-4" />
+                      <Briefcase className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Years of experience</h3>
                     </div>
                     {isFilterActive("experience") && (
@@ -638,7 +411,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                         onClick={() => clearSingleFilter("experience")}
                         className="h-6 p-0 px-1"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     )}
                   </div>
@@ -670,7 +443,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <Calendar className="text-primary h-4 w-4" />
+                      <Calendar className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Post date</h3>
                     </div>
                     {isFilterActive("postDate") && (
@@ -680,7 +453,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                         onClick={() => clearSingleFilter("postDate")}
                         className="h-6 p-0 px-1"
                       >
-                        <X className="h-3 w-3" />
+                        <X className="size-3" />
                       </Button>
                     )}
                   </div>
@@ -716,7 +489,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <Briefcase className="text-primary h-4 w-4" />
+                      <Briefcase className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Fields</h3>
                     </div>
                   </div>
@@ -748,7 +521,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <GraduationCap className="text-primary h-4 w-4" />
+                      <GraduationCap className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Job level</h3>
                     </div>
                   </div>
@@ -791,7 +564,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="text-primary h-4 w-4" />
+                      <MapPin className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Location</h3>
                     </div>
                   </div>
@@ -832,7 +605,7 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                 <div className="bg-muted/20 space-y-3 rounded-lg p-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5">
-                      <Clock className="text-primary h-4 w-4" />
+                      <Clock className="text-primary size-4" />
                       <h3 className="text-sm font-medium">Contract type</h3>
                     </div>
                   </div>
@@ -878,9 +651,9 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
                     variant="ghost"
                     size="sm"
                     onClick={() => handleCheckboxChange("jobCategory", cat, false)}
-                    className="ml-1 h-3 w-3 p-0"
+                    className="ml-1 size-3 p-0"
                   >
-                    <X className="h-2 w-2" />
+                    <X className="size-2" />
                   </Button>
                 </Badge>
               ))}

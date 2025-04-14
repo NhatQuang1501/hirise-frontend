@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { Bell, Check, Eye, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
@@ -29,10 +30,11 @@ export function Header() {
   };
 
   const navigationLinks = [
-    { path: "/", label: "Home" },
-    { path: "/jobs", label: "Jobs" },
-    { path: "/companies", label: "Companies" },
-    { path: "/about", label: "About" },
+    { path: ROUTES.PUBLIC.HOME, label: "Home" },
+    { path: ROUTES.PUBLIC.JOBS.LIST, label: "Jobs" },
+    { path: ROUTES.PUBLIC.COMPANIES.LIST, label: "Companies" },
+    { path: ROUTES.PUBLIC.ABOUT, label: "About" },
+    { path: ROUTES.RECRUITER.JOBS.LIST, label: "Recruitment" },
   ];
 
   return (
@@ -40,7 +42,7 @@ export function Header() {
       <div className="max-w-10xl mx-auto w-full px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center">
-            <Link to="/" className="flex items-center gap-2">
+            <Link to={ROUTES.PUBLIC.HOME} className="flex items-center gap-2">
               <img src="/logo.svg" alt="HiRise Logo" className="h-8 w-auto" />
               <span className="text-primary text-xl font-bold">HiRise</span>
             </Link>
@@ -55,7 +57,8 @@ export function Header() {
                     "relative py-2 transition-colors",
                     isActiveRoute(link.path)
                       ? "text-primary before:bg-primary font-semibold before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full"
-                      : "text-foreground hover:text-primary before:bg-primary before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full before:scale-x-0 before:transition-transform hover:before:scale-x-100",
+                      : "text-foreground hover:text-primary before:bg-primary before:absolute before:bottom-0 before:left-0 before:h-0.5 before:w-full before:scale-x-0 before:transition-transform",
+                    // "hover:before:scale-x-100"
                   )}
                 >
                   {link.label}
@@ -71,7 +74,7 @@ export function Header() {
 
           {/* Desktop Auth Buttons */}
           <div className="hidden items-center gap-3 md:flex">
-            <Link to="/login">
+            <Link to={ROUTES.AUTH.LOGIN}>
               <Button variant="ghost" className="bg-primary hover:bg-secondary text-white">
                 Login
               </Button>
@@ -178,7 +181,7 @@ export function Header() {
 
             <div className="mt-4 flex flex-col space-y-2">
               <Link
-                to="/login"
+                to={ROUTES.AUTH.LOGIN}
                 className="bg-primary hover:bg-secondary w-full rounded-md py-2 text-center text-base font-medium text-white"
                 onClick={() => setIsMenuOpen(false)}
               >

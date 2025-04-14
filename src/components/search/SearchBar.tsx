@@ -62,7 +62,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 onChange={handleInputChange}
                 className="pr-10 pl-10"
               />
-              <Search className="text-muted-foreground absolute top-1/2 left-3 h-5 w-5 -translate-y-1/2" />
+              <Search className="text-muted-foreground absolute top-1/2 left-3 size-5 -translate-y-1/2" />
 
               {/* Autocomplete suggestions */}
               {showSuggestions && suggestions.length > 0 && (
@@ -82,33 +82,6 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
             <Button onClick={handleSearch}>Search</Button>
           </div>
         </div>
-
-        {/* Quick filters
-        <div className="mt-4 flex flex-wrap items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Checkbox 
-              id="remote"
-              checked={isRemote}
-              onCheckedChange={handleRemoteChange}
-            />
-            <label
-              htmlFor="remote"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              <Briefcase className="text-primary inline mr-1 h-4 w-4" /> Remote
-            </label>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <MapPin className="text-primary h-4 w-4" />
-            <span className="text-sm font-medium">Hanoi</span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <DollarSign className="text-primary h-4 w-4" />
-            <span className="text-sm font-medium">20.000.000 - 30.000.000 <span className="text-muted-foreground">VND</span></span>
-          </div>
-        </div> */}
       </div>
     </div>
   );

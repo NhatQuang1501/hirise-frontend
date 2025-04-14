@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import { Job, JobCarouselProps } from "@/types/interfaces";
 import JobCard from "@/components/job/JobCard";
 import {
   Carousel,
@@ -7,21 +8,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-
-interface Job {
-  id: number;
-  company: string;
-  logo: string;
-  title: string;
-  salary: string;
-  location: string;
-  time: string;
-  skills: string[];
-}
-
-interface JobCarouselProps {
-  jobs: Job[];
-}
 
 const JobCarousel: React.FC<JobCarouselProps> = ({ jobs }) => {
   const carouselRef = useRef<HTMLDivElement>(null);

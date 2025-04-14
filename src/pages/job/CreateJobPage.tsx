@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertTriangle, Eye, FileText, Save, Send, Upload, X } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -45,12 +46,12 @@ const postJobSchema = z.object({
   location: z.string().min(3, "Location must be at least 3 characters"),
   salaryMin: z.string().optional(),
   salaryMax: z.string().optional(),
-  currency: z.string().default("USD"),
+  currency: z.string().default("VND"),
   jobType: z.string().min(1, "Please select a job type"),
   jobLevel: z.string().min(1, "Please select a job level"),
   experience: z.string().min(1, "Please select years of experience"),
-  responsibilities: z.string().min(50, "Please provide detailed responsibilities"),
-  requirements: z.string().min(50, "Please provide detailed requirements"),
+  responsibilities: z.string().min(10, "Please provide detailed responsibilities"),
+  requirements: z.string().min(10, "Please provide detailed requirements"),
   preferredSkills: z.string().optional(),
   // benefits: z.array(z.string()),
   benefits: z.string().min(1, "Please provide some benefits information"),
@@ -200,7 +201,7 @@ const CreateJobPage: React.FC = () => {
       localStorage.removeItem("jobPostDraft");
 
       console.log("Job posted successfully!");
-      navigate("/jobs");
+      navigate(ROUTES.RECRUITER.JOBS.LIST, { replace: true });
     } catch (error) {
       console.error("Error posting job:", error);
       console.error("Failed to post job. Please try again.");
@@ -238,15 +239,15 @@ const CreateJobPage: React.FC = () => {
             </p>
           )}
           <Button variant="outline" size="sm" onClick={() => saveFormData()}>
-            <Save className="mr-2 h-4 w-4" />
+            <Save className="mr-2 size-4" />
             Save Draft
           </Button>
           <Button variant="outline" size="sm" onClick={() => setPreviewOpen(true)}>
-            <Eye className="mr-2 h-4 w-4" />
+            <Eye className="mr-2 size-4" />
             Preview
           </Button>
           <Button variant="default" size="sm" onClick={form.handleSubmit(onSubmit)}>
-            <Send className="mr-2 h-4 w-4" />
+            <Send className="mr-2 size-4" />
             Post Job
           </Button>
         </div>
@@ -486,7 +487,7 @@ const CreateJobPage: React.FC = () => {
             <CardContent className="pt-6">
               <div className="space-y-6">
                 <h2 className="flex items-center gap-2 text-xl font-bold">
-                  <FileText className="text-primary h-5 w-5" />
+                  <FileText className="text-primary size-5" />
                   Job Description
                 </h2>
 
@@ -553,25 +554,6 @@ const CreateJobPage: React.FC = () => {
                   )}
                 />
 
-                {/* <FormField
-                  control={form.control}
-                  name="benefits"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Benefits</FormLabel>
-                      <FormControl>
-                        <BenefitsSelector
-                          selectedBenefits={field.value}
-                          onChange={field.onChange}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        Select the benefits offered with this position
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                /> */}
                 <FormField
                   control={form.control}
                   name="benefits"
@@ -618,7 +600,7 @@ const CreateJobPage: React.FC = () => {
             <CardContent className="pt-6">
               <div className="space-y-6">
                 <h2 className="flex items-center gap-2 text-xl font-bold">
-                  <FileText className="text-primary h-5 w-5" />
+                  <FileText className="text-primary size-5" />
                   Application Process
                 </h2>
 
@@ -676,7 +658,7 @@ const CreateJobPage: React.FC = () => {
             <CardContent className="pt-6">
               <div className="space-y-6">
                 <h2 className="flex items-center gap-2 text-xl font-bold">
-                  <FileText className="text-primary h-5 w-5" />
+                  <FileText className="text-primary size-5" />
                   Additional Settings
                 </h2>
 
@@ -717,7 +699,7 @@ const CreateJobPage: React.FC = () => {
                         variant="outline"
                         onClick={() => document.getElementById("attachment")?.click()}
                       >
-                        <Upload className="mr-2 h-4 w-4" />
+                        <Upload className="mr-2 size-4" />
                         Upload PDF
                       </Button>
                       <input
@@ -729,14 +711,14 @@ const CreateJobPage: React.FC = () => {
                       />
                       {form.watch("attachment") && (
                         <div className="bg-muted flex items-center gap-2 rounded-md px-3 py-2 text-sm">
-                          <FileText className="h-4 w-4" />
+                          <FileText className="size-4" />
                           {(form.watch("attachment") as File).name}
                           <button
                             type="button"
                             className="text-muted-foreground hover:text-destructive"
                             onClick={() => form.setValue("attachment", undefined)}
                           >
-                            <X className="h-4 w-4" />
+                            <X className="size-4" />
                           </button>
                         </div>
                       )}
@@ -750,11 +732,11 @@ const CreateJobPage: React.FC = () => {
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => saveFormData()}>
-              <Save className="mr-2 h-4 w-4" />
+              <Save className="mr-2 size-4" />
               Save Draft
             </Button>
             <Button type="submit">
-              <Send className="mr-2 h-4 w-4" />
+              <Send className="mr-2 size-4" />
               Post Job
             </Button>
           </div>

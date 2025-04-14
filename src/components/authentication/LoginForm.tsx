@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -102,9 +103,9 @@ export function LoginForm() {
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="size-4" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="size-4" />
                       )}
                       <span className="sr-only">
                         {showPassword ? "Hide password" : "Show password"}
@@ -119,7 +120,7 @@ export function LoginForm() {
 
           <div className="flex items-center justify-end px-1 pt-1">
             <Link
-              to="/forgot-password"
+              to={ROUTES.AUTH.FORGOT_PASSWORD}
               className="text-primary hover:text-primary/80 text-sm font-medium"
             >
               Forgot password?
@@ -138,7 +139,7 @@ export function LoginForm() {
 
       <div className="mx-2 mt-6 text-center text-sm">
         <span className="text-muted-foreground">You don't have an account? </span>
-        <Link to="/register" className="text-primary hover:text-primary/80 font-medium">
+        <Link to={ROUTES.AUTH.REGISTER} className="text-primary hover:text-primary/80 font-medium">
           Register now
         </Link>
       </div>

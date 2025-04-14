@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
@@ -32,8 +33,6 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
       logo: "/company-logos/apple.png",
       industry: "Technology",
       location: "Multiple locations",
-      rating: 4.6,
-      reviewCount: 1500,
       jobCount: 200,
       followerCount: 60000,
       isFollowing: false,
@@ -46,8 +45,6 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
       logo: "/company-logos/tesla.png",
       industry: "Automotive",
       location: "Multiple locations",
-      rating: 4.5,
-      reviewCount: 1200,
       jobCount: 180,
       followerCount: 50000,
       isFollowing: true,
@@ -60,8 +57,6 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
       logo: "/company-logos/netflix.png",
       industry: "Entertainment",
       location: "Multiple locations",
-      rating: 4.7,
-      reviewCount: 900,
       jobCount: 150,
       followerCount: 45000,
       isFollowing: true,
@@ -74,8 +69,6 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
       logo: "/company-logos/microsoft.png",
       industry: "Technology",
       location: "Multiple locations",
-      rating: 4.8,
-      reviewCount: 2000,
       jobCount: 300,
       followerCount: 70000,
       isFollowing: false,
@@ -88,8 +81,6 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
       logo: "/company-logos/amazon.png",
       industry: "E-commerce",
       location: "Multiple locations",
-      rating: 4.4,
-      reviewCount: 1300,
       jobCount: 250,
       followerCount: 80000,
       isFollowing: true,
@@ -102,8 +93,6 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
       logo: "/company-logos/google.png",
       industry: "Technology",
       location: "Multiple locations",
-      rating: 4.9,
-      reviewCount: 2500,
       jobCount: 350,
       followerCount: 90000,
       isFollowing: false,
@@ -141,7 +130,7 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
               <img
                 src={company.logo}
                 alt={company.name}
-                className="h-12 w-12 rounded-lg object-contain"
+                className="size-12 rounded-lg object-contain"
               />
               {company.newJobsToday > 0 && (
                 <Badge variant="secondary" className="bg-green-100 text-green-800">
@@ -151,7 +140,7 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
             </div>
             <h3 className="mb-2 text-lg font-bold">{company.name}</h3>
             <div className="text-muted-foreground mb-4 flex items-center gap-2">
-              <MapPin className="h-4 w-4" />
+              <MapPin className="size-4" />
               <span>{company.location}</span>
             </div>
             {company.newJobsToday > 0 && (
@@ -159,7 +148,7 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
                 {company.newJobsToday} new jobs today
               </p>
             )}
-            <Link to={`/companies/${company.id}/jobs`}>
+            <Link to={ROUTES.PUBLIC.COMPANIES.JOBS.replace(":id", company.id)}>
               <Button className="group-hover:bg-primary/90 w-full">View Jobs</Button>
             </Link>
           </div>

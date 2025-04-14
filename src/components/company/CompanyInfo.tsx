@@ -1,15 +1,10 @@
 import React from "react";
+import { ROUTES } from "@/routes/routes";
 import { Building } from "lucide-react";
 import { Link } from "react-router-dom";
+import { CompanyInfoProps } from "@/types/interfaces";
 import { Button } from "@/components/ui/button";
 import SaveJobButton from "../job/SaveJobButton";
-
-interface CompanyInfoProps {
-  company: string;
-  companyDescription: string;
-  saved: boolean;
-  onSaveJob: () => void;
-}
 
 const CompanyInfo: React.FC<CompanyInfoProps> = ({
   company,
@@ -21,12 +16,12 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
     <div className="mb-8 rounded-xl bg-white p-6 shadow-md lg:p-8">
       <div className="mb-6">
         <h3 className="mb-3 flex items-center gap-2 text-xl font-semibold">
-          <Building className="text-primary h-5 w-5" />
+          <Building className="text-primary size-5" />
           About the company
         </h3>
         <p className="text-gray-700">{companyDescription}</p>
         <Link
-          to={`/companies/${company.toLowerCase().replace(/\s+/g, "-")}`}
+          to={ROUTES.PUBLIC.COMPANIES.DETAIL.replace(":id", company.id)}
           className="text-primary mt-3 inline-block hover:underline"
         >
           View company details

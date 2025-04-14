@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { Briefcase, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
+import { CompanyJobsProps } from "@/types/interfaces";
 import { Badge } from "@/components/ui/badge";
 import {
   Pagination,
@@ -10,11 +12,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-interface CompanyJobsProps {
-  companyId: string;
-  openPositions: number;
-}
 
 const CompanyJobs = ({ companyId, openPositions }: CompanyJobsProps) => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -38,7 +35,7 @@ const CompanyJobs = ({ companyId, openPositions }: CompanyJobsProps) => {
     <div className="rounded-xl bg-white p-6 shadow-sm lg:p-8">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-2xl font-bold">
-          <Briefcase className="text-primary h-6 w-6" />
+          <Briefcase className="text-primary size-6" />
           Open Positions <span className="text-primary bg-amber-500">{openPositions}</span>
         </h2>
       </div>
@@ -50,12 +47,15 @@ const CompanyJobs = ({ companyId, openPositions }: CompanyJobsProps) => {
             className="group flex flex-col gap-4 py-6 transition-all hover:bg-gray-50 sm:flex-row sm:items-center sm:justify-between"
           >
             <div>
-              <Link to={`/jobs/${job.id}`} className="hover:text-primary text-lg font-medium">
+              <Link
+                to={ROUTES.PUBLIC.JOBS.DETAIL.replace(":id", job.id.toString())}
+                className="hover:text-primary text-lg font-medium"
+              >
                 {job.title}
               </Link>
               <div className="mt-2 flex flex-wrap items-center gap-4">
                 <div className="flex items-center gap-2">
-                  <MapPin className="text-muted-foreground h-4 w-4" />
+                  <MapPin className="text-muted-foreground size-4" />
                   <span className="text-muted-foreground text-sm">{job.location}</span>
                 </div>
                 <Badge variant="secondary">{job.type}</Badge>

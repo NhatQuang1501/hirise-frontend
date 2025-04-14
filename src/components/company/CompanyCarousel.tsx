@@ -1,17 +1,12 @@
 import React from "react";
+import { ROUTES } from "@/routes/routes";
 import { Building2, MapPin, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
+import { CompanyCarouselProps } from "@/types/interfaces";
 import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { BaseCarousel } from "../section/BaseCarousel";
-
-interface CompanyCarouselProps {
-  companies: Company[];
-  title?: string;
-  description?: string;
-  viewAllLink?: string;
-}
 
 const CompanyCarousel = ({
   companies,
@@ -21,7 +16,7 @@ const CompanyCarousel = ({
 }: CompanyCarouselProps) => {
   const renderCompany = (company: Company) => (
     <Link
-      to={`/companies/${company.id}`}
+      to={ROUTES.PUBLIC.COMPANIES.DETAIL.replace(":id", company.id)}
       className="group block rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
     >
       <div className="mb-4 flex items-start justify-between">
@@ -42,23 +37,16 @@ const CompanyCarousel = ({
       </h3>
 
       <div className="mb-3 flex items-center gap-2">
-        <Building2 className="text-muted-foreground h-4 w-4" />
+        <Building2 className="text-muted-foreground size-4" />
         <span className="text-muted-foreground text-sm">{company.industry}</span>
       </div>
 
       <div className="mb-3 flex items-center gap-2">
-        <MapPin className="text-muted-foreground h-4 w-4" />
+        <MapPin className="text-muted-foreground size-4" />
         <span className="text-muted-foreground text-sm">{company.location}</span>
       </div>
 
       <div className="mb-4 flex items-center justify-between">
-        {/* <div className="flex items-center gap-2">
-          <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-          <span className="font-medium">{company.rating}</span>
-          <span className="text-muted-foreground text-sm">
-            ({company.reviewCount.toLocaleString()})
-          </span>
-        </div> */}
         <div className="flex items-center gap-1">
           <Users className="text-primary size-4" />
           <span className="text-muted-foreground text-sm">

@@ -1,8 +1,8 @@
 import React from "react";
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
+import { JobStatus } from "@/types/recruiter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { JobStatus } from "@/types/recruiter";
 
 interface RecruiterJobFiltersProps {
   searchKeyword: string;
@@ -24,13 +24,14 @@ const RecruiterJobFilters: React.FC<RecruiterJobFiltersProps> = ({
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
         <h1 className="text-2xl font-bold">Manage Jobs</h1>
         <Button onClick={onCreateJob} size="lg">
-          + Create Job
+          <Plus className="mr-2 size-4" />
+          Create Job
         </Button>
       </div>
 
       <div className="flex flex-col gap-4 md:flex-row">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+          <Search className="absolute top-3 left-3 size-4 text-gray-400" />
           <Input
             placeholder="Search by job title..."
             value={searchKeyword}

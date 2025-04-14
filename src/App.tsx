@@ -4,11 +4,11 @@ import Loading from "@/components/staticComponents/loading";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "./components/footer/Footer";
 import { Header } from "./components/header/Header";
-import { AUTH_PAGES, userRoutes } from "./routes/userRoute";
+import userRoutes, { AUTH_PAGES } from "./routes/userRoutes";
 
 function AppLayout() {
   const { pathname } = useLocation();
-  const isAuthPage = AUTH_PAGES.includes(pathname);
+  const isAuthPage = AUTH_PAGES.includes(pathname as (typeof AUTH_PAGES)[number]);
 
   return (
     <div className="flex min-h-screen flex-col">

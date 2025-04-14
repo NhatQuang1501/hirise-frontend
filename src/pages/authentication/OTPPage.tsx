@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -80,7 +81,7 @@ const OTPPage = () => {
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       toast.success("Email verified successfully!");
-      navigate("/login");
+      navigate(ROUTES.AUTH.LOGIN, { replace: true });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Verification failed");
     } finally {
@@ -110,7 +111,7 @@ const OTPPage = () => {
                 onChange={(e) => handleChange(e.target, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
                 onPaste={handlePaste}
-                className="h-12 w-12 text-center text-lg"
+                className="size-12 text-center text-lg"
               />
             ))}
           </div>

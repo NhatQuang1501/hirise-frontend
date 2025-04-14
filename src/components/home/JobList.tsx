@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
@@ -47,8 +48,11 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
       <div className="container mx-auto px-4">
         <div className="mb-10 flex items-center justify-between">
           <h2 className="text-3xl font-bold">Latest IT jobs</h2>
-          <Link to="/jobs" className="text-primary flex items-center hover:underline">
-            View all <ChevronRight className="h-4 w-4" />
+          <Link
+            to={ROUTES.PUBLIC.JOBS.LIST}
+            className="text-primary flex items-center hover:underline"
+          >
+            View all <ChevronRight className="size-4" />
           </Link>
         </div>
 

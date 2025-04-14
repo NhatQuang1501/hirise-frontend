@@ -1,4 +1,5 @@
 import React from "react";
+import { ROUTES } from "@/routes/routes";
 import { Briefcase, DollarSign, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { JobCardData } from "@/types/job";
@@ -30,7 +31,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
         {/* Tăng font-size của title */}
         <Link
-          to={`/jobs/${job.id}`}
+          to={ROUTES.PUBLIC.JOBS.DETAIL.replace(":id", job.id.toString())}
           className="group-hover:text-primary mb-3 block text-xl font-semibold"
         >
           {job.title}

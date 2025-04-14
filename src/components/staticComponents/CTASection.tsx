@@ -25,7 +25,7 @@ const CTASection = ({ title, description, primaryAction, secondaryAction }: CTAS
             <Link to={primaryAction.href}>
               <Button size="lg" className="gap-2">
                 {primaryAction.text}
-                <ArrowRight className="h-5 w-5" />
+                <ArrowRight className="size-5" />
               </Button>
             </Link>
             {secondaryAction && (

@@ -18,7 +18,7 @@ const SaveJobButton: React.FC<SaveJobButtonProps> = ({ saved, onSaveJob, classNa
         </span>
       ) : (
         <span className="flex items-center gap-2">
-          <Heart className="h-5 w-5" />
+          <Heart className="size-5" />
           Save
         </span>
       )}

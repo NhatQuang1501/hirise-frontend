@@ -118,7 +118,7 @@ export const BaseCarousel = ({
           {viewAllLink && (
             <Link to={viewAllLink}>
               <Button variant="ghost" className="text-primary gap-2">
-                {viewAllText} <ChevronRight className="h-4 w-4" />
+                {viewAllText} <ChevronRight className="size-4" />
               </Button>
             </Link>
           )}
