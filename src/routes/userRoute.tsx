@@ -1,5 +1,7 @@
+
 import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
+import RecruiterJobDetailPage from '@/pages/recruitment/RecruiterJobDetailPage';
 
 const HomePage = lazy(() => import("@/pages/home/HomePage"));
 const LoginPage = lazy(() => import("@/pages/authentication/LoginPage"));
@@ -13,6 +15,7 @@ const CompanyDetailPage = lazy(() => import("@/pages/company/CompanyDetailPage")
 const AboutPage = lazy(() => import("@/pages/static/AboutPage"));
 const ContactPage = lazy(() => import("@/pages/static/ContactPage"));
 const ProfilePage = lazy(() => import("@/pages/user/applicant/ProfilePage"));
+const RecruiterJobDetailPage = lazy(() => import("@/pages/recruitment/RecruiterJobDetailPage"))
 
 export const AUTH_PAGES = ["/login", "/register", "/register/otp"];
 
@@ -66,4 +69,8 @@ export const userRoutes: RouteObject[] = [
     path: "/applicant-profile",
     element: <ProfilePage />,
   },
+  {
+    path: "/recruitment/job-detail",
+    element: <RecruiterJobDetailPage />
+  }
 ];
