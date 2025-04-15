@@ -65,7 +65,11 @@ const OTPPage = () => {
   const handleResendOTP = () => {
     setTimeLeft(60);
     // Thêm logic gửi lại OTP ở đây
-    toast.success("OTP has been resent to your email");
+    toast.success("OTP has been resent to your email", {
+      description: "Please check your email for the new OTP.",
+      className: "bg-green-500 text-white font-bold rounded-xl",
+      duration: 3000,
+    });
   };
 
   // Xử lý xác thực OTP

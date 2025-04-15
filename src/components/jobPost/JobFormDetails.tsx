@@ -1,10 +1,23 @@
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Card, CardContent } from "@/components/ui/card";
 import SkillsInput from "@/components/jobPost/SkillsInput";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface JobFormDetailsProps {
   form: UseFormReturn<any>;
@@ -119,9 +132,7 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
                 <FormControl>
                   <SkillsInput skills={field.value} onChange={field.onChange} />
                 </FormControl>
-                <FormDescription>
-                  Enter skills and press Enter to add
-                </FormDescription>
+                <FormDescription>Enter skills and press Enter to add</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

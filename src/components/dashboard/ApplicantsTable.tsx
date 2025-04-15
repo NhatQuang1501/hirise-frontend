@@ -1,15 +1,28 @@
 // File: hirise-frontend/src/components/dashboard/ApplicantsTable.tsx
 import React from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { getApplicantStatusColor } from "@/utils/statusHelpers";
+import { CheckCircle, Download, Eye, MoreVertical, UserCircle, XCircle } from "lucide-react";
+import { Applicant } from "@/types/recruiter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, 
-         DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
-import { UserCircle, MoreVertical, Eye, Download, CheckCircle, XCircle } from "lucide-react";
-import { Applicant } from "@/types/recruiter";
-import { getApplicantStatusColor } from "@/utils/statusHelpers";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface ApplicantsTableProps {
   applicants: Applicant[];
@@ -57,8 +70,8 @@ const ApplicantsTable: React.FC<ApplicantsTableProps> = ({ applicants }) => {
                             applicant.matchingScore >= 80
                               ? "bg-green-500"
                               : applicant.matchingScore >= 60
-                              ? "bg-yellow-500"
-                              : "bg-red-500"
+                                ? "bg-yellow-500"
+                                : "bg-red-500"
                           }
                         />
                       </div>
@@ -124,7 +137,7 @@ const ApplicantsTable: React.FC<ApplicantsTableProps> = ({ applicants }) => {
                       <h4 className="font-medium">{applicant.name}</h4>
                       <div className="text-muted-foreground text-xs">{applicant.email}</div>
                     </div>
-                    
+
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
                       <div>
                         <span className="text-muted-foreground">Position: </span>
@@ -135,19 +148,21 @@ const ApplicantsTable: React.FC<ApplicantsTableProps> = ({ applicants }) => {
                         <span>{applicant.applyDate}</span>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center justify-between">
                       <Badge className={getApplicantStatusColor(applicant.status)}>
                         {applicant.status}
                       </Badge>
-                      
+
                       {applicant.matchingScore && (
                         <div className="flex items-center">
                           <span className="text-muted-foreground mr-1 text-xs">Match:</span>
-                          <span className="mr-1 text-sm font-medium">{applicant.matchingScore}%</span>
+                          <span className="mr-1 text-sm font-medium">
+                            {applicant.matchingScore}%
+                          </span>
                         </div>
                       )}
-                      
+
                       <Button variant="ghost" size="sm" className="ml-auto">
                         <Eye className="mr-1 size-3.5" />
                         View

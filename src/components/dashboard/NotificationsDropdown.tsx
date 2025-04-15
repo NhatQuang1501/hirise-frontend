@@ -24,37 +24,37 @@ const NotificationsDropdown: React.FC = () => {
   // Example notifications
   const [notifications, setNotifications] = useState<Notification[]>([
     {
-      id: '1',
-      title: 'New Applicant',
-      message: 'John Smith applied for Senior React Developer position',
-      time: '10 minutes ago',
-      read: false
+      id: "1",
+      title: "New Applicant",
+      message: "John Smith applied for Senior React Developer position",
+      time: "10 minutes ago",
+      read: false,
     },
     {
-      id: '2',
-      title: 'Interview Reminder',
-      message: 'You have an interview with Emily Brown at 3:00 PM today',
-      time: '1 hour ago',
-      read: false
+      id: "2",
+      title: "Interview Reminder",
+      message: "You have an interview with Emily Brown at 3:00 PM today",
+      time: "1 hour ago",
+      read: false,
     },
     {
-      id: '3',
-      title: 'Job Status',
+      id: "3",
+      title: "Job Status",
       message: 'Your "Product Designer" job has been published successfully',
-      time: '2 days ago',
-      read: true
-    }
+      time: "2 days ago",
+      read: true,
+    },
   ]);
 
   // Mark notification as read
   const markAsRead = (notificationId: string) => {
-    setNotifications(notifications.map(note => 
-      note.id === notificationId ? {...note, read: true} : note
-    ));
+    setNotifications(
+      notifications.map((note) => (note.id === notificationId ? { ...note, read: true } : note)),
+    );
   };
 
   // Count unread notifications
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <DropdownMenu>
@@ -62,7 +62,7 @@ const NotificationsDropdown: React.FC = () => {
         <Button variant="outline" size="icon" className="relative">
           <Bell className="size-5" />
           {unreadCount > 0 && (
-            <span className="bg-primary absolute -right-1 -top-1 flex size-4 items-center justify-center rounded-full text-[10px] text-white">
+            <span className="bg-primary absolute -top-1 -right-1 flex size-4 items-center justify-center rounded-full text-[10px] text-white">
               {unreadCount}
             </span>
           )}
@@ -73,9 +73,13 @@ const NotificationsDropdown: React.FC = () => {
         <DropdownMenuSeparator />
         {notifications.length > 0 ? (
           <>
-            {notifications.map(note => (
-              <DropdownMenuItem key={note.id} className="cursor-pointer p-3" onClick={() => markAsRead(note.id)}>
-                <div className={`${note.read ? 'opacity-60' : 'font-medium'} space-y-1`}>
+            {notifications.map((note) => (
+              <DropdownMenuItem
+                key={note.id}
+                className="cursor-pointer p-3"
+                onClick={() => markAsRead(note.id)}
+              >
+                <div className={`${note.read ? "opacity-60" : "font-medium"} space-y-1`}>
                   <div className="flex items-center justify-between">
                     <span className="text-sm">{note.title}</span>
                     <span className="text-muted-foreground text-xs">{note.time}</span>

@@ -1,9 +1,16 @@
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Card, CardContent } from "@/components/ui/card";
-import RichTextEditor from "@/components/jobPost/RichTextEditor";
 import InterviewProcessBuilder from "@/components/jobPost/InterviewProcessBuilder";
+import RichTextEditor from "@/components/jobPost/RichTextEditor";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 interface JobFormDescriptionProps {
   form: UseFormReturn<any>;
@@ -95,10 +102,7 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
               <FormItem>
                 <FormLabel>Interview Process</FormLabel>
                 <FormControl>
-                  <InterviewProcessBuilder
-                    steps={field.value}
-                    onChange={field.onChange}
-                  />
+                  <InterviewProcessBuilder steps={field.value} onChange={field.onChange} />
                 </FormControl>
                 <FormDescription>
                   Describe the interview process so candidates can prepare

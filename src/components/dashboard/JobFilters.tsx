@@ -1,15 +1,15 @@
 // File: hirise-frontend/src/components/dashboard/JobFilters.tsx
 import React from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { 
-  Select, 
-  SelectTrigger, 
-  SelectValue, 
-  SelectContent,
-  SelectItem
-} from "@/components/ui/select";
 import { X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface JobFiltersProps {
   searchKeyword: string;
@@ -24,7 +24,7 @@ const JobFilters: React.FC<JobFiltersProps> = ({
   filterStatus,
   onSearchChange,
   onStatusChange,
-  onResetFilters
+  onResetFilters,
 }) => {
   return (
     <div className="mb-4 flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
@@ -47,11 +47,11 @@ const JobFilters: React.FC<JobFiltersProps> = ({
           </SelectContent>
         </Select>
       </div>
-      
+
       <div className="flex items-center gap-2">
-        <Button 
-          variant="outline" 
-          size="sm" 
+        <Button
+          variant="outline"
+          size="sm"
           onClick={onResetFilters}
           disabled={!searchKeyword && filterStatus === "All"}
         >

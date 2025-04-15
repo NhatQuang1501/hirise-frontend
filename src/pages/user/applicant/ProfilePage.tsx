@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { ROUTES } from "@/routes/routes";
+import { profileMetadata } from "@/utils/profileMetadata";
 import { Pencil } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import ProfileEditForm from "@/components/profile/ProfileEditForm";
-import { profileMetadata } from "../../../utils/profileMetadata";
 
 const ProfilePage = () => {
   const navigate = useNavigate();

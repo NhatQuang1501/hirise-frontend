@@ -1,14 +1,28 @@
 // File: hirise-frontend/src/components/dashboard/RecentApplicantsTable.tsx
 import React from "react";
-import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { getApplicantStatusColor } from "@/utils/statusHelpers";
+import { UserCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Applicant } from "@/types/recruiter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { UserCircle } from "lucide-react";
-import { Applicant } from "@/types/recruiter";
-import { getApplicantStatusColor } from "@/utils/statusHelpers";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface RecentApplicantsTableProps {
   applicants: Applicant[];
@@ -19,9 +33,7 @@ const RecentApplicantsTable: React.FC<RecentApplicantsTableProps> = ({ applicant
     <Card className="overflow-hidden">
       <CardHeader>
         <CardTitle>Latest Applicants</CardTitle>
-        <CardDescription>
-          Most recent job applicants
-        </CardDescription>
+        <CardDescription>Most recent job applicants</CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <Table>

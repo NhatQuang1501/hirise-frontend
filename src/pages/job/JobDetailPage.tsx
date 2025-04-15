@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { ClipboardList } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Job } from "@/types/job";
 import { jobsDataDetail, latestJobs } from "@/types/mockData";
@@ -21,7 +22,7 @@ const JobDetailPage: React.FC = () => {
     const jobDetail = jobsDataDetail.find((job) => job.id === Number(id));
     setJob(jobDetail || null);
 
-    // Cập nhật tiêu đề trang và meta tags - React 19 approach
+    // Cập nhật tiêu đề trang và meta tags
     if (jobDetail) {
       document.title = `${jobDetail.title} - ${jobDetail.company} | HiRise`;
 
@@ -82,7 +83,10 @@ const JobDetailPage: React.FC = () => {
           {/* 2. Chi tiết công việc */}
           <div className="lg:col-span-2">
             <div className="mb-8 rounded-xl bg-white p-6 shadow-md lg:p-8">
-              <h2 className="mb-6 text-2xl font-bold">Job description</h2>
+              <h2 className="mb-6 text-2xl font-bold">
+                <ClipboardList className="text-primary mr-2 inline-block" />
+                Job description
+              </h2>
 
               {/* Responsibilities */}
               <JobResponsibilities responsibilities={job.responsibilities} />
@@ -101,7 +105,7 @@ const JobDetailPage: React.FC = () => {
           {/* 3. Công ty & Nút CTA */}
           <div className="lg:col-span-1">
             <CompanyInfo
-              company={job.company}
+              company={{ id: job.company }}
               companyDescription={job.companyDescription}
               saved={saved}
               onSaveJob={handleSaveJob}
@@ -111,10 +115,13 @@ const JobDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* 4. Carousel: Công việc mới nhất */}
-        <div className="mt-12">
-          <h2 className="mb-6 text-2xl font-bold">Latest jobs</h2>
-          <JobCarousel jobs={latestJobs} />
+        {/* 4. Carousel: Latest jobs section */}
+        <div className="border-primary/10 from-primary/10 to-secondary/20 mt-12 rounded-xl border bg-gradient-to-br px-14 py-8 shadow-lg">
+          <JobCarousel
+            jobs={latestJobs}
+            title="Latest Jobs"
+            description="Discover more opportunities that match your profile"
+          />
         </div>
       </div>
     </div>

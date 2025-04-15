@@ -1,38 +1,41 @@
-import React, { useRef } from "react";
-import { Job, JobCarouselProps } from "@/types/interfaces";
+import React from "react";
+import { ROUTES } from "@/routes/routes";
+import { JobCardData } from "@/types/job";
 import JobCard from "@/components/job/JobCard";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { BaseCarousel } from "@/components/section/BaseCarousel";
 
-const JobCarousel: React.FC<JobCarouselProps> = ({ jobs }) => {
-  const carouselRef = useRef<HTMLDivElement>(null);
+interface JobCarouselProps {
+  jobs: JobCardData[];
+  title?: string;
+  description?: string;
+  viewAllLink?: string;
+  className?: string;
+}
 
+const JobCarousel: React.FC<JobCarouselProps> = ({
+  jobs,
+  title = "Latest jobs",
+  description = "More jobs you might be interested in",
+  viewAllLink = ROUTES.PUBLIC.JOBS.LIST,
+  className,
+}) => {
   return (
-    <Carousel
-      ref={carouselRef}
-      className="w-full"
-      opts={{
-        align: "start",
-        loop: true,
+    <BaseCarousel
+      items={jobs}
+      renderItem={(job) => <JobCard job={job} />}
+      title={title}
+      description={description}
+      viewAllLink={viewAllLink}
+      viewAllText="View all jobs"
+      breakpoints={{
+        sm: 1,
+        md: 2,
+        lg: 3,
+        xl: 3,
       }}
-    >
-      <CarouselContent className="-ml-4">
-        {jobs.map((job) => (
-          <CarouselItem key={job.id} className="pl-4 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-            <JobCard job={job} />
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <div className="mt-6 flex justify-center gap-2">
-        <CarouselPrevious />
-        <CarouselNext />
-      </div>
-    </Carousel>
+      autoplayInterval={10000}
+      className={className}
+    />
   );
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { ROUTES } from "@/routes/routes";
-import { Building2, MapPin, Users } from "lucide-react";
+import { Building2, MapPin, MoveRight, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
 import { CompanyCarouselProps } from "@/types/interfaces";
@@ -58,7 +58,7 @@ const CompanyCarousel = ({
       <div className={cn("border-border mt-4 border-t pt-4", "flex items-center justify-between")}>
         {/* <span className="text-primary font-medium">{company.jobCount} open positions</span> */}
         <span className="text-muted-foreground group-hover:text-primary text-sm transition-colors">
-          View company →
+          View company <MoveRight className="inline-block size-4" />
         </span>
       </div>
     </Link>
@@ -72,7 +72,7 @@ const CompanyCarousel = ({
       description={description}
       viewAllLink={viewAllLink}
       breakpoints={{ sm: 1, md: 2, lg: 3, xl: 3 }}
-      autoplayInterval={10000}
+      autoplayInterval={20000}
     />
   );
 };

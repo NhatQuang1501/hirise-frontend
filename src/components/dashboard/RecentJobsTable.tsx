@@ -1,13 +1,27 @@
 // File: hirise-frontend/src/components/dashboard/RecentJobsTable.tsx
 import React from "react";
-import { Link } from "react-router-dom";
 import { ROUTES } from "@/routes/routes";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
+import { getStatusColor } from "@/utils/statusHelpers";
+import { Link } from "react-router-dom";
+import { RecruiterJob } from "@/types/recruiter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
-import { RecruiterJob } from "@/types/recruiter";
-import { getStatusColor } from "@/utils/statusHelpers";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface RecentJobsTableProps {
   jobs: RecruiterJob[];
@@ -18,9 +32,7 @@ const RecentJobsTable: React.FC<RecentJobsTableProps> = ({ jobs }) => {
     <Card className="overflow-hidden">
       <CardHeader>
         <CardTitle>Recent Jobs</CardTitle>
-        <CardDescription>
-          Recently created job postings
-        </CardDescription>
+        <CardDescription>Recently created job postings</CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <Table>
@@ -35,7 +47,7 @@ const RecentJobsTable: React.FC<RecentJobsTableProps> = ({ jobs }) => {
             {jobs.map((job) => (
               <TableRow key={job.id}>
                 <TableCell className="font-medium">
-                  <Link 
+                  <Link
                     to={ROUTES.RECRUITER.JOBS.DETAIL.replace(":id", job.id.toString())}
                     className="hover:text-primary hover:underline"
                   >
@@ -43,9 +55,7 @@ const RecentJobsTable: React.FC<RecentJobsTableProps> = ({ jobs }) => {
                   </Link>
                 </TableCell>
                 <TableCell>
-                  <Badge className={getStatusColor(job.status)}>
-                    {job.status}
-                  </Badge>
+                  <Badge className={getStatusColor(job.status)}>{job.status}</Badge>
                 </TableCell>
                 <TableCell>{job.applicantCount}</TableCell>
               </TableRow>

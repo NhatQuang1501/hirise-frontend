@@ -1,17 +1,30 @@
 // File: hirise-frontend/src/components/dashboard/JobCardGrid.tsx
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
-import { Card, CardContent } from "@/components/ui/card";
+import { getStatusColor } from "@/utils/statusHelpers";
+import {
+  Calendar,
+  CheckCircle,
+  Edit,
+  Eye,
+  FileBarChart,
+  MapPin,
+  MoreVertical,
+  Users,
+  XCircle,
+} from "lucide-react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { RecruiterJob } from "@/types/recruiter";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, 
-         DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { MoreVertical, MapPin, Calendar, Users, Eye, Edit, XCircle, 
-         CheckCircle, FileBarChart } from "lucide-react";
-import { RecruiterJob } from "@/types/recruiter";
-import { getStatusColor } from "@/utils/statusHelpers";
-import { useNavigate } from "react-router-dom";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import JobFilters from "./JobFilters";
 
 interface JobCardGridProps {
@@ -20,7 +33,7 @@ interface JobCardGridProps {
 
 const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
   const navigate = useNavigate();
-  
+
   // Filter state
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
@@ -29,20 +42,21 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
   // Apply filters effect
   useEffect(() => {
     let result = [...jobs];
-    
+
     // Filter by keyword
     if (searchKeyword) {
-      result = result.filter(job => 
-        job.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchKeyword.toLowerCase())
+      result = result.filter(
+        (job) =>
+          job.title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+          job.company.toLowerCase().includes(searchKeyword.toLowerCase()),
       );
     }
-    
+
     // Filter by status
     if (filterStatus !== "All") {
-      result = result.filter(job => job.status === filterStatus);
+      result = result.filter((job) => job.status === filterStatus);
     }
-    
+
     setFilteredJobs(result);
   }, [jobs, searchKeyword, filterStatus]);
 
@@ -64,14 +78,14 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
 
   return (
     <>
-      <JobFilters 
+      <JobFilters
         searchKeyword={searchKeyword}
         filterStatus={filterStatus}
         onSearchChange={setSearchKeyword}
         onStatusChange={setFilterStatus}
         onResetFilters={handleResetFilters}
       />
-      
+
       {filteredJobs.length > 0 ? (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredJobs.map((job) => (
@@ -79,9 +93,7 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
               <CardContent className="p-0">
                 <div className="p-6">
                   <div className="mb-4 flex items-center justify-between">
-                    <Badge className={getStatusColor(job.status)}>
-                      {job.status}
-                    </Badge>
+                    <Badge className={getStatusColor(job.status)}>{job.status}</Badge>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="icon">
@@ -115,7 +127,7 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
 
                   <div>
                     <h3 className="mb-2 text-lg font-semibold">
-                      <Link 
+                      <Link
                         to={ROUTES.RECRUITER.JOBS.DETAIL.replace(":id", job.id.toString())}
                         className="hover:text-primary hover:underline"
                       >
@@ -156,19 +168,11 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
 
                 <div className="bg-muted/50 border-t p-4">
                   <div className="flex flex-wrap gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleViewJob(job.id)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleViewJob(job.id)}>
                       <Eye className="mr-2 size-4" />
                       View
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEditJob(job.id)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleEditJob(job.id)}>
                       <Edit className="mr-2 size-4" />
                       Edit
                     </Button>

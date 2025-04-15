@@ -1,16 +1,16 @@
 import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { RecruiterJob } from "@/types/recruiter";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 interface JobStatusChartProps {
   jobs: RecruiterJob[];
 }
 
 const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {
-  const publishedJobs = jobs.filter(job => job.status === "Published").length;
-  const draftJobs = jobs.filter(job => job.status === "Draft").length;
-  const closedJobs = jobs.filter(job => job.status === "Closed").length;
+  const publishedJobs = jobs.filter((job) => job.status === "Published").length;
+  const draftJobs = jobs.filter((job) => job.status === "Draft").length;
+  const closedJobs = jobs.filter((job) => job.status === "Closed").length;
 
   return (
     <Card>
@@ -27,13 +27,13 @@ const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {
               </div>
               <span className="font-medium">{publishedJobs}</span>
             </div>
-            <Progress 
-              value={(publishedJobs / jobs.length) * 100} 
+            <Progress
+              value={(publishedJobs / jobs.length) * 100}
               className="h-2 bg-gray-100"
               indicatorClassName="bg-green-500"
             />
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center">
@@ -42,13 +42,13 @@ const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {
               </div>
               <span className="font-medium">{draftJobs}</span>
             </div>
-            <Progress 
-              value={(draftJobs / jobs.length) * 100} 
+            <Progress
+              value={(draftJobs / jobs.length) * 100}
               className="h-2 bg-gray-100"
               indicatorClassName="bg-gray-500"
             />
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center">
@@ -57,8 +57,8 @@ const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {
               </div>
               <span className="font-medium">{closedJobs}</span>
             </div>
-            <Progress 
-              value={(closedJobs / jobs.length) * 100} 
+            <Progress
+              value={(closedJobs / jobs.length) * 100}
               className="h-2 bg-gray-100"
               indicatorClassName="bg-red-500"
             />

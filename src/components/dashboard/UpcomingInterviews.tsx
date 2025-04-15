@@ -1,8 +1,8 @@
 // File: hirise-frontend/src/components/dashboard/UpcomingInterviews.tsx
 import React from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Calendar, Clock } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface Interview {
   id: string;
@@ -17,7 +17,7 @@ interface UpcomingInterviewsProps {
   interviews?: Interview[];
 }
 
-const UpcomingInterviews: React.FC<UpcomingInterviewsProps> = ({ 
+const UpcomingInterviews: React.FC<UpcomingInterviewsProps> = ({
   interviews = [
     {
       id: "1",
@@ -25,7 +25,7 @@ const UpcomingInterviews: React.FC<UpcomingInterviewsProps> = ({
       position: "Senior React Developer",
       date: new Date().toLocaleDateString(),
       time: "15:00 - 16:00",
-      type: "Technical Interview"
+      type: "Technical Interview",
     },
     {
       id: "2",
@@ -33,9 +33,9 @@ const UpcomingInterviews: React.FC<UpcomingInterviewsProps> = ({
       position: "Product Designer",
       date: new Date(Date.now() + 86400000).toLocaleDateString(), // tomorrow
       time: "09:30 - 10:30",
-      type: "Design Challenge"
-    }
-  ]
+      type: "Design Challenge",
+    },
+  ],
 }) => {
   return (
     <Card className="col-span-full">
@@ -51,14 +51,19 @@ const UpcomingInterviews: React.FC<UpcomingInterviewsProps> = ({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {interviews.map(interview => (
-            <div key={interview.id} className="flex flex-col rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between">
+          {interviews.map((interview) => (
+            <div
+              key={interview.id}
+              className="flex flex-col rounded-lg border p-4 sm:flex-row sm:items-center sm:justify-between"
+            >
               <div className="flex items-start gap-3">
                 <div className="bg-primary flex size-10 flex-shrink-0 items-center justify-center rounded-full font-semibold text-white">
-                  {interview.date.split('/')[1] || new Date().getDate()}
+                  {interview.date.split("/")[1] || new Date().getDate()}
                 </div>
                 <div>
-                  <h4 className="font-medium">{interview.applicantName} - {interview.position}</h4>
+                  <h4 className="font-medium">
+                    {interview.applicantName} - {interview.position}
+                  </h4>
                   <div className="text-muted-foreground flex items-center gap-3 text-sm">
                     <span className="flex items-center">
                       <Clock className="mr-1 size-3.5" />
@@ -69,7 +74,9 @@ const UpcomingInterviews: React.FC<UpcomingInterviewsProps> = ({
                 </div>
               </div>
               <div className="mt-4 flex gap-2 sm:mt-0">
-                <Button variant="outline" size="sm">Reschedule</Button>
+                <Button variant="outline" size="sm">
+                  Reschedule
+                </Button>
                 <Button size="sm">Join</Button>
               </div>
             </div>

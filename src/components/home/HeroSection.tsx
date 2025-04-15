@@ -22,7 +22,7 @@ const HeroSection: React.FC = () => {
               <p>Popular:</p>
               <div className="flex flex-wrap gap-2">
                 <Link to={ROUTES.PUBLIC.JOBS.SEARCH("react")} className="hover:text-primary">
-                  ReactJS
+                  React
                 </Link>
                 ,
                 <Link to={ROUTES.PUBLIC.JOBS.SEARCH("java")} className="hover:text-primary">

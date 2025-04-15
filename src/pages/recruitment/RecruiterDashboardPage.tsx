@@ -1,26 +1,23 @@
-// File: hirise-frontend/src/pages/recruitment/RecruiterDashboardPage.tsx
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
-import { Link, useNavigate } from "react-router-dom";
 import { Plus } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Link, useNavigate } from "react-router-dom";
+import { mockApplicants, mockRecruiterJobs } from "@/types/mockData";
 import { RecruiterJob } from "@/types/recruiter";
-import { mockRecruiterJobs, mockApplicants } from "@/types/mockData";
-
-// Import components
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import StatsCards from "@/components/dashboard/StatsCards";
-import JobStatusChart from "@/components/dashboard/JobStatusChart";
 import ApplicantProgressChart from "@/components/dashboard/ApplicantProgressChart";
-import JobCategoryChart from "@/components/dashboard/JobCategoryChart";
-import RecentJobsTable from "@/components/dashboard/RecentJobsTable";
-import RecentApplicantsTable from "@/components/dashboard/RecentApplicantsTable";
-import LoadingSpinner from "@/components/ui/loading-spinner";
-import JobCardGrid from "@/components/dashboard/JobCardGrid";
 import ApplicantsTable from "@/components/dashboard/ApplicantsTable";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import JobCardGrid from "@/components/dashboard/JobCardGrid";
+import JobCategoryChart from "@/components/dashboard/JobCategoryChart";
+import JobStatusChart from "@/components/dashboard/JobStatusChart";
 import NotificationsDropdown from "@/components/dashboard/NotificationsDropdown";
+import RecentApplicantsTable from "@/components/dashboard/RecentApplicantsTable";
+import RecentJobsTable from "@/components/dashboard/RecentJobsTable";
+import StatsCards from "@/components/dashboard/StatsCards";
 import UpcomingInterviews from "@/components/dashboard/UpcomingInterviews";
+import { Button } from "@/components/ui/button";
+import LoadingSpinner from "@/components/ui/loadingSpinner";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Dashboard statistics interface
 interface DashboardStats {
@@ -54,14 +51,19 @@ const RecruiterDashboardPage: React.FC = () => {
         // In a real app, this would be an API call
         setTimeout(() => {
           setJobs(mockRecruiterJobs);
-          
+
           // Calculate statistics
-          const activeJobs = mockRecruiterJobs.filter(job => job.status === "Published").length;
-          const totalApplications = mockRecruiterJobs.reduce((sum, job) => sum + job.applicantCount, 0);
-          const newApplications = mockApplicants.filter(app => app.status === "New").length;
-          const interviewScheduled = mockApplicants.filter(app => app.status === "Interviewed").length;
-          const offerSent = mockApplicants.filter(app => app.status === "Offered").length;
-          
+          const activeJobs = mockRecruiterJobs.filter((job) => job.status === "Published").length;
+          const totalApplications = mockRecruiterJobs.reduce(
+            (sum, job) => sum + job.applicantCount,
+            0,
+          );
+          const newApplications = mockApplicants.filter((app) => app.status === "New").length;
+          const interviewScheduled = mockApplicants.filter(
+            (app) => app.status === "Interviewed",
+          ).length;
+          const offerSent = mockApplicants.filter((app) => app.status === "Offered").length;
+
           setStats({
             totalJobs: mockRecruiterJobs.length,
             activeJobs,
@@ -70,7 +72,7 @@ const RecruiterDashboardPage: React.FC = () => {
             interviewScheduled,
             offerSent,
           });
-          
+
           setIsLoading(false);
         }, 800);
       } catch (error) {
@@ -104,7 +106,12 @@ const RecruiterDashboardPage: React.FC = () => {
         </div>
       </div>
 
-      <Tabs defaultValue={activeTab} value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+      <Tabs
+        defaultValue={activeTab}
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-8"
+      >
         <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="jobs">Jobs</TabsTrigger>

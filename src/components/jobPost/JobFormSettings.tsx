@@ -1,8 +1,21 @@
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface JobFormSettingsProps {
   form: UseFormReturn<any>;
@@ -29,12 +42,8 @@ const JobFormSettings: React.FC<JobFormSettingsProps> = ({ form }) => {
                   </FormControl>
                   <SelectContent>
                     <SelectItem value="public">Public - Visible to everyone</SelectItem>
-                    <SelectItem value="private">
-                      Private - Only visible with direct link
-                    </SelectItem>
-                    <SelectItem value="unlisted">
-                      Unlisted - Not shown in search results
-                    </SelectItem>
+                    <SelectItem value="private">Private - Only visible with direct link</SelectItem>
+                    <SelectItem value="unlisted">Unlisted - Not shown in search results</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>Control who can see your job posting</FormDescription>
@@ -61,9 +70,7 @@ const JobFormSettings: React.FC<JobFormSettingsProps> = ({ form }) => {
                     <SelectItem value="Closed">Closed - Close applications</SelectItem>
                   </SelectContent>
                 </Select>
-                <FormDescription>
-                  If published, job will be visible to candidates
-                </FormDescription>
+                <FormDescription>If published, job will be visible to candidates</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

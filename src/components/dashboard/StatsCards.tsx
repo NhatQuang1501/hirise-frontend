@@ -1,7 +1,7 @@
 // File: hirise-frontend/src/components/dashboard/StatsCards.tsx
 import React from "react";
+import { Calendar, FileBarChart, Users } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileBarChart, Users, Calendar } from "lucide-react";
 
 interface StatsCardsProps {
   stats: {
@@ -24,9 +24,7 @@ const StatsCards: React.FC<StatsCardsProps> = ({ stats }) => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.totalJobs}</div>
-          <p className="text-muted-foreground text-xs">
-            {stats.activeJobs} active jobs
-          </p>
+          <p className="text-muted-foreground text-xs">{stats.activeJobs} active jobs</p>
         </CardContent>
       </Card>
 
@@ -50,9 +48,7 @@ const StatsCards: React.FC<StatsCardsProps> = ({ stats }) => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.interviewScheduled}</div>
-          <p className="text-muted-foreground text-xs">
-            {stats.offerSent} job offers sent
-          </p>
+          <p className="text-muted-foreground text-xs">{stats.offerSent} job offers sent</p>
         </CardContent>
       </Card>
     </div>

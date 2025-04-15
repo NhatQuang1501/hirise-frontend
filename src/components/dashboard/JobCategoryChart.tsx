@@ -1,6 +1,6 @@
 // File: hirise-frontend/src/components/dashboard/JobCategoryChart.tsx
 import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 const JobCategoryChart: React.FC = () => {
@@ -19,13 +19,9 @@ const JobCategoryChart: React.FC = () => {
               </div>
               <span className="font-medium">45%</span>
             </div>
-            <Progress 
-              value={45} 
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-indigo-500"
-            />
+            <Progress value={45} className="h-2 bg-gray-100" indicatorClassName="bg-indigo-500" />
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center">
@@ -34,13 +30,9 @@ const JobCategoryChart: React.FC = () => {
               </div>
               <span className="font-medium">30%</span>
             </div>
-            <Progress 
-              value={30} 
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-pink-500"
-            />
+            <Progress value={30} className="h-2 bg-gray-100" indicatorClassName="bg-pink-500" />
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center">
@@ -49,11 +41,7 @@ const JobCategoryChart: React.FC = () => {
               </div>
               <span className="font-medium">25%</span>
             </div>
-            <Progress 
-              value={25} 
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-amber-500"
-            />
+            <Progress value={25} className="h-2 bg-gray-100" indicatorClassName="bg-amber-500" />
           </div>
         </div>
       </CardContent>

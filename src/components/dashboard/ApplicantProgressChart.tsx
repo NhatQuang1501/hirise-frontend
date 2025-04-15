@@ -1,16 +1,16 @@
 import React from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import { Applicant } from "@/types/recruiter";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 interface ApplicantProgressChartProps {
   applicants: Applicant[];
 }
 
 const ApplicantProgressChart: React.FC<ApplicantProgressChartProps> = ({ applicants }) => {
-  const newApplicants = applicants.filter(a => a.status === "New").length;
-  const reviewing = applicants.filter(a => a.status === "Reviewing").length;
-  const interviewed = applicants.filter(a => a.status === "Interviewed").length;
+  const newApplicants = applicants.filter((a) => a.status === "New").length;
+  const reviewing = applicants.filter((a) => a.status === "Reviewing").length;
+  const interviewed = applicants.filter((a) => a.status === "Interviewed").length;
 
   return (
     <Card>
@@ -27,13 +27,13 @@ const ApplicantProgressChart: React.FC<ApplicantProgressChartProps> = ({ applica
               </div>
               <span className="font-medium">{newApplicants}</span>
             </div>
-            <Progress 
-              value={(newApplicants / applicants.length) * 100} 
+            <Progress
+              value={(newApplicants / applicants.length) * 100}
               className="h-2 bg-gray-100"
               indicatorClassName="bg-blue-500"
             />
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center">
@@ -42,13 +42,13 @@ const ApplicantProgressChart: React.FC<ApplicantProgressChartProps> = ({ applica
               </div>
               <span className="font-medium">{reviewing}</span>
             </div>
-            <Progress 
-              value={(reviewing / applicants.length) * 100} 
+            <Progress
+              value={(reviewing / applicants.length) * 100}
               className="h-2 bg-gray-100"
               indicatorClassName="bg-yellow-500"
             />
           </div>
-          
+
           <div className="space-y-2">
             <div className="flex items-center justify-between text-sm">
               <div className="flex items-center">
@@ -57,8 +57,8 @@ const ApplicantProgressChart: React.FC<ApplicantProgressChartProps> = ({ applica
               </div>
               <span className="font-medium">{interviewed}</span>
             </div>
-            <Progress 
-              value={(interviewed / applicants.length) * 100} 
+            <Progress
+              value={(interviewed / applicants.length) * 100}
               className="h-2 bg-gray-100"
               indicatorClassName="bg-purple-500"
             />

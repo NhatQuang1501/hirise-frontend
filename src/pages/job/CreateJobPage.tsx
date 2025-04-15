@@ -1,18 +1,17 @@
 import React, { useState } from "react";
+import { ROUTES } from "@/routes/routes";
+import { ArrowLeft, Eye, Save, Send } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { DEFAULT_JOB_FORM_VALUES, JobFormValues } from "@/types/job";
+import JobFormBasicInfo from "@/components/jobPost/JobFormBasicInfo";
+import JobFormDescription from "@/components/jobPost/JobFormDescription";
+import JobFormDetails from "@/components/jobPost/JobFormDetails";
+import JobFormPreview from "@/components/jobPost/JobFormPreview";
+import JobFormSettings from "@/components/jobPost/JobFormSettings";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
-import { Save, Send, Eye } from "lucide-react";
-import { ROUTES } from "@/routes/routes"
-
-// Import shared components
-import JobFormBasicInfo from "@/components/jobPost/JobFormBasicInfo";
-import JobFormDetails from "@/components/jobPost/JobFormDetails";
-import JobFormDescription from "@/components/jobPost/JobFormDescription";
-import JobFormSettings from "@/components/jobPost/JobFormSettings";
-import JobFormPreview from "@/components/jobPost/JobFormPreview";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Sample data for companies
 const mockCompanies = [
@@ -24,36 +23,16 @@ const mockCompanies = [
 
 const CreateJobPage: React.FC = () => {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("edit");
-  
+  const [activeTab, setActiveTab] = useState("create");
+
   // Form setup with react-hook-form
-  const form = useForm({
-    defaultValues: {
-      title: "",
-      companyId: "",
-      location: "",
-      jobType: "",
-      salaryMin: "",
-      salaryMax: "",
-      currency: "VND",
-      skills: [],
-      level: "",
-      experience: "",
-      deadline: "",
-      responsibilities: [],
-      basicRequirements: [],
-      preferredSkills: [],
-      benefits: [],
-      interviewProcess: [],
-      description: "",
-      visibility: "public",
-      status: "Draft",
-    }
+  const form = useForm<JobFormValues>({
+    defaultValues: DEFAULT_JOB_FORM_VALUES,
   });
 
   const onSubmit = (data: any) => {
     console.log("Form submitted:", data);
-    
+
     // For demo purposes, we'll check if they're trying to publish or save as draft
     if (data.status === "Published") {
       console.log("Publishing job...");
@@ -62,12 +41,12 @@ const CreateJobPage: React.FC = () => {
       console.log("Saving as draft...");
       alert("Job saved as draft!");
     }
-    
+
     // Redirect to jobs list
     navigate(ROUTES.RECRUITER.JOBS.LIST);
   };
 
-  // Action buttons based on current form values
+  // Render action buttons cho Create page
   const renderActionButtons = () => {
     return (
       <div className="flex space-x-2">
@@ -75,25 +54,23 @@ const CreateJobPage: React.FC = () => {
           type="button"
           variant="outline"
           onClick={() => {
-            // Save as draft
             form.setValue("status", "Draft");
             form.handleSubmit(onSubmit)();
           }}
         >
-          <Save className="mr-2 h-4 w-4" />
-          Save as Draft
+          <Save className="mr-2 size-4" />
+          Save draft
         </Button>
-        
-        <Button 
+
+        <Button
           type="button"
           onClick={() => {
-            // Publish immediately
             form.setValue("status", "Published");
             form.handleSubmit(onSubmit)();
           }}
         >
-          <Send className="mr-2 h-4 w-4" />
-          Publish Now
+          <Send className="mr-2 size-4" />
+          Publish
         </Button>
       </div>
     );
@@ -101,26 +78,41 @@ const CreateJobPage: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="mb-6 text-2xl font-bold">Create New Job</h1>
-      
-      <Tabs defaultValue="edit" value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <div className="mb-6 flex items-center">
+        <Button 
+          variant="outline" 
+          size="icon" 
+          className="mr-2" 
+          onClick={() => navigate(ROUTES.RECRUITER.JOBS.LIST)}
+        >
+          <ArrowLeft className="size-4" />
+        </Button>
+        <h1 className="text-2xl font-bold">Create new job</h1>
+      </div>
+
+      <Tabs
+        defaultValue="create"
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-2 lg:w-[400px]">
-          <TabsTrigger value="edit">Edit</TabsTrigger>
+          <TabsTrigger value="create">Create</TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
         </TabsList>
-        
-        <TabsContent value="edit" className="space-y-6">
+
+        <TabsContent value="create" className="space-y-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <JobFormBasicInfo form={form} companies={mockCompanies} />
               <JobFormDetails form={form} />
               <JobFormDescription form={form} />
               <JobFormSettings form={form} />
-              
+
               <div className="flex justify-between">
                 <Button 
                   type="button" 
-                  variant="outline"
+                  variant="outline" 
                   onClick={() => setActiveTab("preview")}
                 >
                   <Eye className="mr-2 h-4 w-4" />
@@ -131,17 +123,20 @@ const CreateJobPage: React.FC = () => {
             </form>
           </Form>
         </TabsContent>
-        
+
         <TabsContent value="preview">
           <div className="rounded-lg border shadow-sm">
             <div className="p-6">
               <JobFormPreview form={form} companies={mockCompanies} />
             </div>
-            
-            <div className="border-t bg-muted/50 p-4">
+
+            <div className="bg-muted/50 border-t p-4">
               <div className="flex justify-between">
-                <Button variant="outline" onClick={() => setActiveTab("edit")}>
-                  Edit
+                <Button 
+                  variant="outline" 
+                  onClick={() => setActiveTab("create")}
+                >
+                  Back to editing
                 </Button>
                 {renderActionButtons()}
               </div>

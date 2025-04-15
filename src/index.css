@@ -304,6 +304,10 @@
   --container-10xl: 104rem;
 
   /* text */
+  --text-3xs: 0.5rem;
+  --text-3xs--line-height: calc(1 / 0.5);
+  --text-2xs: 0.625rem;
+  --text-2xs--line-height: calc(1 / 0.625);
   --text-xs: 0.75rem;
   --text-xs--line-height: calc(1 / 0.75);
   --text-sm: 0.875rem;
