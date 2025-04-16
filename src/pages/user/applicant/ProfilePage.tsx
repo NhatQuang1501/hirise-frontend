@@ -24,7 +24,6 @@ const ProfilePage = () => {
   const handleSubmitSuccess = () => {
     toast.success("Information updated successfully!", {
       description: "Your profile information has been updated.",
-      className: "bg-green-500 text-white font-bold rounded-xl",
       duration: 3000,
     });
     // Redirect to the profile page after successful submission
@@ -34,7 +33,6 @@ const ProfilePage = () => {
   const handleSubmitError = () => {
     toast.error("Failed to update information. Please try again.", {
       description: "There was an error updating your profile information.",
-      className: "bg-red-500 text-white font-bold rounded-xl",
       duration: 5000,
     });
     // Optionally, you can add more error handling logic here

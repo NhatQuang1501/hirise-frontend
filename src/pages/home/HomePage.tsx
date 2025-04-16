@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
     <div className="flex flex-col">
       <HeroSection />
       <JobList jobs={jobsData} />
-      <section className="border-y bg-gray-50 py-16">
+      <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <CompanyCarousel
             companies={topCompaniesData}

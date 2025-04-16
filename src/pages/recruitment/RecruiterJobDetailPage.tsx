@@ -3,8 +3,8 @@ import { ROUTES } from "@/routes/routes";
 import { ClipboardList } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { mockRecruiterJobs } from "@/types/mockData";
-import { RecruiterJob } from "@/types/recruiter";
+import { mockApplicants, mockRecruiterJobs } from "@/types/mockData";
+import { Applicant, RecruiterJob } from "@/types/recruiter";
 import CompanyInfo from "@/components/company/CompanyInfo";
 import JobBenefits from "@/components/job/JobBenefits";
 import JobRequirements from "@/components/job/JobRequirements";
@@ -13,6 +13,7 @@ import SkillTags from "@/components/job/SkillTags";
 import { CustomDialog } from "@/components/popup/CustomDialog";
 import RecruiterJobHeader from "@/components/recruitment/RecruiterJobHeader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import ApplicantListSection from "@/components/section/ApplicantListSection";
 
 const RecruiterJobDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ const RecruiterJobDetailPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
 
   useEffect(() => {
     const fetchJob = async () => {
@@ -34,7 +36,6 @@ const RecruiterJobDetailPage: React.FC = () => {
       } catch (error) {
         toast.error("Failed to load job details", {
           description: "Please try again later.",
-          className: "bg-red-500 text-white font-bold rounded-xl",
           duration: 5000,
         });
       } finally {
@@ -45,6 +46,22 @@ const RecruiterJobDetailPage: React.FC = () => {
     fetchJob();
     window.scrollTo(0, 0);
   }, [id]);
+
+  useEffect(() => {
+    const fetchApplicants = async () => {
+      try {
+        // Simulate API call - replace with actual API call later
+        const jobApplicants = mockApplicants.slice(0, 5);
+        setApplicants(jobApplicants);
+      } catch (error) {
+        toast.error("Failed to load applicants");
+      }
+    };
+
+    if (job) {
+      fetchApplicants();
+    }
+  }, [job]);
 
   const handleEdit = () => {
     navigate(ROUTES.RECRUITER.JOBS.EDIT.replace(":id", id || ""));
@@ -63,7 +80,6 @@ const RecruiterJobDetailPage: React.FC = () => {
     // Add API call to close job
     toast.success("Job has been closed successfully", {
       description: "You will be redirected to the job list.",
-      className: "bg-green-500 text-white font-bold rounded-xl",
       duration: 3000,
     });
     navigate(ROUTES.RECRUITER.JOBS.LIST);
@@ -74,7 +90,6 @@ const RecruiterJobDetailPage: React.FC = () => {
     // Add API call to delete job
     toast.success("Job has been deleted successfully", {
       description: "You will be redirected to the job list.",
-      className: "bg-green-500 text-white font-bold rounded-xl",
       duration: 3000,
     });
     navigate(ROUTES.RECRUITER.JOBS.LIST);
@@ -102,7 +117,6 @@ const RecruiterJobDetailPage: React.FC = () => {
   return (
     <div className="bg-background py-12">
       <div className="container mx-auto px-4">
-        {/* Custom header for recruiter */}
         <RecruiterJobHeader
           job={job}
           onEdit={handleEdit}
@@ -110,7 +124,6 @@ const RecruiterJobDetailPage: React.FC = () => {
           onDelete={handleDelete}
         />
 
-        {/* Main content grid */}
         <div className="grid gap-8 lg:grid-cols-3">
           {/* Job details */}
           <div className="lg:col-span-2">
@@ -127,6 +140,11 @@ const RecruiterJobDetailPage: React.FC = () => {
               />
               <JobBenefits benefits={job.benefits} />
             </div>
+
+            {/* Add ApplicantListSection here */}
+            <div className="rounded-xl bg-white p-6 shadow-md lg:p-8">
+              <ApplicantListSection applicants={applicants} />
+            </div>
           </div>
 
           {/* Sidebar */}
@@ -140,7 +158,7 @@ const RecruiterJobDetailPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Confirmation Dialogs */}
+        {/* Existing dialogs */}
         <CustomDialog
           open={closeDialogOpen}
           onClose={() => setCloseDialogOpen(false)}

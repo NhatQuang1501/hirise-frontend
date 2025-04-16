@@ -5,9 +5,8 @@ import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { BaseCarousel } from "../section/BaseCarousel";
+import { BaseCarousel } from "@/components/section/BaseCarousel";
 
-// Sử dụng BaseCarousel để tránh lặp lại code
 const PopularCompaniesCarousel = () => {
   // Mock data - replace with API call
   const companies: Company[] = [
@@ -112,7 +111,7 @@ const PopularCompaniesCarousel = () => {
       renderItem={renderCompanyCard}
       title="Popular Companies"
       description="Most followed companies by tech professionals"
-      viewAllLink="/companies"
+      viewAllLink={ROUTES.PUBLIC.COMPANIES.LIST}
       breakpoints={{ sm: 1, md: 3, lg: 4, xl: 4 }}
     />
   );

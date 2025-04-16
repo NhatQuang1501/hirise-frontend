@@ -33,9 +33,9 @@ const ApplicantListSection: React.FC<ApplicantListSectionProps> = ({ applicants 
       <Card>
         <CardContent className="p-6 text-center">
           <UserCircle className="mx-auto size-12 text-gray-400" />
-          <h3 className="mt-2 text-lg font-medium">Chưa có ứng viên nào</h3>
+          <h3 className="mt-2 text-lg font-medium">No applicants yet</h3>
           <p className="text-muted-foreground mt-1">
-            Công việc của bạn chưa có ứng viên nào ứng tuyển.
+            Your job has no applicants yet. Please check back later or share the job link to get more applicants.
           </p>
         </CardContent>
       </Card>

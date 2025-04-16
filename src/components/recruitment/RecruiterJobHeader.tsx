@@ -134,13 +134,13 @@ const RecruiterJobHeader: React.FC<RecruiterJobHeaderProps> = ({
 
         {/* Action Buttons */}
         <div className="flex flex-col items-start justify-center space-y-3 md:items-end ">
-          <Button size="lg" onClick={onEdit} className="w-full md:w-[150px] hover:bg-secondary">
+          <Button size="lg" variant="outline" onClick={onEdit} className="w-full md:w-[150px] text-white bg-secondary hover:bg-secondary/10 hover:text-secondary">
             <Edit className="mr-2 size-4" />
             Edit Job
           </Button>
 
           {job.status !== "Closed" && (
-            <Button size="lg" variant="outline" onClick={onClose} className="w-full md:w-[150px] hover:bg-gray-400">
+            <Button size="lg" variant="outline" onClick={onClose} className="w-full md:w-[150px] text-white bg-foreground/80 hover:bg-foreground/10 hover:text-foreground/80">
               <XCircle className="mr-2 size-4" />
               Close Job
             </Button>
@@ -150,7 +150,7 @@ const RecruiterJobHeader: React.FC<RecruiterJobHeaderProps> = ({
             size="lg"
             variant="outline"
             onClick={onDelete}
-            className="w-full md:w-[150px] bg-red-50 text-red-600 hover:bg-red-400 hover:text-white"
+            className="w-full md:w-[150px] text-white bg-red-500 hover:bg-red-50 hover:text-red-600"
           >
             <Trash2 className="mr-2 size-4" />
             Delete Job

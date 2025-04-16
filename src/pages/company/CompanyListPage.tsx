@@ -97,7 +97,7 @@ const CompanyListPage = () => {
       </section>
 
       {/* Popular Companies */}
-      <section className="border-y bg-gray-50 py-16">
+      <section className="bg-gray-50 py-16">
         <div className="container mx-auto px-4">
           <PopularCompaniesCarousel />
         </div>

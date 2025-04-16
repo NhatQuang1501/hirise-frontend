@@ -2,7 +2,7 @@ import { Compass, Target } from "lucide-react";
 
 const MissionVisionSection = () => {
   return (
-    <section className="bg-secondary/5 border-y py-16 md:py-24">
+    <section className="bg-secondary/5 py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="grid gap-12 md:grid-cols-2">
           <div className="rounded-xl bg-white p-8 shadow-sm">

@@ -12,7 +12,7 @@ const CompanyCarousel = ({
   companies,
   title = "Top Companies",
   description = "Leading employers in the tech industry",
-  viewAllLink = "/companies",
+  viewAllLink = ROUTES.PUBLIC.COMPANIES.LIST,
 }: CompanyCarouselProps) => {
   const renderCompany = (company: Company) => (
     <Link
@@ -71,7 +71,12 @@ const CompanyCarousel = ({
       title={title}
       description={description}
       viewAllLink={viewAllLink}
-      breakpoints={{ sm: 1, md: 2, lg: 3, xl: 3 }}
+      breakpoints={{ 
+        sm: 1, 
+        md: 2, 
+        lg: 3, 
+        xl: 3 
+      }}
       autoplayInterval={20000}
     />
   );

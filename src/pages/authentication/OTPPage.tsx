@@ -5,6 +5,8 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+const TEST_OTP = "123456";
+
 const OTPPage = () => {
   const navigate = useNavigate();
   const [otp, setOtp] = useState<string[]>(new Array(6).fill(""));
@@ -12,7 +14,6 @@ const OTPPage = () => {
   const [timeLeft, setTimeLeft] = useState(60);
   const inputRefs = useRef<HTMLInputElement[]>([]);
 
-  // Xử lý countdown timer
   useEffect(() => {
     if (timeLeft > 0) {
       const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -20,7 +21,6 @@ const OTPPage = () => {
     }
   }, [timeLeft]);
 
-  // Xử lý input OTP
   const handleChange = (element: HTMLInputElement, index: number) => {
     const value = element.value;
     if (isNaN(Number(value))) return;
@@ -29,25 +29,36 @@ const OTPPage = () => {
     newOtp[index] = value;
     setOtp(newOtp);
 
-    // Di chuyển đến ô tiếp theo nếu có giá trị
     if (value && index < 5) {
-      inputRefs.current[index + 1].focus();
+      inputRefs.current[index + 1]?.focus();
     }
   };
 
-  // Xử lý xóa OTP
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
     if (e.key === "Backspace") {
-      if (!otp[index] && index > 0) {
+      e.preventDefault();
+      if (otp[index]) {
+        const newOtp = [...otp];
+        newOtp[index] = "";
+        setOtp(newOtp);
+      } else if (index > 0) {
         const newOtp = [...otp];
         newOtp[index - 1] = "";
         setOtp(newOtp);
-        inputRefs.current[index - 1].focus();
+        inputRefs.current[index - 1]?.focus();
       }
+    } else if (e.key === "ArrowLeft" && index > 0) {
+      e.preventDefault();
+      inputRefs.current[index - 1]?.focus();
+    } else if (e.key === "ArrowRight" && index < 5) {
+      e.preventDefault();
+      inputRefs.current[index + 1]?.focus();
+    } else if (e.key === "Enter" && !otp.some(digit => !digit)) {
+      e.preventDefault();
+      handleVerifyOTP();
     }
   };
 
-  // Xử lý paste OTP
   const handlePaste = (e: React.ClipboardEvent) => {
     e.preventDefault();
     const pastedData = e.clipboardData.getData("text").slice(0, 6);
@@ -58,21 +69,17 @@ const OTPPage = () => {
       if (index < 6) newOtp[index] = value;
     });
     setOtp(newOtp);
-    if (inputRefs.current[5]) inputRefs.current[5].focus();
+    inputRefs.current[5]?.focus();
   };
 
-  // Xử lý gửi lại OTP
   const handleResendOTP = () => {
     setTimeLeft(60);
-    // Thêm logic gửi lại OTP ở đây
     toast.success("OTP has been resent to your email", {
       description: "Please check your email for the new OTP.",
-      className: "bg-green-500 text-white font-bold rounded-xl",
       duration: 3000,
     });
   };
 
-  // Xử lý xác thực OTP
   const handleVerifyOTP = async () => {
     setIsLoading(true);
     try {
@@ -81,10 +88,17 @@ const OTPPage = () => {
         throw new Error("Please enter complete OTP");
       }
 
-      // Thêm logic verify OTP ở đây
+      if (otpString !== TEST_OTP) {
+        setOtp(new Array(6).fill(""))
+        inputRefs.current[0]?.focus();
+        throw new Error("Invalid OTP. Please recheck in your email and try again");
+      }
+
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      toast.success("Email verified successfully!");
+      toast.success("Email verified successfully!", {
+        duration: 3000,
+      });
       navigate(ROUTES.AUTH.LOGIN, { replace: true });
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Verification failed");
@@ -94,50 +108,49 @@ const OTPPage = () => {
   };
 
   return (
-    <div className="bg-background flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center px-4 py-8">
-      <div className="mx-auto w-full max-w-md space-y-6">
+    <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-10">
+      <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Verify your email</h1>
-          <p className="text-muted-foreground mt-2 text-sm">
-            We've sent a verification code to your email
+          <h1 className="text-3xl font-semibold text-gray-900">Verify Your Email</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            We have sent a 6-digit verification code to your email address.
           </p>
         </div>
 
-        <div className="mt-8">
-          <div className="flex justify-center gap-2">
-            {otp.map((_, index) => (
-              <Input
-                key={index}
-                type="text"
-                maxLength={1}
-                value={otp[index]}
-                ref={(el) => el && (inputRefs.current[index] = el)}
-                onChange={(e) => handleChange(e.target, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                onPaste={handlePaste}
-                className="size-12 text-center text-lg"
-              />
-            ))}
-          </div>
+        <div className="mt-8 flex justify-center gap-3">
+          {otp.map((_, index) => (
+            <Input
+              key={index}
+              type="text"
+              maxLength={1}
+              value={otp[index]}
+              ref={(el) => el && (inputRefs.current[index] = el)}
+              onChange={(e) => handleChange(e.target, index)}
+              onKeyDown={(e) => handleKeyDown(e, index)}
+              onPaste={handlePaste}
+              className="size-12 rounded-lg border text-center text-xl shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+              pattern="[0-9]*"
+            />
+          ))}
+        </div>
 
-          <Button
-            className="mt-8 w-full"
-            disabled={isLoading || otp.some((digit) => !digit)}
-            onClick={handleVerifyOTP}
-          >
-            {isLoading ? "Verifying..." : "Verify Email"}
-          </Button>
+        <Button
+          className="mt-8 w-full text-base font-medium"
+          disabled={isLoading || otp.some((digit) => !digit)}
+          onClick={handleVerifyOTP}
+        >
+          {isLoading ? "Verifying..." : "Verify"}
+        </Button>
 
-          <div className="text-muted-foreground mt-4 text-center text-sm">
-            Didn't receive the code?{" "}
-            {timeLeft > 0 ? (
-              <span>Resend in {timeLeft}s</span>
-            ) : (
-              <Button variant="link" className="text-primary p-0" onClick={handleResendOTP}>
-                Resend OTP
-              </Button>
-            )}
-          </div>
+        <div className="mt-6 text-center text-sm text-muted-foreground">
+          Haven't receive the code?{' '}
+          {timeLeft > 0 ? (
+            <span>Resend in {timeLeft}s</span>
+          ) : (
+            <Button variant="link" className="p-0 text-primary" onClick={handleResendOTP}>
+              Resend OTP
+            </Button>
+          )}
         </div>
       </div>
     </div>

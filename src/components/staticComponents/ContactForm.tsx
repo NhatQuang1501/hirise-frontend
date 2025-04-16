@@ -42,7 +42,6 @@ const ContactForm = () => {
 
       toast.success("Message sent successfully!", {
         description: "We'll get back to you soon.",
-        className: "bg-green-500 text-white font-bold rounded-xl",
         duration: 3000,
       });
 
@@ -51,7 +50,6 @@ const ContactForm = () => {
       console.error("Error submitting form:", error);
       toast.error("Error sending message", {
         description: "Please try again later.",
-        className: "bg-red-500 text-white font-bold rounded-xl",
         duration: 5000,
       });
     }
