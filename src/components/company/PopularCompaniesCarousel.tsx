@@ -4,8 +4,8 @@ import { Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import { BaseCarousel } from "@/components/section/BaseCarousel";
+import { Button } from "@/components/ui/button";
 
 const PopularCompaniesCarousel = () => {
   // Mock data - replace with API call

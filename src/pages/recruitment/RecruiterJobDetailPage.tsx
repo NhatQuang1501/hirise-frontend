@@ -12,8 +12,8 @@ import JobResponsibilities from "@/components/job/JobResponsibilities";
 import SkillTags from "@/components/job/SkillTags";
 import { CustomDialog } from "@/components/popup/CustomDialog";
 import RecruiterJobHeader from "@/components/recruitment/RecruiterJobHeader";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import ApplicantListSection from "@/components/section/ApplicantListSection";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const RecruiterJobDetailPage: React.FC = () => {
   const navigate = useNavigate();

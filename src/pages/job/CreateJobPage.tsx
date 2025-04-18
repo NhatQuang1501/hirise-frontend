@@ -79,10 +79,10 @@ const CreateJobPage: React.FC = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6 flex items-center">
-        <Button 
-          variant="outline" 
-          size="icon" 
-          className="mr-2" 
+        <Button
+          variant="outline"
+          size="icon"
+          className="mr-2"
           onClick={() => navigate(ROUTES.RECRUITER.JOBS.LIST)}
         >
           <ArrowLeft className="size-4" />
@@ -110,11 +110,7 @@ const CreateJobPage: React.FC = () => {
               <JobFormSettings form={form} />
 
               <div className="flex justify-between">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => setActiveTab("preview")}
-                >
+                <Button type="button" variant="outline" onClick={() => setActiveTab("preview")}>
                   <Eye className="mr-2 h-4 w-4" />
                   Preview
                 </Button>
@@ -132,10 +128,7 @@ const CreateJobPage: React.FC = () => {
 
             <div className="bg-muted/50 border-t p-4">
               <div className="flex justify-between">
-                <Button 
-                  variant="outline" 
-                  onClick={() => setActiveTab("create")}
-                >
+                <Button variant="outline" onClick={() => setActiveTab("create")}>
                   Back to editing
                 </Button>
                 {renderActionButtons()}

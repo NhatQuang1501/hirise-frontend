@@ -53,7 +53,7 @@ const OTPPage = () => {
     } else if (e.key === "ArrowRight" && index < 5) {
       e.preventDefault();
       inputRefs.current[index + 1]?.focus();
-    } else if (e.key === "Enter" && !otp.some(digit => !digit)) {
+    } else if (e.key === "Enter" && !otp.some((digit) => !digit)) {
       e.preventDefault();
       handleVerifyOTP();
     }
@@ -89,7 +89,7 @@ const OTPPage = () => {
       }
 
       if (otpString !== TEST_OTP) {
-        setOtp(new Array(6).fill(""))
+        setOtp(new Array(6).fill(""));
         inputRefs.current[0]?.focus();
         throw new Error("Invalid OTP. Please recheck in your email and try again");
       }
@@ -108,11 +108,11 @@ const OTPPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-muted px-4 py-10">
+    <div className="bg-muted flex min-h-screen items-center justify-center px-4 py-10">
       <div className="w-full max-w-md rounded-2xl bg-white p-8 shadow-xl">
         <div className="text-center">
           <h1 className="text-3xl font-semibold text-gray-900">Verify Your Email</h1>
-          <p className="mt-2 text-sm text-muted-foreground">
+          <p className="text-muted-foreground mt-2 text-sm">
             We have sent a 6-digit verification code to your email address.
           </p>
         </div>
@@ -128,7 +128,7 @@ const OTPPage = () => {
               onChange={(e) => handleChange(e.target, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               onPaste={handlePaste}
-              className="size-12 rounded-lg border text-center text-xl shadow-sm focus:border-primary focus:ring-1 focus:ring-primary"
+              className="focus:border-primary focus:ring-primary size-12 rounded-lg border text-center text-xl shadow-sm focus:ring-1"
               pattern="[0-9]*"
             />
           ))}
@@ -142,12 +142,12 @@ const OTPPage = () => {
           {isLoading ? "Verifying..." : "Verify"}
         </Button>
 
-        <div className="mt-6 text-center text-sm text-muted-foreground">
-          Haven't receive the code?{' '}
+        <div className="text-muted-foreground mt-6 text-center text-sm">
+          Haven't receive the code?{" "}
           {timeLeft > 0 ? (
             <span>Resend in {timeLeft}s</span>
           ) : (
-            <Button variant="link" className="p-0 text-primary" onClick={handleResendOTP}>
+            <Button variant="link" className="text-primary p-0" onClick={handleResendOTP}>
               Resend OTP
             </Button>
           )}

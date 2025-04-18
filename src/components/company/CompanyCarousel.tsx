@@ -71,11 +71,11 @@ const CompanyCarousel = ({
       title={title}
       description={description}
       viewAllLink={viewAllLink}
-      breakpoints={{ 
-        sm: 1, 
-        md: 2, 
-        lg: 3, 
-        xl: 3 
+      breakpoints={{
+        sm: 1,
+        md: 2,
+        lg: 3,
+        xl: 3,
       }}
       autoplayInterval={20000}
     />

@@ -12,6 +12,7 @@ const CompanyDetailPage = lazy(() => import("@/pages/company/CompanyDetailPage")
 const LoginPage = lazy(() => import("@/pages/authentication/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/authentication/RegisterPage"));
 const OTPPage = lazy(() => import("@/pages/authentication/OTPPage"));
+const ProfilePage = lazy(() => import("@/pages/user/applicant/ProfilePage"));
 const RecruiterJobListPage = lazy(() => import("@/pages/recruitment/RecruiterJobListPage"));
 const RecruiterJobDetailPage = lazy(() => import("@/pages/recruitment/RecruiterJobDetailPage"));
 const CreateJobPage = lazy(() => import("@/pages/job/CreateJobPage"));
@@ -53,6 +54,10 @@ const userRoutes: RouteObject[] = [
       { path: ROUTES.RECRUITER.JOBS.DETAIL, element: <RecruiterJobDetailPage /> },
       { path: ROUTES.RECRUITER.JOBS.EDIT, element: <RecruiterJobEditPage /> },
     ],
+  },
+  {
+    path: "/applicant",
+    children: [{ path: ROUTES.APPLICANT.PROFILE, element: <ProfilePage /> }],
   },
 ];
 
