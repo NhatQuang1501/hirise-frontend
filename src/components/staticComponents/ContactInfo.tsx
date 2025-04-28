@@ -43,7 +43,7 @@ const ContactInfo = () => {
             <p className="text-muted-foreground">
               54 Nguyen Luong Bang Street, Lien Chieu District
               <br />
-              Da Nang, Viet Nam
+              Danang, Vietnam
             </p>
           </div>
         </div>
@@ -58,7 +58,7 @@ const ContactInfo = () => {
             <p className="text-muted-foreground">
               Monday - Friday
               <br />
-              9:00 AM - 6:00 PM
+              8:00 AM - 5:30 PM
             </p>
           </div>
         </div>

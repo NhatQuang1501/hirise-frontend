@@ -276,6 +276,15 @@
   --color-border: #e2e8f0;
   --color-input: #e2e8f0;
   --color-ring: #cbd5e1;
+  --color-success: #10b981; /* xanh lá dịu cho thành công */
+  --color-success-foreground: #ffffff;
+  --color-warning: #f59e0b; /* vàng cam nổi bật cho cảnh báo */
+  --color-warning-foreground: #ffffff;
+  --color-info: #3b82f6; /* xanh da trời cho thông báo */
+  --color-info-foreground: #ffffff;
+  --color-neutral: #9ca3af; /* xám trung tính, dùng cho placeholder hoặc secondary text */
+  --color-highlight: #e0f2fe; /* nền xanh nhạt dùng highlight */
+  --color-highlight-foreground: #1e40af; /* xanh đậm chữ trên nền highlight */
 
   /* breakpoint */
   --spacing: 0.25rem;

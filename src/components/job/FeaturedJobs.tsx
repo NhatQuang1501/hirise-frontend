@@ -2,8 +2,8 @@ import React from "react";
 import { Clock, Sparkles, Star, Users } from "lucide-react";
 import { JobCardData } from "@/types/job";
 import { cn } from "@/lib/utils";
+import TabContentSection from "@/components/section/TabContentSection";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import TabContentSection from "../section/TabContentSection";
 import JobCard from "./JobCard";
 
 interface FeaturedJobsProps {

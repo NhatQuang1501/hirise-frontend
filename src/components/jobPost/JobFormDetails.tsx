@@ -47,7 +47,6 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
                     <SelectItem value="part-time">Part-time</SelectItem>
                     <SelectItem value="contract">Contract</SelectItem>
                     <SelectItem value="freelance">Freelance</SelectItem>
-                    <SelectItem value="internship">Internship</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -68,14 +67,14 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Internship">Internship</SelectItem>
-                    <SelectItem value="Entry Level">Entry Level</SelectItem>
-                    <SelectItem value="Junior">Junior</SelectItem>
-                    <SelectItem value="Mid-level">Mid-level</SelectItem>
-                    <SelectItem value="Senior">Senior</SelectItem>
-                    <SelectItem value="Team Lead">Team Lead</SelectItem>
-                    <SelectItem value="Manager">Manager</SelectItem>
-                    <SelectItem value="Director">Director</SelectItem>
+                    <SelectItem value="intern">Internship</SelectItem>
+                    <SelectItem value="fresher">Fresher</SelectItem>
+                    <SelectItem value="junior">Junior</SelectItem>
+                    <SelectItem value="middle">Middle</SelectItem>
+                    <SelectItem value="senior">Senior</SelectItem>
+                    <SelectItem value="lead">Team Lead</SelectItem>
+                    <SelectItem value="manager">Manager</SelectItem>
+                    {/* <SelectItem value="Director">Director</SelectItem> */}
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -114,7 +113,7 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
             name="deadline"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Application Deadline*</FormLabel>
+                <FormLabel>Expired Date*</FormLabel>
                 <FormControl>
                   <Input type="date" {...field} />
                 </FormControl>

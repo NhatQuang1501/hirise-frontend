@@ -21,7 +21,7 @@ const mockCompanies = [
   { id: "4", name: "Shopee" },
 ];
 
-const CreateJobPage: React.FC = () => {
+const RecruiterJobCreatePage: React.FC = () => {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("create");
 
@@ -141,4 +141,4 @@ const CreateJobPage: React.FC = () => {
   );
 };
 
-export default CreateJobPage;
+export default RecruiterJobCreatePage;

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
+import { contactMetadata } from "@/utils/contactMetadata";
+import { updatePageMetadata } from "@/utils/metadataUtils";
 import ContactForm from "@/components/staticComponents/ContactForm";
 import ContactInfo from "@/components/staticComponents/ContactInfo";
 import MapEmbed from "@/components/staticComponents/MapEmbed";
-import { contactMetadata } from "../../utils/contactMetadata";
-import { updatePageMetadata } from "../../utils/metadataUtils";
 
 const ContactPage = () => {
   // Cập nhật metadata khi component mount

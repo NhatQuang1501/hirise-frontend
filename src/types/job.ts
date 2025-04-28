@@ -42,7 +42,7 @@ export const jobFormSchema = z.object({
   skills: z.array(z.string()).min(1, { message: "Please add at least 1 skill" }),
   level: z.string({ required_error: "Please select job level" }),
   experience: z.string({ required_error: "Please select experience level" }),
-  deadline: z.string({ required_error: "Please select application deadline" }),
+  deadline: z.string({ required_error: "Please select expired date" }),
   responsibilities: z.array(z.string()).optional(),
   basicRequirements: z.array(z.string()).optional(),
   preferredSkills: z.array(z.string()).optional(),

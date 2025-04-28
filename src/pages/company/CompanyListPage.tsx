@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { companiesMetadata } from "@/utils/companyMetadata";
 import { Search } from "lucide-react";
 import { topCompaniesData } from "@/types/mockData";
 import CompanyCarousel from "@/components/company/CompanyCarousel";
@@ -13,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { companiesMetadata } from "../../utils/companyMetadata";
 
 const CompanyListPage = () => {
   const [searchQuery, setSearchQuery] = useState("");

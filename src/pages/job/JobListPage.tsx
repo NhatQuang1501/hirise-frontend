@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
+import { jobListMetadata } from "@/utils/joblMetadata";
 import { JobCardData } from "@/types/job";
 import { sampleJobs } from "@/types/mockData";
 import FeaturedJobs from "@/components/job/FeaturedJobs";
 import JobListingSection from "@/components/job/JobListingSection";
 import AdvancedFilters from "@/components/search/AdvancedFilters";
 import SearchBar from "@/components/search/SearchBar";
-import { jobListMetadata } from "../../utils/joblMetadata";
 
 // Định nghĩa kiểu cho salaryRange
 type SalaryRangeKey = "500-1000" | "1000-2000" | "2000-3000" | "3000+";

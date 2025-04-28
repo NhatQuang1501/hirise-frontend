@@ -3,8 +3,8 @@ import { ROUTES } from "@/routes/routes";
 import { Building } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CompanyInfoProps } from "@/types/interfaces";
+import SaveJobButton from "@/components/job/SaveJobButton";
 import { Button } from "@/components/ui/button";
-import SaveJobButton from "../job/SaveJobButton";
 
 const CompanyInfo: React.FC<CompanyInfoProps> = ({
   company,

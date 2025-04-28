@@ -5,8 +5,8 @@ import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
 import { CompanyCarouselProps } from "@/types/interfaces";
 import { cn } from "@/lib/utils";
+import { BaseCarousel } from "@/components/section/BaseCarousel";
 import { Badge } from "@/components/ui/badge";
-import { BaseCarousel } from "../section/BaseCarousel";
 
 const CompanyCarousel = ({
   companies,

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { jobDetailMetadata } from "@/utils/joblMetadata";
 import { ClipboardList } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { Job } from "@/types/job";
@@ -10,7 +11,6 @@ import JobHeader from "@/components/job/JobHeader";
 import JobRequirements from "@/components/job/JobRequirements";
 import JobResponsibilities from "@/components/job/JobResponsibilities";
 import SkillTags from "@/components/job/SkillTags";
-import { jobDetailMetadata } from "../../utils/joblMetadata";
 
 const JobDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();

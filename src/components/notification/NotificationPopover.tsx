@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Bell, Check, Eye } from "lucide-react";
+import { useNotification } from "@/types/useNotification";
 import { cn } from "@/lib/utils";
-import { useNotification } from "@/hooks/useNotification";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { NotificationBadge } from "./NotificationBadge";

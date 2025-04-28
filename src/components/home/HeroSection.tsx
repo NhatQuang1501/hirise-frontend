@@ -1,7 +1,7 @@
 import React from "react";
 import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
-import SearchBox from "../search/SearchBox";
+import SearchBox from "@/components/search/SearchBox";
 
 const HeroSection: React.FC = () => {
   return (

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
+import { homeMetadata } from "@/utils/homeMetadata";
 import { jobsData, topCompaniesData } from "@/types/mockData";
 import CompanyCarousel from "@/components/company/CompanyCarousel";
 import BenefitsSection from "@/components/home/BenefitsSection";
 import HeroSection from "@/components/home/HeroSection";
 import JobList from "@/components/home/JobList";
 import NewsletterSection from "@/components/home/NewsletterSection";
-import { homeMetadata } from "../../utils/homeMetadata";
 
 // Dữ liệu mẫu (thực tế sẽ được lấy từ API/Redux/Context)
 

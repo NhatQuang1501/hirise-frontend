@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
+import { aboutMetadata } from "@/utils/aboutMetadata";
+import { updatePageMetadata } from "@/utils/metadataUtils";
 import AboutHeroSection from "@/components/staticComponents/AboutHeroSection";
 import CTASection from "@/components/staticComponents/CTASection";
 import MissionVisionSection from "@/components/staticComponents/MissionVisionSection";
 import StorySection from "@/components/staticComponents/StorySection";
 import TeamSection from "@/components/staticComponents/TeamSection";
-import { aboutMetadata } from "../../utils/aboutMetadata";
-import { updatePageMetadata } from "../../utils/metadataUtils";
 
 const AboutPage = () => {
   // Cập nhật metadata khi component mount

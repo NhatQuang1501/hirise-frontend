@@ -15,7 +15,7 @@ const OTPPage = lazy(() => import("@/pages/authentication/OTPPage"));
 const ProfilePage = lazy(() => import("@/pages/user/applicant/ProfilePage"));
 const RecruiterJobListPage = lazy(() => import("@/pages/recruitment/RecruiterJobListPage"));
 const RecruiterJobDetailPage = lazy(() => import("@/pages/recruitment/RecruiterJobDetailPage"));
-const CreateJobPage = lazy(() => import("@/pages/job/CreateJobPage"));
+const RecruiterJobCreatePage = lazy(() => import("@/pages/recruitment/RecruiterJobCreatePage"));
 const RecruiterJobEditPage = lazy(() => import("@/pages/recruitment/RecruiterJobEditPage"));
 const RecruiterDashboardPage = lazy(() => import("@/pages/recruitment/RecruiterDashboardPage"));
 
@@ -50,7 +50,7 @@ const userRoutes: RouteObject[] = [
     children: [
       { path: ROUTES.RECRUITER.DASHBOARD, element: <RecruiterDashboardPage /> },
       { path: ROUTES.RECRUITER.JOBS.LIST, element: <RecruiterJobListPage /> },
-      { path: ROUTES.RECRUITER.JOBS.CREATE, element: <CreateJobPage /> },
+      { path: ROUTES.RECRUITER.JOBS.CREATE, element: <RecruiterJobCreatePage /> },
       { path: ROUTES.RECRUITER.JOBS.DETAIL, element: <RecruiterJobDetailPage /> },
       { path: ROUTES.RECRUITER.JOBS.EDIT, element: <RecruiterJobEditPage /> },
     ],

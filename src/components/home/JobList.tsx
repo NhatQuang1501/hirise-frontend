@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import JobCard from "@/components/job/JobCard";
 import {
   Pagination,
   PaginationContent,
@@ -10,7 +11,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import JobCard from "../job/JobCard";
 import JobFilterButtons from "./JobFilterButtons";
 
 interface Job {

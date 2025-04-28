@@ -2,8 +2,10 @@ import { useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { Bell, Check, Eye, Menu, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import { useNotification } from "@/types/useNotification";
 import { cn } from "@/lib/utils";
-import { useNotification } from "@/hooks/useNotification";
+import { NotificationBadge } from "@/components/notification/NotificationBadge";
+import { NotificationList } from "@/components/notification/NotificationList";
 import { NotificationPopover } from "@/components/notification/NotificationPopover";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,8 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { NotificationBadge } from "../notification/NotificationBadge";
-import { NotificationList } from "../notification/NotificationList";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -103,7 +103,7 @@ export function Header() {
                 </Button>
               </DialogTrigger>
               <DialogContent className="flex h-[80vh] flex-col p-0 sm:max-w-[425px]">
-                <DialogHeader className="bg-muted/30 flex-row items-center justify-between border-b px-4 py-3.5">
+                <DialogHeader className="bg-muted/30 flex-row items-center border-b px-4 py-3.5">
                   <div className="flex items-center gap-2">
                     <Bell className="text-primary size-4" />
                     <DialogTitle className="text-primary">Notifications</DialogTitle>
@@ -112,32 +112,32 @@ export function Header() {
                         {unreadCount} new
                       </span>
                     )}
+                    {notifications.length > 0 && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={cn(
+                          "hover:bg-primary/5 text-xs font-medium",
+                          unreadCount > 0
+                            ? "text-muted-foreground hover:text-primary"
+                            : "text-success hover:text-green-700",
+                        )}
+                        onClick={markAllAsRead}
+                      >
+                        {unreadCount > 0 ? (
+                          <>
+                            <Eye className="mr-1.5 size-3.5" />
+                            Mark all as read
+                          </>
+                        ) : (
+                          <>
+                            <Check className="mr-1.5 size-3.5" />
+                            All caught up!
+                          </>
+                        )}
+                      </Button>
+                    )}
                   </div>
-                  {notifications.length > 0 && (
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className={cn(
-                        "hover:bg-primary/5 text-xs font-medium",
-                        unreadCount > 0
-                          ? "text-muted-foreground hover:text-primary"
-                          : "text-green-600 hover:text-green-700",
-                      )}
-                      onClick={markAllAsRead}
-                    >
-                      {unreadCount > 0 ? (
-                        <>
-                          <Eye className="mr-1.5 size-3.5" />
-                          Mark all as read
-                        </>
-                      ) : (
-                        <>
-                          <Check className="mr-1.5 size-3.5" />
-                          All caught up!
-                        </>
-                      )}
-                    </Button>
-                  )}
                 </DialogHeader>
                 <div className="flex-1 overflow-auto">
                   <NotificationList />
@@ -187,13 +187,6 @@ export function Header() {
               >
                 Login
               </Link>
-              {/* <Link
-                to="/register"
-                className="bg-primary hover:bg-secondary w-full rounded-md py-2 text-center text-base font-medium text-white"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Register
-              </Link> */}
             </div>
           </div>
         </div>
