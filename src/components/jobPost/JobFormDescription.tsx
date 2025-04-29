@@ -1,7 +1,7 @@
 import React from "react";
 import { UseFormReturn } from "react-hook-form";
 import InterviewProcessBuilder from "@/components/jobPost/InterviewProcessBuilder";
-import RichTextEditor from "@/components/jobPost/RichTextEditor";
+import QuillEditor from "@/components/jobPost/QuillEditor";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   FormControl,
@@ -27,10 +27,10 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
             control={form.control}
             name="responsibilities"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-2.5">
                 <FormLabel>Job Responsibilities</FormLabel>
                 <FormControl>
-                  <RichTextEditor
+                  <QuillEditor
                     placeholder="Describe responsibilities for this position..."
                     value={field.value}
                     onChange={field.onChange}
@@ -45,10 +45,10 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
             control={form.control}
             name="basicRequirements"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-2.5">
                 <FormLabel>Basic Requirements</FormLabel>
                 <FormControl>
-                  <RichTextEditor
+                  <QuillEditor
                     placeholder="List the basic requirements..."
                     value={field.value}
                     onChange={field.onChange}
@@ -63,10 +63,10 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
             control={form.control}
             name="preferredSkills"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-2.5">
                 <FormLabel>Preferred Skills</FormLabel>
                 <FormControl>
-                  <RichTextEditor
+                  <QuillEditor
                     placeholder="List the preferred skills..."
                     value={field.value}
                     onChange={field.onChange}
@@ -81,11 +81,11 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
             control={form.control}
             name="benefits"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="space-y-2.5">
                 <FormLabel>Benefits</FormLabel>
                 <FormControl>
-                  <RichTextEditor
-                    placeholder="Describe the benefits..."
+                  <QuillEditor
+                    placeholder="List the benefits..."
                     value={field.value}
                     onChange={field.onChange}
                   />

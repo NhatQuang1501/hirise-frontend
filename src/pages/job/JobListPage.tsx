@@ -294,7 +294,7 @@ const JobListPage: React.FC = () => {
             {/* Danh sách việc làm */}
             {isLoading ? (
               <div className="flex h-64 items-center justify-center">
-                <div className="border-primary h-8 w-8 animate-spin rounded-full border-4 border-t-transparent"></div>
+                <div className="border-primary size-8 animate-spin rounded-full border-4 border-t-transparent"></div>
                 <span className="ml-2">Loading...</span>
               </div>
             ) : (

@@ -7,7 +7,7 @@ const MissionVisionSection = () => {
         <div className="grid gap-12 md:grid-cols-2">
           <div className="rounded-xl bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center gap-3">
-              <Target className="text-primary h-8 w-8" />
+              <Target className="text-primary size-8" />
               <h3 className="text-2xl font-bold">Our Mission</h3>
             </div>
             <p className="text-muted-foreground">
@@ -19,7 +19,7 @@ const MissionVisionSection = () => {
 
           <div className="rounded-xl bg-white p-8 shadow-sm">
             <div className="mb-6 flex items-center gap-3">
-              <Compass className="text-primary h-8 w-8" />
+              <Compass className="text-primary size-8" />
               <h3 className="text-2xl font-bold">Our Vision</h3>
             </div>
             <p className="text-muted-foreground">

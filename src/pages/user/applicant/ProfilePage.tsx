@@ -44,7 +44,7 @@ const ProfilePage = () => {
       <div className="mx-auto max-w-4xl">
         {/* Header */}
         <div className="mb-8 flex items-center gap-2">
-          <Pencil className="text-primary h-8 w-8" />
+          <Pencil className="text-primary size-8" />
           <h1 className="text-3xl font-bold">Edit profile</h1>
         </div>
 

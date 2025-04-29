@@ -57,7 +57,7 @@ const InterviewProcessBuilder: React.FC<InterviewProcessBuilderProps> = ({ steps
         <div className="space-y-2">
           {steps.map((step, index) => (
             <div key={index} className="flex items-center gap-2">
-              <div className="bg-muted flex h-8 w-8 shrink-0 items-center justify-center rounded-full">
+              <div className="bg-muted flex size-8 shrink-0 items-center justify-center rounded-full">
                 {index + 1}
               </div>
               <Input
@@ -72,7 +72,7 @@ const InterviewProcessBuilder: React.FC<InterviewProcessBuilderProps> = ({ steps
                   size="icon"
                   onClick={() => handleMoveUp(index)}
                   disabled={index === 0}
-                  className="h-8 w-8"
+                  className="size-8"
                 >
                   <MoveUp className="size-4" />
                 </Button>
@@ -82,7 +82,7 @@ const InterviewProcessBuilder: React.FC<InterviewProcessBuilderProps> = ({ steps
                   size="icon"
                   onClick={() => handleMoveDown(index)}
                   disabled={index === steps.length - 1}
-                  className="h-8 w-8"
+                  className="size-8"
                 >
                   <MoveDown className="size-4" />
                 </Button>
@@ -91,7 +91,7 @@ const InterviewProcessBuilder: React.FC<InterviewProcessBuilderProps> = ({ steps
                   variant="ghost"
                   size="icon"
                   onClick={() => handleRemoveStep(index)}
-                  className="text-destructive hover:text-destructive h-8 w-8"
+                  className="text-destructive hover:text-destructive size-8"
                 >
                   <Trash2 className="size-4" />
                 </Button>

@@ -67,7 +67,7 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="intern">Internship</SelectItem>
+                    <SelectItem value="intern">Intern</SelectItem>
                     <SelectItem value="fresher">Fresher</SelectItem>
                     <SelectItem value="junior">Junior</SelectItem>
                     <SelectItem value="middle">Middle</SelectItem>
@@ -82,7 +82,7 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
             )}
           />
 
-          <FormField
+          {/* <FormField
             control={form.control}
             name="experience"
             render={({ field }) => (
@@ -106,7 +106,7 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
                 <FormMessage />
               </FormItem>
             )}
-          />
+          /> */}
 
           <FormField
             control={form.control}
