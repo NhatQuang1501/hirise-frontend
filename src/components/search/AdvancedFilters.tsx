@@ -1,19 +1,6 @@
-import React, { useState } from "react";
-import {
-  Briefcase,
-  Calendar,
-  ChevronDown,
-  ChevronUp,
-  Clock,
-  DollarSign,
-  Filter,
-  GraduationCap,
-  MapPin,
-  X,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import React, { useEffect, useState } from "react";
+import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
@@ -22,11 +9,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface FilterState {
   jobCategory: string[];
+  city: string[];
   location: string[];
   salaryRange: string;
   jobLevel: string[];
@@ -36,15 +22,17 @@ interface FilterState {
 }
 
 interface AdvancedFiltersProps {
-  onFilterChange: (filters: any) => void;
+  onChange: (filters: FilterState) => void;
+  initialFilters?: FilterState; // Thêm prop initialFilters
 }
 
-const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [activeTab, setActiveTab] = useState("all");
+// Cập nhật component để có thêm các filter mới
+const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onChange, initialFilters }) => {
+  // State để lưu trữ các filter
   const [filters, setFilters] = useState<FilterState>({
     jobCategory: [],
     location: [],
+    city: [],
     salaryRange: "",
     jobLevel: [],
     contractType: [],
@@ -52,626 +40,237 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onFilterChange }) => 
     postDate: "",
   });
 
-  // Đếm số bộ lọc đang hoạt động
-  const activeFiltersCount = [
-    ...filters.jobCategory,
-    ...filters.location,
-    ...filters.jobLevel,
-    ...filters.contractType,
-    filters.salaryRange,
-    filters.experience,
-    filters.postDate,
-  ].filter(Boolean).length;
+  // Cập nhật filters từ initialFilters nếu có
+  useEffect(() => {
+    if (initialFilters) {
+      setFilters(initialFilters);
+    }
+  }, [initialFilters]);
 
-  // Xử lý thay đổi cho checkbox
-  const handleCheckboxChange = (group: keyof FilterState, value: string, checked: boolean) => {
-    setFilters((prev) => {
-      const values = [...prev[group]];
-      if (checked) {
-        values.push(value);
-      } else {
-        const index = values.indexOf(value);
-        if (index !== -1) {
-          values.splice(index, 1);
-        }
-      }
-      return { ...prev, [group]: values };
-    });
+  // Các options cho filter
+  const cityOptions = [
+    { value: "hanoi", label: "Ha Noi" },
+    { value: "hochiminh", label: "Ho Chi Minh" },
+    { value: "danang", label: "Da Nang" },
+    { value: "hue", label: "Hue" },
+    { value: "cantho", label: "Can Tho" },
+    { value: "others", label: "Others" },
+  ];
+
+  const jobLevelOptions = [
+    { value: "intern", label: "Intern" },
+    { value: "fresher", label: "Fresher" },
+    { value: "junior", label: "Junior" },
+    { value: "middle", label: "Mid" },
+    { value: "senior", label: "Senior" },
+    { value: "lead", label: "Lead" },
+    { value: "manager", label: "Manager" },
+  ];
+
+  const contractTypeOptions = [
+    { value: "full time", label: "Full Time" },
+    { value: "part time", label: "Part Time" },
+    { value: "contract", label: "Contract" },
+    { value: "freelance", label: "Freelance" },
+  ];
+
+  const salaryRangeOptions = [
+    { value: "0-10000000", label: "Under 10 million VND" },
+    { value: "10000000-20000000", label: "10-20 million VND" },
+    { value: "20000000-30000000", label: "20-30 million VND" },
+    { value: "30000000-50000000", label: "30-50 million VND" },
+    { value: "50000000-100000000", label: "50-100 million VND" },
+    { value: "100000000-", label: "Over 100 million VND" },
+  ];
+
+  const postDateOptions = [
+    { value: "today", label: "Today" },
+    { value: "this_week", label: "This Week" },
+    { value: "this_month", label: "This Month" },
+  ];
+
+  // Xử lý thay đổi filter
+  const handleFilterChange = (key: keyof FilterState, value: any) => {
+    // Nếu value là "any", đặt nó thành chuỗi rỗng trong state
+    const actualValue = value === "any" ? "" : value;
+    const newFilters = { ...filters, [key]: actualValue };
+    setFilters(newFilters);
   };
 
-  // Xử lý thay đổi cho select
-  const handleSelectChange = (group: keyof FilterState, value: string) => {
-    setFilters((prev) => ({ ...prev, [group]: value }));
-  };
+  // Xử lý thay đổi checkbox
+  const handleCheckboxChange = (key: keyof FilterState, value: string, checked: boolean) => {
+    let currentValues = [...(filters[key] as string[])];
 
-  // Xóa tất cả bộ lọc
-  const clearAllFilters = () => {
-    const resetFilters = {
-      jobCategory: [],
-      location: [],
-      salaryRange: "",
-      jobLevel: [],
-      contractType: [],
-      experience: "",
-      postDate: "",
-    };
-    setFilters(resetFilters);
-    onFilterChange(resetFilters);
-  };
-
-  // Xóa một bộ lọc cụ thể
-  const clearSingleFilter = (group: keyof FilterState) => {
-    if (Array.isArray(filters[group])) {
-      setFilters((prev) => ({ ...prev, [group]: [] }));
+    if (checked) {
+      currentValues.push(value);
     } else {
-      setFilters((prev) => ({ ...prev, [group]: "" }));
+      currentValues = currentValues.filter((v) => v !== value);
     }
-  };
 
-  // Áp dụng bộ lọc
-  const applyFilters = () => {
-    onFilterChange(filters);
-  };
-
-  // Kiểm tra xem nhóm có bộ lọc nào được áp dụng không
-  const isFilterActive = (group: keyof FilterState) => {
-    if (Array.isArray(filters[group])) {
-      return (filters[group] as string[]).length > 0;
+    // Đảm bảo các giá trị trong currentValues là chính xác
+    if (key === "contractType") {
+      // Đảm bảo giá trị job_type khớp với backend
+      // Ví dụ: "full time", "part time", "contract", "freelance"
+    } else if (key === "jobLevel") {
+      // Đảm bảo giá trị experience_level khớp với backend
+      // Ví dụ: "intern", "fresher", "junior", "middle", "senior", "lead", "manager"
+    } else if (key === "city") {
+      // Đảm bảo giá trị city khớp với backend
+      // Ví dụ: "hanoi", "hochiminh", "danang", "hue", "cantho", "others"
     }
-    return Boolean(filters[group]);
+
+    handleFilterChange(key, currentValues);
   };
 
+  // Xử lý áp dụng filter
+  const handleApplyFilters = () => {
+    console.log("Applying filters:", filters);
+    onChange(filters);
+  };
+
+  console.log("Sending filter parameters to backend:", filters);
+
+  // UI cho component này
   return (
-    <Card className="bg-card border-border w-full border shadow-md">
-      <CardHeader className="p-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <CardTitle className="text-secondary flex flex-wrap items-center gap-2 text-2xl font-medium">
-            <Filter className="size-6 sm:size-10" />
-            <span className="text-xl sm:text-2xl">Advanced filters</span>
-            {activeFiltersCount > 0 && (
-              <Badge variant="secondary" className="ml-0 py-0 text-xs sm:ml-2">
-                {activeFiltersCount}
-              </Badge>
-            )}
-          </CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="hover:bg-foreground h-8 w-full px-2 text-sm sm:w-auto"
-          >
-            {isExpanded ? (
-              <span className="flex items-center justify-center">
-                Collapse <ChevronUp className="ml-1 size-3" />
-              </span>
-            ) : (
-              <span className="flex items-center justify-center">
-                Expand <ChevronDown className="ml-1 size-3" />
-              </span>
-            )}
-          </Button>
-        </div>
-      </CardHeader>
+    <div className="mb-8 rounded-lg border p-6">
+      <div className="mb-4 flex items-center justify-between">
+        <h3 className="text-lg font-semibold">Advanced Filters</h3>
+        <Button onClick={handleApplyFilters} className="flex items-center gap-2">
+          <Filter className="size-4" />
+          Apply Filters
+        </Button>
+      </div>
 
-      {isExpanded && (
-        <CardContent className="p-4 pt-0">
-          <Separator className="mb-4" />
-
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="bg-muted/50 mb-4 p-1">
-              <TabsTrigger value="all" className="text-xs">
-                All
-              </TabsTrigger>
-              <TabsTrigger value="job" className="text-xs">
-                Job
-              </TabsTrigger>
-              <TabsTrigger value="location" className="text-xs">
-                Location
-              </TabsTrigger>
-              <TabsTrigger value="company" className="text-xs">
-                Company
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="all" className="m-0">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-1">
-                {/* Ngành nghề */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Briefcase className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Field</h3>
-                    </div>
-                    {isFilterActive("jobCategory") && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => clearSingleFilter("jobCategory")}
-                        className="h-6 p-0 px-1"
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {["IT & Software", "Marketing", "Sales", "Design", "Data Science"].map(
-                      (category) => (
-                        <div key={category} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`category-${category}`}
-                            checked={filters.jobCategory.includes(category)}
-                            onCheckedChange={(checked) =>
-                              handleCheckboxChange("jobCategory", category, checked === true)
-                            }
-                            className="h-3.5 w-3.5"
-                          />
-                          <label
-                            htmlFor={`category-${category}`}
-                            className="cursor-pointer text-xs"
-                          >
-                            {category}
-                          </label>
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </div>
-
-                {/* Địa điểm */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Location</h3>
-                    </div>
-                    {isFilterActive("location") && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => clearSingleFilter("location")}
-                        className="h-6 p-0 px-1"
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {["Ha Noi", "Ho Chi Minh City", "Da Nang", "Remote"].map((location, idx) => {
-                      const locationValues = ["Hanoi", "Ho Chi Minh", "Da Nang", "Remote"];
-                      return (
-                        <div key={location} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`location-${location}`}
-                            checked={filters.location.includes(locationValues[idx])}
-                            onCheckedChange={(checked) =>
-                              handleCheckboxChange(
-                                "location",
-                                locationValues[idx],
-                                checked === true,
-                              )
-                            }
-                            className="h-3.5 w-3.5"
-                          />
-                          <label
-                            htmlFor={`location-${location}`}
-                            className="cursor-pointer text-xs"
-                          >
-                            {location}
-                          </label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                {/* Mức lương */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <DollarSign className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Salary</h3>
-                    </div>
-                    {isFilterActive("salaryRange") && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => clearSingleFilter("salaryRange")}
-                        className="h-6 p-0 px-1"
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </div>
-                  <Select
-                    value={filters.salaryRange}
-                    onValueChange={(value) => handleSelectChange("salaryRange", value)}
-                  >
-                    <SelectTrigger className="bg-background h-8 text-xs">
-                      <SelectValue placeholder="Salary range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="500-1000" className="text-xs">
-                        Below 10.000.000 VND
-                      </SelectItem>
-                      <SelectItem value="1000-2000" className="text-xs">
-                        10.000.000 - 30.000.000 VND
-                      </SelectItem>
-                      <SelectItem value="2000-3000" className="text-xs">
-                        30.000.000 - 50.000.000 VND
-                      </SelectItem>
-                      <SelectItem value="3000+" className="text-xs">
-                        Over 50.000.000 VND
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Cấp bậc */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <GraduationCap className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Job level</h3>
-                    </div>
-                    {isFilterActive("jobLevel") && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => clearSingleFilter("jobLevel")}
-                        className="h-6 p-0 px-1"
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {[
-                      { label: "Intern", value: "Intern" },
-                      { label: "Fresher", value: "Fresher" },
-                      { label: "Junior", value: "Junior" },
-                      { label: "Middle", value: "Middle" },
-                      { label: "Senior", value: "Senior" },
-                      { label: "Lead", value: "Lead" },
-                      { label: "Manager", value: "Manager" },
-                      { label: "Chief", value: "Chief" },
-                    ].map((level) => (
-                      <div key={level.value} className="flex items-center gap-2">
-                        <Checkbox
-                          id={`level-${level.value}`}
-                          checked={filters.jobLevel.includes(level.value)}
-                          onCheckedChange={(checked) =>
-                            handleCheckboxChange("jobLevel", level.value, checked === true)
-                          }
-                          className="h-3.5 w-3.5"
-                        />
-                        <label htmlFor={`level-${level.value}`} className="cursor-pointer text-xs">
-                          {level.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Loại hợp đồng */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Contract type</h3>
-                    </div>
-                    {isFilterActive("contractType") && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => clearSingleFilter("contractType")}
-                        className="h-6 p-0 px-1"
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {[
-                      { label: "Full-time", value: "Full-time" },
-                      { label: "Part-time", value: "Part-time" },
-                      { label: "Freelance", value: "Freelance" },
-                      { label: "Contract", value: "Contract" },
-                    ].map((type) => (
-                      <div key={type.value} className="flex items-center gap-2">
-                        <Checkbox
-                          id={`contract-${type.value}`}
-                          checked={filters.contractType.includes(type.value)}
-                          onCheckedChange={(checked) =>
-                            handleCheckboxChange("contractType", type.value, checked === true)
-                          }
-                          className="h-3.5 w-3.5"
-                        />
-                        <label
-                          htmlFor={`contract-${type.value}`}
-                          className="cursor-pointer text-xs"
-                        >
-                          {type.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Kinh nghiệm */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Briefcase className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Years of experience</h3>
-                    </div>
-                    {isFilterActive("experience") && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => clearSingleFilter("experience")}
-                        className="h-6 p-0 px-1"
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </div>
-                  <Select
-                    value={filters.experience}
-                    onValueChange={(value) => handleSelectChange("experience", value)}
-                  >
-                    <SelectTrigger className="bg-background h-8 text-xs">
-                      <SelectValue placeholder="Chọn kinh nghiệm" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0-1" className="text-xs">
-                        0-1 year
-                      </SelectItem>
-                      <SelectItem value="1-3" className="text-xs">
-                        1-3 years
-                      </SelectItem>
-                      <SelectItem value="3-5" className="text-xs">
-                        3-5 years
-                      </SelectItem>
-                      <SelectItem value="5+" className="text-xs">
-                        5+ years
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Ngày đăng tuyển */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Calendar className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Post date</h3>
-                    </div>
-                    {isFilterActive("postDate") && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => clearSingleFilter("postDate")}
-                        className="h-6 p-0 px-1"
-                      >
-                        <X className="size-3" />
-                      </Button>
-                    )}
-                  </div>
-                  <Select
-                    value={filters.postDate}
-                    onValueChange={(value) => handleSelectChange("postDate", value)}
-                  >
-                    <SelectTrigger className="bg-background h-8 text-xs">
-                      <SelectValue placeholder="Select time" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="today" className="text-xs">
-                        Today
-                      </SelectItem>
-                      <SelectItem value="week" className="text-xs">
-                        This week
-                      </SelectItem>
-                      <SelectItem value="month" className="text-xs">
-                        This month
-                      </SelectItem>
-                      <SelectItem value="any" className="text-xs">
-                        Any
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {/* City Filter */}
+        <div>
+          <h4 className="mb-2 font-medium">City</h4>
+          <div className="space-y-2">
+            {cityOptions.map((option) => (
+              <div key={option.value} className="flex items-center">
+                <Checkbox
+                  id={`city-${option.value}`}
+                  checked={filters.city.includes(option.value)}
+                  onCheckedChange={(checked) =>
+                    handleCheckboxChange("city", option.value, checked === true)
+                  }
+                />
+                <label htmlFor={`city-${option.value}`} className="ml-2 text-sm">
+                  {option.label}
+                </label>
               </div>
-            </TabsContent>
-
-            <TabsContent value="job" className="m-0">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Ngành nghề */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Briefcase className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Fields</h3>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {["IT & Software", "Marketing", "Sales", "Design", "Data Science"].map(
-                      (category) => (
-                        <div key={category} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`tab-category-${category}`}
-                            checked={filters.jobCategory.includes(category)}
-                            onCheckedChange={(checked) =>
-                              handleCheckboxChange("jobCategory", category, checked === true)
-                            }
-                            className="h-3.5 w-3.5"
-                          />
-                          <label
-                            htmlFor={`tab-category-${category}`}
-                            className="cursor-pointer text-xs"
-                          >
-                            {category}
-                          </label>
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </div>
-
-                {/* Cấp bậc */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <GraduationCap className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Job level</h3>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {[
-                      { label: "Intern", value: "Intern" },
-                      { label: "Fresher", value: "Fresher" },
-                      { label: "Junior", value: "Junior" },
-                      { label: "Middle", value: "Middle" },
-                      { label: "Senior", value: "Senior" },
-                      { label: "Lead", value: "Lead" },
-                      { label: "Manager", value: "Manager" },
-                      { label: "Chief", value: "Chief" },
-                    ].map((level) => (
-                      <div key={level.value} className="flex items-center gap-2">
-                        <Checkbox
-                          id={`tab-level-${level.value}`}
-                          checked={filters.jobLevel.includes(level.value)}
-                          onCheckedChange={(checked) =>
-                            handleCheckboxChange("jobLevel", level.value, checked === true)
-                          }
-                          className="h-3.5 w-3.5"
-                        />
-                        <label
-                          htmlFor={`tab-level-${level.value}`}
-                          className="cursor-pointer text-xs"
-                        >
-                          {level.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="location" className="m-0">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Địa điểm */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <MapPin className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Location</h3>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {["Ha Noi", "Ho Chi Minh", "Da Nang", "Remote"].map((location, idx) => {
-                      const locationValues = ["Hanoi", "Ho Chi Minh", "Da Nang", "Remote"];
-                      return (
-                        <div key={location} className="flex items-center gap-2">
-                          <Checkbox
-                            id={`tab-location-${location}`}
-                            checked={filters.location.includes(locationValues[idx])}
-                            onCheckedChange={(checked) =>
-                              handleCheckboxChange(
-                                "location",
-                                locationValues[idx],
-                                checked === true,
-                              )
-                            }
-                            className="h-3.5 w-3.5"
-                          />
-                          <label
-                            htmlFor={`tab-location-${location}`}
-                            className="cursor-pointer text-xs"
-                          >
-                            {location}
-                          </label>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="company" className="m-0">
-              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                {/* Loại hợp đồng */}
-                <div className="bg-muted/20 space-y-3 rounded-lg p-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5">
-                      <Clock className="text-primary size-4" />
-                      <h3 className="text-sm font-medium">Contract type</h3>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {[
-                      { label: "Full-time", value: "Full-time" },
-                      { label: "Part-time", value: "Part-time" },
-                      { label: "Freelance", value: "Freelance" },
-                      { label: "Contract", value: "Contract" },
-                    ].map((type) => (
-                      <div key={type.value} className="flex items-center gap-2">
-                        <Checkbox
-                          id={`tab-contract-${type.value}`}
-                          checked={filters.contractType.includes(type.value)}
-                          onCheckedChange={(checked) =>
-                            handleCheckboxChange("contractType", type.value, checked === true)
-                          }
-                          className="h-3.5 w-3.5"
-                        />
-                        <label
-                          htmlFor={`tab-contract-${type.value}`}
-                          className="cursor-pointer text-xs"
-                        >
-                          {type.label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </TabsContent>
-          </Tabs>
-
-          {activeFiltersCount > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              <span className="text-muted-foreground mr-1 self-center text-xs">
-                Selected filters:
-              </span>
-              {filters.jobCategory.map((cat) => (
-                <Badge key={`badge-${cat}`} variant="secondary" className="py-0 text-xs">
-                  {cat}
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleCheckboxChange("jobCategory", cat, false)}
-                    className="ml-1 size-3 p-0"
-                  >
-                    <X className="size-2" />
-                  </Button>
-                </Badge>
-              ))}
-              {/* Hiển thị tương tự cho các bộ lọc khác */}
-            </div>
-          )}
-
-          <div className="mt-6 flex justify-end gap-3">
-            <Button variant="outline" size="sm" onClick={clearAllFilters} className="h-8 text-xs">
-              Clear filters
-            </Button>
-            <Button size="sm" onClick={applyFilters} className="bg-primary h-8 text-xs">
-              Apply
-            </Button>
+            ))}
           </div>
-        </CardContent>
-      )}
-    </Card>
+        </div>
+
+        {/* Job Level Filter */}
+        <div>
+          <h4 className="mb-2 font-medium">Experience Level</h4>
+          <div className="space-y-2">
+            {jobLevelOptions.map((option) => (
+              <div key={option.value} className="flex items-center">
+                <Checkbox
+                  id={`level-${option.value}`}
+                  checked={filters.jobLevel.includes(option.value)}
+                  onCheckedChange={(checked) =>
+                    handleCheckboxChange("jobLevel", option.value, checked === true)
+                  }
+                />
+                <label htmlFor={`level-${option.value}`} className="ml-2 text-sm">
+                  {option.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Contract Type Filter */}
+        <div>
+          <h4 className="mb-2 font-medium">Job Type</h4>
+          <div className="space-y-2">
+            {contractTypeOptions.map((option) => (
+              <div key={option.value} className="flex items-center">
+                <Checkbox
+                  id={`type-${option.value}`}
+                  checked={filters.contractType.includes(option.value)}
+                  onCheckedChange={(checked) =>
+                    handleCheckboxChange("contractType", option.value, checked === true)
+                  }
+                />
+                <label htmlFor={`type-${option.value}`} className="ml-2 text-sm">
+                  {option.label}
+                </label>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Salary Range Filter */}
+        <div>
+          <h4 className="mb-2 font-medium">Salary Range</h4>
+          <Select
+            value={filters.salaryRange}
+            onValueChange={(value) => handleFilterChange("salaryRange", value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select salary range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Any Salary</SelectItem>
+              {salaryRangeOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+
+        {/* Post Date Filter */}
+        <div>
+          <h4 className="mb-2 font-medium">Posted Date</h4>
+          <Select
+            value={filters.postDate}
+            onValueChange={(value) => handleFilterChange("postDate", value)}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select date range" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="any">Any Time</SelectItem>
+              {postDateOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      {/* Thêm nút reset filter và apply filter */}
+      <div className="mt-6 flex justify-end gap-2">
+        <Button
+          variant="outline"
+          onClick={() => {
+            const emptyFilters = {
+              jobCategory: [],
+              location: [],
+              city: [],
+              salaryRange: "",
+              jobLevel: [],
+              contractType: [],
+              experience: "",
+              postDate: "",
+            };
+            setFilters(emptyFilters);
+            onChange(emptyFilters); // Gọi onChange khi reset
+          }}
+        >
+          Reset Filters
+        </Button>
+      </div>
+    </div>
   );
 };
 

@@ -1,0 +1,129 @@
+import { JobFormValues } from "@/types/job";
+import api from "@/config/api";
+
+export interface JobFilter {
+  search?: string; // Từ khóa tìm kiếm
+  status?: string; // Trạng thái: published, draft, closed
+  job_type?: string; // Loại công việc: full time, part time, contract, etc.
+  experience_level?: string; // Cấp độ kinh nghiệm: entry, junior, middle, senior, etc.
+  city?: string; // Thành phố
+  min_salary?: string; // Lương tối thiểu - Đổi tên thành min_salary_gte
+  max_salary?: string; // Lương tối đa - Đổi tên thành max_salary_lte
+  min_salary_gte?: string; // Thêm vào để khớp với backend
+  max_salary_lte?: string; // Thêm vào để khớp với backend
+  posted_date?: string; // Thời gian đăng: today, this_week, this_month, etc.
+  page?: number; // Trang hiện tại
+  page_size?: number; // Số lượng job mỗi trang
+}
+
+export const jobService = {
+  // Lấy danh sách job
+  getJobs: async (filters?: JobFilter) => {
+    const response = await api.get("/jobs/", { params: filters });
+    return response.data;
+  },
+
+  // Lấy job theo ID
+  getJobById: async (id: string) => {
+    const response = await api.get(`/jobs/${id}/`);
+    return response.data;
+  },
+
+  // Lấy danh sách job của công ty hiện tại
+  getMyJobs: async (filters?: JobFilter) => {
+    // Sử dụng endpoint chung với filter phù hợp
+    // Khi gọi API với token, backend sẽ tự động lọc job của công ty hiện tại
+    const response = await api.get("/jobs/", { params: filters });
+    return response.data;
+  },
+
+  // Tạo job mới
+  createJob: async (jobData: JobFormValues) => {
+    const formattedData = formatJobData(jobData);
+    const response = await api.post("/jobs/create/", formattedData);
+    return response.data;
+  },
+
+  // Cập nhật job
+  updateJob: async (id: string, jobData: JobFormValues) => {
+    const formattedData = formatJobData(jobData);
+    const response = await api.put(`/jobs/${id}/update/`, formattedData);
+    return response.data;
+  },
+
+  // Cập nhật trạng thái job
+  updateJobStatus: async (id: string, status: string) => {
+    const response = await api.patch(`/jobs/${id}/status/`, { status });
+    return response.data;
+  },
+
+  // Xóa job
+  deleteJob: async (id: string) => {
+    const response = await api.delete(`/jobs/${id}/delete/`);
+    return response.data;
+  },
+
+  // Lấy thống kê job
+  getJobStatistics: async (id: string) => {
+    const response = await api.get(`/jobs/${id}/statistics/`);
+    return response.data;
+  },
+
+  // Lưu job
+  saveJob: async (id: string) => {
+    const response = await api.post(`/jobs/${id}/save/`);
+    return response.data;
+  },
+
+  // Bỏ lưu job
+  unsaveJob: async (id: string) => {
+    const response = await api.delete(`/jobs/${id}/save/`);
+    return response.data;
+  },
+
+  // Lấy danh sách job đã lưu
+  getSavedJobs: async (filters?: JobFilter) => {
+    const response = await api.get("/saved-jobs/", { params: filters });
+    return response.data;
+  },
+
+  // Lấy danh sách job đã lưu của ứng viên
+  getApplicantSavedJobs: async (applicantId: string, filters?: JobFilter) => {
+    const response = await api.get(`/applicants/${applicantId}/saved-jobs/`, {
+      params: filters,
+    });
+    return response.data;
+  },
+};
+
+// Hàm hỗ trợ chuyển đổi dữ liệu từ form sang API format
+function formatJobData(jobData: JobFormValues) {
+  // Chuyển đổi status từ "Draft"/"Published"/"Closed" sang "draft"/"published"/"closed"
+  const status = jobData.status.toLowerCase();
+
+  // Sử dụng level thay vì experience để đặt experience_level
+  const experienceLevel = jobData.level.toLowerCase();
+
+  // Chuyển đổi các trường khác nếu cần
+  return {
+    title: jobData.title,
+    description: jobData.description || "",
+    city: jobData.city,
+    responsibilities: jobData.responsibilities || "",
+    requirements: jobData.requirements || "",
+    benefits: jobData.benefits || "",
+    job_type: jobData.jobType.toLowerCase() || "full time",
+    experience_level: experienceLevel,
+    min_salary: jobData.salaryMin ? parseInt(jobData.salaryMin) : null,
+    max_salary: jobData.salaryMax ? parseInt(jobData.salaryMax) : null,
+    currency: jobData.currency || "VND",
+    is_salary_negotiable: true,
+    closed_date: jobData.deadline || null,
+    status: status,
+    location_names: [jobData.location],
+    industry_names: [], // Đã xóa level từ đây vì đã dùng cho experience_level
+    skill_names: jobData.skills || [],
+  };
+}
+
+export default jobService;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Calendar, Download, ExternalLink, Mail, Phone, UserCircle } from "lucide-react";
-import { Applicant } from "@/types/recruiter";
+import { Applicant } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { Plus } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { mockApplicants, mockRecruiterJobs } from "@/types/mockData";
-import { RecruiterJob } from "@/types/recruiter";
+import { CompanyJob } from "@/types/company";
+import { mockApplicants, mockCompanyJobs } from "@/types/mockData";
 import ApplicantProgressChart from "@/components/dashboard/ApplicantProgressChart";
 import ApplicantsTable from "@/components/dashboard/ApplicantsTable";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
@@ -29,9 +29,9 @@ interface DashboardStats {
   offerSent: number;
 }
 
-const RecruiterDashboardPage: React.FC = () => {
+const CompanyDashboardPage: React.FC = () => {
   const navigate = useNavigate();
-  const [jobs, setJobs] = useState<RecruiterJob[]>([]);
+  const [jobs, setJobs] = useState<CompanyJob[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("overview");
   const [stats, setStats] = useState<DashboardStats>({
@@ -50,11 +50,11 @@ const RecruiterDashboardPage: React.FC = () => {
       try {
         // In a real app, this would be an API call
         setTimeout(() => {
-          setJobs(mockRecruiterJobs);
+          setJobs(mockCompanyJobs);
 
           // Calculate statistics
-          const activeJobs = mockRecruiterJobs.filter((job) => job.status === "Published").length;
-          const totalApplications = mockRecruiterJobs.reduce(
+          const activeJobs = mockCompanyJobs.filter((job) => job.status === "Published").length;
+          const totalApplications = mockCompanyJobs.reduce(
             (sum, job) => sum + job.applicantCount,
             0,
           );
@@ -65,7 +65,7 @@ const RecruiterDashboardPage: React.FC = () => {
           const offerSent = mockApplicants.filter((app) => app.status === "Offered").length;
 
           setStats({
-            totalJobs: mockRecruiterJobs.length,
+            totalJobs: mockCompanyJobs.length,
             activeJobs,
             totalApplications,
             newApplications,
@@ -86,7 +86,7 @@ const RecruiterDashboardPage: React.FC = () => {
 
   // Handle job creation
   const handleCreateJob = () => {
-    navigate(ROUTES.RECRUITER.JOBS.CREATE);
+    navigate(ROUTES.COMPANY.JOBS.CREATE);
   };
 
   if (isLoading) {
@@ -159,7 +159,7 @@ const RecruiterDashboardPage: React.FC = () => {
           <div className="flex flex-col space-y-4">
             <div className="flex justify-between">
               <h2 className="text-xl font-semibold">All Applicants</h2>
-              <Link to={ROUTES.RECRUITER.APPLICATIONS}>
+              <Link to={ROUTES.COMPANY.APPLICATIONS}>
                 <Button variant="outline">View All Applicants</Button>
               </Link>
             </div>
@@ -171,4 +171,4 @@ const RecruiterDashboardPage: React.FC = () => {
   );
 };
 
-export default RecruiterDashboardPage;
+export default CompanyDashboardPage;

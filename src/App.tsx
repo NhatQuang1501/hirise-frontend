@@ -1,10 +1,15 @@
+// src/App.tsx
 import { Suspense } from "react";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
 import Loading from "@/components/staticComponents/loading";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "./components/footer/Footer";
 import { Header } from "./components/header/Header";
 import userRoutes, { AUTH_PATHS } from "./routes/userRoutes";
+
+const queryClient = new QueryClient();
 
 function AppLayout() {
   const { pathname } = useLocation();
@@ -38,9 +43,13 @@ function AppLayout() {
 
 function App() {
   return (
-    <Router>
-      <AppLayout />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <AuthProvider>
+          <AppLayout />
+        </AuthProvider>
+      </Router>
+    </QueryClientProvider>
   );
 }
 

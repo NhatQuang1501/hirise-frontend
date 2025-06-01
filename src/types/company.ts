@@ -31,3 +31,45 @@ export interface CompanyDetails extends Company {
   };
   openPositions: number;
 }
+
+export interface Applicant {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  cvLink: string;
+  matchingScore?: number;
+  applyDate: string;
+  status: "New" | "Reviewing" | "Interviewed" | "Offered" | "Rejected";
+}
+
+export interface CompanyJob {
+  id: string;
+  title: string;
+  companyId?: string;
+  company: string;
+  logo?: string | null;
+  location: string;
+  city?: string;
+  city_display?: string;
+  contractType: string;
+  salary: string;
+  skills: string[];
+  level: string;
+  experience: string;
+  deadline: string;
+  status: JobStatus;
+  description?: string;
+  responsibilities: string[];
+  basicRequirements: string[];
+  preferredSkills: string[];
+  benefits: string[];
+  interviewProcess: string[];
+  companyDescription: string;
+  applicationCount?: number;
+  applicantCount?: number;
+  createdDate?: string;
+  time?: string;
+}
+
+export type JobStatus = "Draft" | "Published" | "Closed";

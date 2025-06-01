@@ -1,5 +1,5 @@
 import React from "react";
-import { Applicant } from "@/types/recruiter";
+import { Applicant } from "@/types/company";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 

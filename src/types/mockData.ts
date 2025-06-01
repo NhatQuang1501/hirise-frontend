@@ -1,5 +1,5 @@
+import { Applicant, CompanyJob } from "@/types/company";
 import { Job, JobCardData } from "./job";
-import { Applicant, RecruiterJob } from "./recruiter";
 
 export const topCompaniesData = [
   {
@@ -440,8 +440,8 @@ At Google, engineers and scientists from diverse backgrounds come together to cr
   openPositions: 350,
 };
 
-// Mẫu dữ liệu cho trang tuyển dụng của recruiter
-export const mockJob: RecruiterJob = {
+// Mẫu dữ liệu cho trang tuyển dụng của company
+export const mockJob: CompanyJob = {
   id: 1,
   title: "Senior React Developer",
   company: "FPT Software",
@@ -522,7 +522,7 @@ export const mockApplicants: Applicant[] = [
   },
 ];
 
-export const mockRecruiterJobs: RecruiterJob[] = [
+export const mockCompanyJobs: CompanyJob[] = [
   {
     id: 1,
     title: "Senior React Developer",

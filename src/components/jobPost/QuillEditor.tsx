@@ -28,7 +28,8 @@ const modules = {
   },
 };
 
-const formats = ["header", "bold", "italic", "underline", "list", "bullet"];
+// Sửa lại formats để phù hợp với ReactQuill
+const formats = ["header", "bold", "italic", "underline", "list"];
 
 const QuillEditor: React.FC<QuillEditorProps> = ({
   value,

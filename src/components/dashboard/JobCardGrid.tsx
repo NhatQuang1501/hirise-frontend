@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { RecruiterJob } from "@/types/recruiter";
+import { CompanyJob } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -28,7 +28,7 @@ import {
 import JobFilters from "./JobFilters";
 
 interface JobCardGridProps {
-  jobs: RecruiterJob[];
+  jobs: CompanyJob[];
 }
 
 const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
@@ -37,7 +37,7 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
   // Filter state
   const [searchKeyword, setSearchKeyword] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [filteredJobs, setFilteredJobs] = useState<RecruiterJob[]>(jobs);
+  const [filteredJobs, setFilteredJobs] = useState<CompanyJob[]>(jobs);
 
   // Apply filters effect
   useEffect(() => {
@@ -62,12 +62,12 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
 
   // Handler for view job
   const handleViewJob = (id: number) => {
-    navigate(ROUTES.RECRUITER.JOBS.DETAIL.replace(":id", id.toString()));
+    navigate(ROUTES.COMPANY.JOBS.DETAIL.replace(":id", id.toString()));
   };
 
   // Handler for edit job
   const handleEditJob = (id: number) => {
-    navigate(ROUTES.RECRUITER.JOBS.EDIT.replace(":id", id.toString()));
+    navigate(ROUTES.COMPANY.JOBS.EDIT.replace(":id", id.toString()));
   };
 
   // Reset filters
@@ -128,7 +128,7 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
                   <div>
                     <h3 className="mb-2 text-lg font-semibold">
                       <Link
-                        to={ROUTES.RECRUITER.JOBS.DETAIL.replace(":id", job.id.toString())}
+                        to={ROUTES.COMPANY.JOBS.DETAIL.replace(":id", job.id.toString())}
                         className="hover:text-primary hover:underline"
                       >
                         {job.title}

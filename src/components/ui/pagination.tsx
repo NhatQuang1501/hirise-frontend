@@ -45,8 +45,8 @@ function PaginationLink({ className, isActive, size = "icon", ...props }: Pagina
           variant: isActive ? "outline" : "ghost",
           size,
         }),
-        "hover:bg-primary hover:text-primary-foreground transition-all",
-        isActive && "bg-primary text-primary-foreground hover:bg-primary/90",
+        "hover:bg-primary/80 hover:text-primary-foreground transition-all",
+        isActive && "bg-secondary text-primary-foreground hover:bg-primary/90",
         className,
       )}
       {...props}
@@ -61,7 +61,7 @@ function PaginationPrevious({ className, ...props }: React.ComponentProps<typeof
       size="default"
       className={cn(
         "gap-1 px-2.5 sm:pl-2.5",
-        "hover:bg-primary hover:text-primary-foreground transition-all",
+        "hover:bg-primary/80 hover:text-primary-foreground transition-all",
         "disabled:pointer-events-none disabled:opacity-50",
         className,
       )}
@@ -80,7 +80,7 @@ function PaginationNext({ className, ...props }: React.ComponentProps<typeof Pag
       size="default"
       className={cn(
         "gap-1 px-2.5 sm:pr-2.5",
-        "hover:bg-primary hover:text-primary-foreground transition-all",
+        "hover:bg-primary/80 hover:text-primary-foreground transition-all",
         "disabled:pointer-events-none disabled:opacity-50",
         className,
       )}

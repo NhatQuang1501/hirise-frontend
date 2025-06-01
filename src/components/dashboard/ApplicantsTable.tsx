@@ -2,7 +2,7 @@
 import React from "react";
 import { getApplicantStatusColor } from "@/utils/statusHelpers";
 import { CheckCircle, Download, Eye, MoreVertical, UserCircle, XCircle } from "lucide-react";
-import { Applicant } from "@/types/recruiter";
+import { Applicant } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

@@ -4,7 +4,7 @@ import { ROUTES } from "@/routes/routes";
 import { getApplicantStatusColor } from "@/utils/statusHelpers";
 import { UserCircle } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Applicant } from "@/types/recruiter";
+import { Applicant } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -66,7 +66,7 @@ const RecentApplicantsTable: React.FC<RecentApplicantsTableProps> = ({ applicant
       </CardContent>
       <CardFooter className="bg-muted/50 border-t p-2">
         <Button variant="link" asChild>
-          <Link to={ROUTES.RECRUITER.APPLICATIONS}>View All Applicants</Link>
+          <Link to={ROUTES.COMPANY.APPLICATIONS}>View All Applicants</Link>
         </Button>
       </CardFooter>
     </Card>

@@ -5,11 +5,11 @@ import { Input } from "@/components/ui/input";
 
 interface SearchBarProps {
   onSearch: (keyword: string) => void;
-  onFilterChange: (filters: any) => void;
+  initialValue?: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
-  const [keyword, setKeyword] = useState<string>("");
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch, initialValue = "" }) => {
+  const [keyword, setKeyword] = useState<string>(initialValue);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
 
@@ -43,6 +43,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
     setShowSuggestions(false);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleSearch();
+    }
+  };
+
   const handleSuggestionClick = (suggestion: string) => {
     setKeyword(suggestion);
     setShowSuggestions(false);
@@ -60,6 +66,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
                 placeholder="Search for jobs, companies, skills..."
                 value={keyword}
                 onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
                 className="pr-10 pl-10"
               />
               <Search className="text-muted-foreground absolute top-1/2 left-3 size-5 -translate-y-1/2" />

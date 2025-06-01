@@ -1,10 +1,10 @@
 import React from "react";
-import { RecruiterJob } from "@/types/recruiter";
+import { CompanyJob } from "@/types/company";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 
 interface JobStatusChartProps {
-  jobs: RecruiterJob[];
+  jobs: CompanyJob[];
 }
 
 const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {

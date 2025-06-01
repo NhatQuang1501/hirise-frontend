@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,7 +21,7 @@ import { Input } from "@/components/ui/input";
 
 // Schema validation using Zod
 const loginSchema = z.object({
-  email: z.string().email({ message: "Email is not valid" }),
+  username: z.string().min(2, { message: "Username must be at least 2 characters" }),
   password: z.string().min(6, { message: "Password must be at least 6 characters" }),
 });
 
@@ -27,12 +30,14 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   // Create form instance using react-hook-form
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
@@ -41,12 +46,11 @@ export function LoginForm() {
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true);
     try {
-      // Gọi API đăng nhập ở đây
-      console.log("Login with:", data);
-      // await loginUser(data);
-      // Chuyển hướng sau khi đăng nhập thành công
-    } catch (error) {
-      console.error("Login error:", error);
+      await login(data);
+      toast.success("Login successfully");
+      // Navigation will be handled in AuthContext after successful login
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -57,7 +61,7 @@ export function LoginForm() {
       <div className="mx-2 text-center">
         <h1 className="text-foreground text-xl font-bold sm:text-2xl">Login</h1>
         <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-          Welcome back! Please enter your information
+          Welcome back to HiRise! Please enter your information
         </p>
       </div>
 
@@ -65,13 +69,13 @@ export function LoginForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="mx-2 space-y-5 sm:space-y-6">
           <FormField
             control={form.control}
-            name="email"
+            name="username"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">Email</FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Username</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="email@example.com"
+                    placeholder="username"
                     className="border-input bg-background text-foreground mx-0.5 h-11 rounded-md px-4 py-2 shadow-sm"
                     {...field}
                   />
@@ -91,15 +95,14 @@ export function LoginForm() {
                   <div className="relative mx-0.5">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 shadow-sm"
+                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 pr-10 shadow-sm"
                       {...field}
                     />
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon"
                       className="absolute top-0 right-0 h-full px-3"
+                      tabIndex={-1}
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (

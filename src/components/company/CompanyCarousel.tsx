@@ -7,13 +7,47 @@ import { CompanyCarouselProps } from "@/types/interfaces";
 import { cn } from "@/lib/utils";
 import { BaseCarousel } from "@/components/section/BaseCarousel";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const CompanyCarousel = ({
   companies,
   title = "Top Companies",
   description = "Leading employers in the tech industry",
   viewAllLink = ROUTES.PUBLIC.COMPANIES.LIST,
-}: CompanyCarouselProps) => {
+  loading = false,
+}: CompanyCarouselProps & { loading?: boolean }) => {
+  const renderCompanySkeleton = () => (
+    <div className="block rounded-lg bg-white p-6 shadow-sm">
+      <div className="mb-4 flex items-start justify-between">
+        <Skeleton className="h-16 w-16 rounded-lg" />
+        <Skeleton className="h-6 w-20 rounded-full" />
+      </div>
+
+      <Skeleton className="mb-2 h-6 w-40" />
+
+      <div className="mb-3 flex items-center gap-2">
+        <Skeleton className="h-4 w-4" />
+        <Skeleton className="h-4 w-32" />
+      </div>
+
+      <div className="mb-3 flex items-center gap-2">
+        <Skeleton className="h-4 w-4" />
+        <Skeleton className="h-4 w-36" />
+      </div>
+
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <Skeleton className="h-4 w-4" />
+          <Skeleton className="h-4 w-16" />
+        </div>
+      </div>
+
+      <div className={cn("border-border mt-4 border-t pt-4", "flex items-center justify-between")}>
+        <Skeleton className="h-4 w-32" />
+      </div>
+    </div>
+  );
+
   const renderCompany = (company: Company) => (
     <Link
       to={ROUTES.PUBLIC.COMPANIES.DETAIL.replace(":id", company.id)}
@@ -56,7 +90,6 @@ const CompanyCarousel = ({
       </div>
 
       <div className={cn("border-border mt-4 border-t pt-4", "flex items-center justify-between")}>
-        {/* <span className="text-primary font-medium">{company.jobCount} open positions</span> */}
         <span className="text-muted-foreground group-hover:text-primary text-sm transition-colors">
           View company <MoveRight className="inline-block size-4" />
         </span>
@@ -66,8 +99,8 @@ const CompanyCarousel = ({
 
   return (
     <BaseCarousel
-      items={companies}
-      renderItem={renderCompany}
+      items={loading ? Array(3).fill({}) : companies}
+      renderItem={loading ? renderCompanySkeleton : renderCompany}
       title={title}
       description={description}
       viewAllLink={viewAllLink}

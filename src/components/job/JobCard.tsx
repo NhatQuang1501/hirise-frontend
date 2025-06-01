@@ -1,78 +1,133 @@
 import React from "react";
-import { ROUTES } from "@/routes/routes";
-import { Briefcase, DollarSign, MapPin } from "lucide-react";
-import { Link } from "react-router-dom";
-import { JobCardData } from "@/types/job";
-import { Button } from "@/components/ui/button";
+import { Briefcase, Building, DollarSign, MapPin } from "lucide-react";
+import { JobCardItem } from "@/types/job";
+import { cn } from "@/lib/utils";
+import JobCardSaveButton from "@/components/job/JobCardSaveButton";
 
 interface JobCardProps {
-  job: JobCardData;
+  job: JobCardItem;
+  onSaveJob: () => void;
+  onClick: () => void;
+  layout?: "grid" | "list";
 }
 
-const JobCard: React.FC<JobCardProps> = ({ job }) => {
+const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "grid" }) => {
+  // Xử lý sự kiện lưu job - ngăn không cho lan truyền sự kiện đến thẻ cha
+  const handleSaveJob = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Ngăn sự kiện lan truyền lên thẻ cha
+    onSaveJob();
+  };
+
   return (
-    <div className="border-border group bg-card flex h-full flex-col justify-between rounded-lg border p-6 shadow-sm transition-all hover:shadow-md">
-      {/* Phần nội dung card */}
-      <div>
-        {/* Tăng kích thước logo và spacing */}
-        <div className="mb-4 flex items-center gap-3">
-          <img
-            src={job.logo}
-            alt={job.company}
-            className="size-14 rounded-md" // Tăng kích thước logo
-            loading="lazy"
-            width="56"
-            height="56"
-          />
-          <div>
-            <h3 className="text-lg font-medium">{job.company}</h3>
-          </div>
-        </div>
+    <div
+      onClick={onClick}
+      className={cn(
+        "group border-border bg-card relative flex cursor-pointer overflow-hidden rounded-lg border shadow-sm transition-all hover:shadow-md",
+        layout === "grid" ? "h-full flex-col p-5" : "flex-row items-center gap-4 p-4",
+      )}
+    >
+      {/* Save Button - Floating */}
+      <JobCardSaveButton saved={job.is_saved} onSaveJob={handleSaveJob} />
 
-        {/* Tăng font-size của title */}
-        <Link
-          to={ROUTES.PUBLIC.JOBS.DETAIL.replace(":id", job.id.toString())}
-          className="group-hover:text-primary mb-3 block text-xl font-semibold"
+      {/* Card content */}
+      <div className={cn("flex", layout === "grid" ? "h-full flex-col" : "w-full flex-row gap-4")}>
+        {/* Company logo */}
+        <div
+          className={cn("flex items-center", layout === "grid" ? "mb-4 gap-3" : "flex-shrink-0")}
         >
-          {job.title}
-        </Link>
-
-        {/* Tăng không gian và kích thước text */}
-        <div className="mb-4 space-y-3">
-          <div className="text-primary flex items-center gap-2 text-base">
-            <DollarSign className="size-5" />
-            <span>{job.salary}</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-base text-gray-600">
-            <MapPin className="size-5" />
-            <span>{job.location}</span>
-          </div>
-
-          <div className="flex items-center gap-2 text-base text-gray-600">
-            <Briefcase className="size-5" />
-            <span>{job.time}</span>
-          </div>
+          <img
+            src={job.logo || "/placeholder-logo.png"}
+            alt={job.company}
+            className={cn(
+              "rounded-md bg-gray-50 object-contain",
+              layout === "grid" ? "size-14" : "size-16",
+            )}
+            loading="lazy"
+          />
+          {layout === "grid" && (
+            <div>
+              <h3 className="line-clamp-1 text-sm font-medium text-gray-600">{job.company}</h3>
+            </div>
+          )}
         </div>
 
-        {/* Tăng kích thước skill tags */}
-        <div className="flex flex-wrap gap-2">
-          {job.skills.map((skill, index) => (
-            <span
-              key={index}
-              className="bg-primary/10 text-primary rounded-full px-3 py-1.5 text-sm"
-            >
-              {skill}
-            </span>
-          ))}
-        </div>
-      </div>
+        {/* Job details */}
+        <div className={cn("flex", layout === "grid" ? "flex-1 flex-col" : "flex-1 flex-row")}>
+          <div className={layout === "list" ? "w-2/3 pr-4" : "w-full"}>
+            {/* Company name (list view only) */}
+            {layout === "list" && (
+              <h3 className="mb-1 text-sm font-medium text-gray-600">{job.company}</h3>
+            )}
 
-      {/* Button */}
-      <div className="mt-5 pt-3">
-        <Button variant="outline" size="lg" className="hover:bg-secondary w-full">
-          Apply
-        </Button>
+            {/* Job title with hover effect */}
+            <h2 className="group-hover:text-primary mb-2 line-clamp-2 text-lg font-semibold transition-colors">
+              {job.title}
+            </h2>
+
+            {/* Skills (list view) */}
+            {layout === "list" && (
+              <div className="mb-2 flex flex-wrap gap-1">
+                {job.skills.slice(0, 3).map((skill, index) => (
+                  <span
+                    key={index}
+                    className="bg-primary/10 text-primary rounded-full px-2 py-1 text-xs"
+                  >
+                    {skill}
+                  </span>
+                ))}
+                {job.skills.length > 3 && (
+                  <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
+                    +{job.skills.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+
+          <div className={layout === "list" ? "w-1/3" : "w-full"}>
+            {/* Job details */}
+            <div className={cn("space-y-2 text-gray-600", layout === "grid" ? "mb-4" : "")}>
+              <div className="text-primary flex items-center gap-2 text-sm">
+                <DollarSign className="size-4 flex-shrink-0" />
+                <span className="line-clamp-1">{job.salary}</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm">
+                <MapPin className="size-4 flex-shrink-0" />
+                <span className="line-clamp-1">{job.location}</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm">
+                <Building className="size-4 flex-shrink-0" />
+                <span className="line-clamp-1">{job.city_display || "N/A"}</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-sm">
+                <Briefcase className="size-4 flex-shrink-0" />
+                <span>{job.time}</span>
+              </div>
+            </div>
+
+            {/* Skills (grid view) */}
+            {layout === "grid" && (
+              <div className="mt-auto flex flex-wrap gap-1">
+                {job.skills.slice(0, 3).map((skill, index) => (
+                  <span
+                    key={index}
+                    className="bg-primary/10 text-primary rounded-full px-2 py-1 text-xs"
+                  >
+                    {skill}
+                  </span>
+                ))}
+                {job.skills.length > 3 && (
+                  <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
+                    +{job.skills.length - 3}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

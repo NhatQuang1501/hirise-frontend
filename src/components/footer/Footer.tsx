@@ -1,5 +1,6 @@
 import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
+import hiriseLogo from "@/assets/images/hiriseLogo.png";
 
 export function Footer() {
   return (
@@ -9,8 +10,7 @@ export function Footer() {
           {/* Logo và social links - chiếm 1 cột */}
           <div>
             <Link to={ROUTES.PUBLIC.HOME} className="mb-4 flex items-center gap-2">
-              <img src="/logo.svg" alt="HiRise Logo" className="h-8 w-auto" />
-              <span className="text-primary text-xl font-bold">HiRise</span>
+              <img src={hiriseLogo} alt="HiRise Logo" className="h-8 w-auto" />
             </Link>
             <p className="text-muted-foreground mb-4 text-sm">
               Connect talent with the best job opportunities in the technology industry
@@ -88,7 +88,7 @@ export function Footer() {
                 <ul className="space-y-2">
                   <li>
                     <Link
-                      to={ROUTES.RECRUITER.JOBS.CREATE}
+                      to={ROUTES.COMPANY.JOBS.CREATE}
                       className="text-muted-foreground hover:text-primary text-sm transition-colors"
                     >
                       Post a job

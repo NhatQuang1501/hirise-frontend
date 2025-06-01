@@ -3,6 +3,7 @@ import { ROUTES } from "@/routes/routes";
 import {
   Award,
   Briefcase,
+  Building,
   Calendar,
   Clock,
   Edit,
@@ -12,23 +13,18 @@ import {
   XCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { RecruiterJob } from "@/types/recruiter";
+import { CompanyJob } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-interface RecruiterJobHeaderProps {
-  job: RecruiterJob;
+interface CompanyJobHeaderProps {
+  job: CompanyJob;
   onEdit: () => void;
   onClose: () => void;
   onDelete: () => void;
 }
 
-const RecruiterJobHeader: React.FC<RecruiterJobHeaderProps> = ({
-  job,
-  onEdit,
-  onClose,
-  onDelete,
-}) => {
+const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClose, onDelete }) => {
   return (
     <div className="mb-10 rounded-xl bg-white p-6 shadow-md lg:p-8">
       <div className="grid gap-8 md:grid-cols-3">
@@ -42,13 +38,19 @@ const RecruiterJobHeader: React.FC<RecruiterJobHeaderProps> = ({
               )}
               className="group"
             >
-              <img
-                src={job.logo}
-                alt={job.company}
-                className="group-hover:border-primary h-20 w-20 rounded-lg border border-gray-200 object-contain p-2 transition-all"
-                width="80"
-                height="80"
-              />
+              {job.logo ? (
+                <img
+                  src={job.logo}
+                  alt={job.company}
+                  className="group-hover:border-primary h-20 w-20 rounded-lg border border-gray-200 object-contain p-2 transition-all"
+                  width="80"
+                  height="80"
+                />
+              ) : (
+                <div className="group-hover:border-primary flex h-20 w-20 items-center justify-center rounded-lg border border-gray-200 bg-gray-50 p-2 text-xl font-bold text-gray-400 transition-all">
+                  {job.company.charAt(0)}
+                </div>
+              )}
             </Link>
             <div>
               <Link
@@ -115,10 +117,18 @@ const RecruiterJobHeader: React.FC<RecruiterJobHeaderProps> = ({
             </div>
 
             <div className="flex items-center gap-2">
+              <Building className="size-5 text-gray-500" />
+              <div>
+                <p className="text-sm text-gray-500">City</p>
+                <p className="font-medium">{job.city_display || "N/A"}</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
               <Clock className="size-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Posted</p>
-                <p className="font-medium">{job.createdDate}</p>
+                <p className="font-medium">{job.createdDate || "Recently"}</p>
               </div>
             </div>
 
@@ -126,7 +136,7 @@ const RecruiterJobHeader: React.FC<RecruiterJobHeaderProps> = ({
               <Users className="size-5 text-gray-500" />
               <div>
                 <p className="text-sm text-gray-500">Applications</p>
-                <p className="font-medium">{job.applicantCount} candidates</p>
+                <p className="font-medium">{job.applicantCount || 0} candidates</p>
               </div>
             </div>
           </div>
@@ -171,4 +181,4 @@ const RecruiterJobHeader: React.FC<RecruiterJobHeaderProps> = ({
   );
 };
 
-export default RecruiterJobHeader;
+export default CompanyJobHeader;

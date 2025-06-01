@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { X } from "lucide-react";
 import { SkillsInputProps } from "@/types/interfaces";
 import { Badge } from "@/components/ui/badge";
@@ -11,67 +11,39 @@ const SkillsInput: React.FC<SkillsInputProps> = ({
     "React",
     "Vue",
     "Angular",
-    "JavaScript",
-    "TypeScript",
-    "Python",
+    "PHP",
+    "Nodejs",
     "Java",
     "C#",
-    "Node.js",
-    "Express",
-    "Django",
-    "Flask",
-    "SQL",
-    "NoSQL",
-    "MongoDB",
-    "PostgreSQL",
-    "AWS",
-    "Azure",
-    "Docker",
-    "Kubernetes",
-    "Git",
-    "CI/CD",
-    "REST API",
-    "GraphQL",
-    "CSS",
-    "HTML",
-    "SASS",
-    "LESS",
-    "Tailwind CSS",
-    "Bootstrap",
-    "React Native",
-    "Flutter",
-    "iOS",
-    "Android",
-    "Swift",
-    "Kotlin",
+    "C++",
+    "C",
+    "Python",
+    "Ruby",
+    "Go",
   ],
 }) => {
   const [inputValue, setInputValue] = useState("");
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestionsRef = useRef<HTMLDivElement>(null);
 
-  // Filter suggestions when input changes
-  useEffect(() => {
-    if (inputValue.trim() === "") {
-      setFilteredSuggestions([]);
-      return;
-    }
-
-    const filtered = suggestions
-      .filter(
-        (suggestion) =>
-          suggestion.toLowerCase().includes(inputValue.toLowerCase()) &&
-          !skills.includes(suggestion),
-      )
-      .slice(0, 6); // Limit to 6 suggestions
-
-    setFilteredSuggestions(filtered);
-  }, [inputValue, skills, suggestions]);
+  // Tính toán filteredSuggestions trực tiếp trong render, không dùng state
+  const filteredSuggestions =
+    inputValue.trim() === ""
+      ? []
+      : suggestions
+          .filter((suggestion) => {
+            const suggestionLower = suggestion.toLowerCase();
+            const inputLower = inputValue.toLowerCase();
+            return (
+              suggestionLower.includes(inputLower) &&
+              !skills.some((skill) => skill.toLowerCase() === suggestionLower)
+            );
+          })
+          .slice(0, 6);
 
   // Close suggestions on outside click
-  useEffect(() => {
+  React.useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (
         suggestionsRef.current &&

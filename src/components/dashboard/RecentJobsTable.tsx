@@ -3,7 +3,7 @@ import React from "react";
 import { ROUTES } from "@/routes/routes";
 import { getStatusColor } from "@/utils/statusHelpers";
 import { Link } from "react-router-dom";
-import { RecruiterJob } from "@/types/recruiter";
+import { CompanyJob } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 
 interface RecentJobsTableProps {
-  jobs: RecruiterJob[];
+  jobs: CompanyJob[];
 }
 
 const RecentJobsTable: React.FC<RecentJobsTableProps> = ({ jobs }) => {
@@ -48,7 +48,7 @@ const RecentJobsTable: React.FC<RecentJobsTableProps> = ({ jobs }) => {
               <TableRow key={job.id}>
                 <TableCell className="font-medium">
                   <Link
-                    to={ROUTES.RECRUITER.JOBS.DETAIL.replace(":id", job.id.toString())}
+                    to={ROUTES.COMPANY.JOBS.DETAIL.replace(":id", job.id.toString())}
                     className="hover:text-primary hover:underline"
                   >
                     {job.title}
@@ -65,7 +65,7 @@ const RecentJobsTable: React.FC<RecentJobsTableProps> = ({ jobs }) => {
       </CardContent>
       <CardFooter className="bg-muted/50 border-t p-2">
         <Button variant="link" asChild>
-          <Link to={ROUTES.RECRUITER.JOBS.LIST}>View All Jobs</Link>
+          <Link to={ROUTES.COMPANY.JOBS.LIST}>View All Jobs</Link>
         </Button>
       </CardFooter>
     </Card>

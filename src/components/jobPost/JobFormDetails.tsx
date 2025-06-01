@@ -43,8 +43,8 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="full-time">Full-time</SelectItem>
-                    <SelectItem value="part-time">Part-time</SelectItem>
+                    <SelectItem value="full time">Full time</SelectItem>
+                    <SelectItem value="part time">Part time</SelectItem>
                     <SelectItem value="contract">Contract</SelectItem>
                     <SelectItem value="freelance">Freelance</SelectItem>
                   </SelectContent>
@@ -72,9 +72,8 @@ const JobFormDetails: React.FC<JobFormDetailsProps> = ({ form }) => {
                     <SelectItem value="junior">Junior</SelectItem>
                     <SelectItem value="middle">Middle</SelectItem>
                     <SelectItem value="senior">Senior</SelectItem>
-                    <SelectItem value="lead">Team Lead</SelectItem>
+                    <SelectItem value="lead">Lead</SelectItem>
                     <SelectItem value="manager">Manager</SelectItem>
-                    {/* <SelectItem value="Director">Director</SelectItem> */}
                   </SelectContent>
                 </Select>
                 <FormMessage />

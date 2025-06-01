@@ -8,6 +8,46 @@ interface JobFormPreviewProps {
 }
 
 const JobFormPreview: React.FC<JobFormPreviewProps> = ({ form, companies }) => {
+  const skills = form.watch("skills") || [];
+  const responsibilities = form.watch("responsibilities") || "";
+  const requirements = form.watch("requirements") || "";
+  const benefits = form.watch("benefits") || "";
+
+  // Phân tách requirements thành basic và preferred
+  const [basicRequirements, preferredSkills] = React.useMemo(() => {
+    if (!requirements) return ["", ""];
+
+    const parts = requirements.split("### PREFERRED SKILLS ###");
+    return [parts[0].trim(), parts.length > 1 ? parts[1].trim() : ""];
+  }, [requirements]);
+
+  // Chuyển đổi text có định dạng bullet thành mảng
+  const parseToArray = (text: string) => {
+    if (!text) return [];
+    return text
+      .split("\n")
+      .filter((line) => line.trim().startsWith("-"))
+      .map((line) => line.trim().substring(1).trim());
+  };
+
+  const getCityDisplay = (cityCode: string) => {
+    const cityMap: Record<string, string> = {
+      hanoi: "Ha Noi",
+      hochiminh: "Ho Chi Minh",
+      danang: "Da Nang",
+      hue: "Hue",
+      cantho: "Can Tho",
+      others: "Others",
+    };
+
+    return cityCode ? cityMap[cityCode] || cityCode : "";
+  };
+
+  const responsibilitiesArray = parseToArray(responsibilities);
+  const basicRequirementsArray = parseToArray(basicRequirements);
+  const preferredSkillsArray = parseToArray(preferredSkills);
+  const benefitsArray = parseToArray(benefits);
+
   return (
     <div className="space-y-4 py-4">
       <div className="space-y-2">
@@ -19,6 +59,8 @@ const JobFormPreview: React.FC<JobFormPreviewProps> = ({ form, companies }) => {
           <div>•</div>
           <div>{form.watch("location") || "Location"}</div>
           <div>•</div>
+          <div>{getCityDisplay(form.watch("city")) || "City"}</div>
+          <div>•</div>
           <div>
             {form.watch("salaryMin") && form.watch("salaryMax")
               ? `${form.watch("salaryMin")}-${form.watch("salaryMax")} ${form.watch("currency")}`
@@ -28,7 +70,7 @@ const JobFormPreview: React.FC<JobFormPreviewProps> = ({ form, companies }) => {
       </div>
 
       <div className="my-4 flex flex-wrap gap-2">
-        {form.watch("skills").map((skill: string, index: number) => (
+        {skills.map((skill: string, index: number) => (
           <Badge key={index} variant="secondary">
             {skill}
           </Badge>
@@ -37,29 +79,52 @@ const JobFormPreview: React.FC<JobFormPreviewProps> = ({ form, companies }) => {
 
       <div>
         <h3 className="mb-2 text-lg font-semibold">Responsibilities</h3>
-        <ul className="list-disc pl-5">
-          {form.watch("responsibilities").map((item: string, index: number) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+        {responsibilitiesArray.length > 0 ? (
+          <ul className="list-disc pl-5">
+            {responsibilitiesArray.map((item: string, index: number) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-muted-foreground">No responsibilities specified</p>
+        )}
       </div>
 
       <div>
-        <h3 className="mb-2 text-lg font-semibold">Requirements</h3>
-        <ul className="list-disc pl-5">
-          {form.watch("basicRequirements").map((item: string, index: number) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+        <h3 className="mb-2 text-lg font-semibold">Basic Requirements</h3>
+        {basicRequirementsArray.length > 0 ? (
+          <ul className="list-disc pl-5">
+            {basicRequirementsArray.map((item: string, index: number) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-muted-foreground">No requirements specified</p>
+        )}
       </div>
+
+      {preferredSkillsArray.length > 0 && (
+        <div>
+          <h3 className="mb-2 text-lg font-semibold">Preferred Skills (Nice to have)</h3>
+          <ul className="list-disc pl-5">
+            {preferredSkillsArray.map((item: string, index: number) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div>
         <h3 className="mb-2 text-lg font-semibold">Benefits</h3>
-        <ul className="list-disc pl-5">
-          {form.watch("benefits").map((item: string, index: number) => (
-            <li key={index}>{item}</li>
-          ))}
-        </ul>
+        {benefitsArray.length > 0 ? (
+          <ul className="list-disc pl-5">
+            {benefitsArray.map((item: string, index: number) => (
+              <li key={index}>{item}</li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-muted-foreground">No benefits specified</p>
+        )}
       </div>
     </div>
   );

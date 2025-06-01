@@ -1,4 +1,5 @@
 import { lazy } from "react";
+import ProtectedRoute from "@/routes/protectedRoute";
 import { ROUTES } from "@/routes/routes";
 import { RouteObject } from "react-router-dom";
 
@@ -12,12 +13,14 @@ const CompanyDetailPage = lazy(() => import("@/pages/company/CompanyDetailPage")
 const LoginPage = lazy(() => import("@/pages/authentication/LoginPage"));
 const RegisterPage = lazy(() => import("@/pages/authentication/RegisterPage"));
 const OTPPage = lazy(() => import("@/pages/authentication/OTPPage"));
-const ProfilePage = lazy(() => import("@/pages/user/applicant/ProfilePage"));
-const RecruiterJobListPage = lazy(() => import("@/pages/recruitment/RecruiterJobListPage"));
-const RecruiterJobDetailPage = lazy(() => import("@/pages/recruitment/RecruiterJobDetailPage"));
-const RecruiterJobCreatePage = lazy(() => import("@/pages/recruitment/RecruiterJobCreatePage"));
-const RecruiterJobEditPage = lazy(() => import("@/pages/recruitment/RecruiterJobEditPage"));
-const RecruiterDashboardPage = lazy(() => import("@/pages/recruitment/RecruiterDashboardPage"));
+const ProfilePage = lazy(() => import("@/pages/user/ProfilePage"));
+const JobManagementPage = lazy(() => import("@/pages/applicant/JobManagementPage"));
+const CompanyJobListPage = lazy(() => import("@/pages/recruitment/CompanyJobListPage"));
+const CompanyJobDetailPage = lazy(() => import("@/pages/recruitment/CompanyJobDetailPage"));
+const CompanyJobCreatePage = lazy(() => import("@/pages/recruitment/CompanyJobCreatePage"));
+const CompanyJobEditPage = lazy(() => import("@/pages/recruitment/CompanyJobEditPage"));
+const ApplicantDashboardPage = lazy(() => import("@/pages/applicant/ApplicantDashboardPage"));
+// const CompanyDashboardPage = lazy(() => import("@/pages/recruitment/CompanyDashboardPage"));
 
 const userRoutes: RouteObject[] = [
   {
@@ -42,32 +45,124 @@ const userRoutes: RouteObject[] = [
     element: <RegisterPage />,
   },
   {
-    path: ROUTES.AUTH.VERIFY_EMAIL,
+    path: ROUTES.AUTH.VERIFY_OTP,
     element: <OTPPage />,
   },
   {
-    path: "/recruiter",
+    path: "/company",
     children: [
-      { path: ROUTES.RECRUITER.DASHBOARD, element: <RecruiterDashboardPage /> },
-      { path: ROUTES.RECRUITER.JOBS.LIST, element: <RecruiterJobListPage /> },
-      { path: ROUTES.RECRUITER.JOBS.CREATE, element: <RecruiterJobCreatePage /> },
-      { path: ROUTES.RECRUITER.JOBS.DETAIL, element: <RecruiterJobDetailPage /> },
-      { path: ROUTES.RECRUITER.JOBS.EDIT, element: <RecruiterJobEditPage /> },
+      {
+        path: ROUTES.COMPANY.DASHBOARD,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyJobListPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.JOBS.LIST,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyJobListPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.JOBS.CREATE,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyJobCreatePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.JOBS.DETAIL,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyJobDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.JOBS.EDIT,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyJobEditPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.PROFILE,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
   {
     path: "/applicant",
-    children: [{ path: ROUTES.APPLICANT.PROFILE, element: <ProfilePage /> }],
+    children: [
+      {
+        path: ROUTES.APPLICANT.PROFILE,
+        element: (
+          <ProtectedRoute allowedRoles={["applicant"]}>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.APPLICANT.DASHBOARD,
+        element: (
+          <ProtectedRoute allowedRoles={["applicant"]}>
+            <ApplicantDashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.APPLICANT.JOB_MANAGEMENT,
+        element: (
+          <ProtectedRoute allowedRoles={["applicant"]}>
+            <JobManagementPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.APPLICANT.APPLIED_JOBS,
+        element: (
+          <ProtectedRoute allowedRoles={["applicant"]}>
+            <JobManagementPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.APPLICANT.SAVED_JOBS,
+        element: (
+          <ProtectedRoute allowedRoles={["applicant"]}>
+            <JobManagementPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.APPLICANT.FOLLOWING_COMPANIES,
+        element: (
+          <ProtectedRoute allowedRoles={["applicant"]}>
+            <JobManagementPage />
+          </ProtectedRoute>
+        ),
+      },
+    ],
   },
 ];
 
 // Update AUTH_PATHS to use ROUTES constant
 export const AUTH_PATHS = [
-  // ROUTES.AUTH.LOGIN,
-  // ROUTES.AUTH.REGISTER,
-  // ROUTES.AUTH.VERIFY_EMAIL,
-  // ROUTES.AUTH.FORGOT_PASSWORD,
-  // ROUTES.AUTH.RESET_PASSWORD,
+  ROUTES.AUTH.LOGIN,
+  ROUTES.AUTH.REGISTER,
+  ROUTES.AUTH.VERIFY_OTP,
+  ROUTES.AUTH.FORGOT_PASSWORD,
+  ROUTES.AUTH.RESET_PASSWORD,
 ];
 
 export default userRoutes;

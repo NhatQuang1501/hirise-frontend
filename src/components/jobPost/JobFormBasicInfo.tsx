@@ -11,17 +11,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface Company {
-  id: string;
-  name: string;
-}
-
 interface JobFormBasicInfoProps {
   form: UseFormReturn<any>;
-  companies: Company[];
+  companies?: { id: string; name: string }[];
 }
 
-const JobFormBasicInfo: React.FC<JobFormBasicInfoProps> = ({ form, companies }) => {
+const JobFormBasicInfo: React.FC<JobFormBasicInfoProps> = ({ form }) => {
   return (
     <Card>
       <CardContent className="pt-6">
@@ -44,22 +39,23 @@ const JobFormBasicInfo: React.FC<JobFormBasicInfoProps> = ({ form, companies }) 
 
           <FormField
             control={form.control}
-            name="companyId"
+            name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company*</FormLabel>
+                <FormLabel>City*</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select company" />
+                      <SelectValue placeholder="Select city" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {companies.map((company) => (
-                      <SelectItem key={company.id} value={company.id}>
-                        {company.name}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="hanoi">Ha Noi</SelectItem>
+                    <SelectItem value="hochiminh">Ho Chi Minh</SelectItem>
+                    <SelectItem value="danang">Da Nang</SelectItem>
+                    <SelectItem value="hue">Hue</SelectItem>
+                    <SelectItem value="cantho">Can Tho</SelectItem>
+                    <SelectItem value="others">Others</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -74,7 +70,10 @@ const JobFormBasicInfo: React.FC<JobFormBasicInfoProps> = ({ form, companies }) 
               <FormItem>
                 <FormLabel>Work Location*</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g. Hanoi or Remote" {...field} />
+                  <Input
+                    placeholder="e.g. 4th Floor, E.Town 1, 364 Cong Hoa, Tan Binh, HCMC"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>

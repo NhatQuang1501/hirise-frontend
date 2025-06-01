@@ -13,7 +13,7 @@ const HeroSection: React.FC = () => {
               Find your dream <span className="text-primary">IT job</span>
             </h1>
             <p className="mb-6 text-lg text-gray-600 md:text-xl">
-              Connect you with thousands of jobs from top technology companies.
+              Connect you with thousands of jobs from top technology companies
             </p>
 
             <SearchBox />

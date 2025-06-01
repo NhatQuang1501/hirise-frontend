@@ -3,7 +3,7 @@ export const ROUTES = {
   AUTH: {
     LOGIN: "/auth/login",
     REGISTER: "/auth/register",
-    VERIFY_EMAIL: "/auth/verify-email",
+    VERIFY_OTP: "/auth/verify-otp",
     FORGOT_PASSWORD: "/auth/forgot-password",
     RESET_PASSWORD: "/auth/reset-password",
   },
@@ -33,20 +33,23 @@ export const ROUTES = {
   APPLICANT: {
     DASHBOARD: "/applicant/dashboard",
     PROFILE: "/applicant/profile",
-    APPLICATIONS: "/applicant/applications",
+    APPLIED_JOBS: "/applicant/applied-jobs",
     SAVED_JOBS: "/applicant/saved-jobs",
+    FOLLOWING_COMPANIES: "/applicant/following-companies",
+    JOB_MANAGEMENT: "/applicant/job-management",
   },
 
-  // Recruiter routes
-  RECRUITER: {
-    DASHBOARD: "/recruiter/dashboard",
+  // company routes
+  COMPANY: {
+    DASHBOARD: "/company/dashboard",
+    PROFILE: "/company/profile",
     JOBS: {
-      LIST: "/recruiter/jobs",
-      CREATE: "/recruiter/jobs/create",
-      DETAIL: "/recruiter/jobs/:id",
-      EDIT: "/recruiter/jobs/:id/edit",
+      LIST: "/company/jobs",
+      CREATE: "/company/jobs/create",
+      DETAIL: "/company/jobs/:id",
+      EDIT: "/company/jobs/:id/edit",
     },
-    APPLICATIONS: "/recruiter/applications",
-    COMPANY_PROFILE: "/recruiter/company",
+    APPLICATIONS: "/company/applications",
+    COMPANY_PROFILE: "/company/company",
   },
 };
