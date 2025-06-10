@@ -1,7 +1,7 @@
 import { lazy } from "react";
 import ProtectedRoute from "@/routes/protectedRoute";
 import { ROUTES } from "@/routes/routes";
-import { RouteObject } from "react-router-dom";
+import { Navigate, RouteObject } from "react-router-dom";
 
 const HomePage = lazy(() => import("@/pages/home/HomePage"));
 const AboutPage = lazy(() => import("@/pages/static/AboutPage"));
@@ -15,12 +15,12 @@ const RegisterPage = lazy(() => import("@/pages/authentication/RegisterPage"));
 const OTPPage = lazy(() => import("@/pages/authentication/OTPPage"));
 const ProfilePage = lazy(() => import("@/pages/user/ProfilePage"));
 const JobManagementPage = lazy(() => import("@/pages/applicant/JobManagementPage"));
-const CompanyJobListPage = lazy(() => import("@/pages/recruitment/CompanyJobListPage"));
+const CompanyRecruitmentPage = lazy(() => import("@/pages/recruitment/CompanyRecruitmentPage"));
 const CompanyJobDetailPage = lazy(() => import("@/pages/recruitment/CompanyJobDetailPage"));
 const CompanyJobCreatePage = lazy(() => import("@/pages/recruitment/CompanyJobCreatePage"));
 const CompanyJobEditPage = lazy(() => import("@/pages/recruitment/CompanyJobEditPage"));
 const ApplicantDashboardPage = lazy(() => import("@/pages/applicant/ApplicantDashboardPage"));
-// const CompanyDashboardPage = lazy(() => import("@/pages/recruitment/CompanyDashboardPage"));
+const JobApplicationsPage = lazy(() => import("@/pages/company/JobApplicationsPage"));
 
 const userRoutes: RouteObject[] = [
   {
@@ -52,18 +52,50 @@ const userRoutes: RouteObject[] = [
     path: "/company",
     children: [
       {
-        path: ROUTES.COMPANY.DASHBOARD,
+        path: "applications",
         element: (
           <ProtectedRoute allowedRoles={["company"]}>
-            <CompanyJobListPage />
+            <Navigate to={ROUTES.COMPANY.APPLICATIONS.LIST} replace />
           </ProtectedRoute>
         ),
       },
       {
-        path: ROUTES.COMPANY.JOBS.LIST,
+        path: "jobs",
         element: (
           <ProtectedRoute allowedRoles={["company"]}>
-            <CompanyJobListPage />
+            <Navigate to={ROUTES.COMPANY.JOBS.LIST} replace />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.DASHBOARD,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyRecruitmentPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.RECRUITMENT_MANAGEMENT,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyRecruitmentPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "recruitment-management/jobs",
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyRecruitmentPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "recruitment-management/applications",
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <CompanyRecruitmentPage />
           </ProtectedRoute>
         ),
       },
@@ -88,6 +120,14 @@ const userRoutes: RouteObject[] = [
         element: (
           <ProtectedRoute allowedRoles={["company"]}>
             <CompanyJobEditPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.JOBS.APPLICATIONS,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <JobApplicationsPage />
           </ProtectedRoute>
         ),
       },

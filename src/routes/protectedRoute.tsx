@@ -1,8 +1,8 @@
 import { useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 import Loading from "@/components/staticComponents/loading";
 
 interface ProtectedRouteProps {

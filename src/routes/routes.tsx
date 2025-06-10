@@ -43,13 +43,17 @@ export const ROUTES = {
   COMPANY: {
     DASHBOARD: "/company/dashboard",
     PROFILE: "/company/profile",
+    RECRUITMENT_MANAGEMENT: "/company/recruitment-management",
     JOBS: {
-      LIST: "/company/jobs",
+      LIST: "/company/recruitment-management/jobs",
       CREATE: "/company/jobs/create",
       DETAIL: "/company/jobs/:id",
       EDIT: "/company/jobs/:id/edit",
+      APPLICATIONS: "/company/jobs/:id/applications",
     },
-    APPLICATIONS: "/company/applications",
+    APPLICATIONS: {
+      LIST: "/company/recruitment-management/applications",
+    },
     COMPANY_PROFILE: "/company/company",
   },
 };

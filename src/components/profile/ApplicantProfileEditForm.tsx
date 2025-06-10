@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { profileService } from "@/services/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, User } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
   Form,

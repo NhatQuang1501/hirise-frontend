@@ -194,6 +194,7 @@ const JobDetailPage: React.FC = () => {
       }
       setSaved(!saved);
     } catch (error) {
+      console.error("Error saving job:", error);
       toast.error("An error occurred. Please try again later.");
     }
   };
@@ -262,10 +263,8 @@ const JobDetailPage: React.FC = () => {
         return "Part Time";
       case "contract":
         return "Contract";
-      case "internship":
-        return "Internship";
-      case "temporary":
-        return "Temporary";
+      case "freelance":
+        return "Freelance";
       default:
         return capitalizeFirstLetter(type);
     }

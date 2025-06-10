@@ -1,12 +1,19 @@
 import React from "react";
 import { ROUTES } from "@/routes/routes";
-import { Building2, MapPin, MoveRight, Users } from "lucide-react";
+import { Building2, ChevronRight, MapPin, MoveRight, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Company } from "@/types/company";
 import { CompanyCarouselProps } from "@/types/interfaces";
 import { cn } from "@/lib/utils";
-import { BaseCarousel } from "@/components/section/BaseCarousel";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const CompanyCarousel = ({
@@ -55,9 +62,13 @@ const CompanyCarousel = ({
     >
       <div className="mb-4 flex items-start justify-between">
         <img
-          src={company.logo}
+          src={company.logo || "../assets/images/companyPlaceholder.png"}
           alt={company.name}
           className="h-16 w-16 rounded-lg object-contain"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            target.src = "../assets/images/companyPlaceholder.png";
+          }}
         />
         {company.newJobsToday > 0 && (
           <Badge variant="secondary" className="bg-green-100 text-green-800">
@@ -66,18 +77,22 @@ const CompanyCarousel = ({
         )}
       </div>
 
-      <h3 className="group-hover:text-primary mb-2 text-lg font-bold transition-colors">
+      <h3 className="group-hover:text-primary mb-2 line-clamp-1 text-lg font-bold transition-colors">
         {company.name}
       </h3>
 
       <div className="mb-3 flex items-center gap-2">
-        <Building2 className="text-muted-foreground size-4" />
-        <span className="text-muted-foreground text-sm">{company.industry}</span>
+        <Building2 className="text-muted-foreground size-4 flex-shrink-0" />
+        <span className="text-muted-foreground line-clamp-1 text-sm">
+          {company.industries?.length ? company.industries[0] : company.industry || "Technology"}
+        </span>
       </div>
 
       <div className="mb-3 flex items-center gap-2">
-        <MapPin className="text-muted-foreground size-4" />
-        <span className="text-muted-foreground text-sm">{company.location}</span>
+        <MapPin className="text-muted-foreground size-4 flex-shrink-0" />
+        <span className="text-muted-foreground line-clamp-1 text-sm">
+          {company.locations?.length ? company.locations[0] : company.location || "Vietnam"}
+        </span>
       </div>
 
       <div className="mb-4 flex items-center justify-between">
@@ -98,20 +113,41 @@ const CompanyCarousel = ({
   );
 
   return (
-    <BaseCarousel
-      items={loading ? Array(3).fill({}) : companies}
-      renderItem={loading ? renderCompanySkeleton : renderCompany}
-      title={title}
-      description={description}
-      viewAllLink={viewAllLink}
-      breakpoints={{
-        sm: 1,
-        md: 2,
-        lg: 3,
-        xl: 3,
-      }}
-      autoplayInterval={20000}
-    />
+    <div>
+      {/* Header */}
+      <div className="mb-10 flex items-center justify-between">
+        <div>
+          <h2 className="text-3xl font-bold">{title}</h2>
+          <p className="text-muted-foreground mt-2">{description}</p>
+        </div>
+
+        {viewAllLink && (
+          <Link to={viewAllLink}>
+            <Button variant="link" className="text-primary gap-2">
+              View all <ChevronRight className="size-4" />
+            </Button>
+          </Link>
+        )}
+      </div>
+
+      {/* Carousel */}
+      <div className="relative">
+        <Carousel className="w-full">
+          <CarouselContent>
+            {(loading ? Array(6).fill({}) : companies).map((item, index) => (
+              <CarouselItem
+                key={index}
+                className="pl-4 sm:basis-full md:basis-1/3 lg:basis-1/3 xl:basis-1/3"
+              >
+                {loading ? renderCompanySkeleton() : renderCompany(item as Company)}
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-4 hidden bg-white sm:flex" />
+          <CarouselNext className="-right-4 hidden bg-white sm:flex" />
+        </Carousel>
+      </div>
+    </div>
   );
 };
 

@@ -149,6 +149,7 @@ const CompanyJobListPage: React.FC = () => {
         toast.success("Job deleted successfully");
         fetchJobs(pagination.currentPage);
       } catch (error) {
+        console.error("Error deleting job:", error);
         toast.error("Failed to delete job");
       } finally {
         setDeleteDialogOpen(false);
@@ -171,6 +172,7 @@ const CompanyJobListPage: React.FC = () => {
         toast.success("Job closed successfully");
         fetchJobs(pagination.currentPage);
       } catch (error) {
+        console.error("Error closing job:", error);
         toast.error("Failed to close job");
       } finally {
         setCloseDialogOpen(false);
@@ -185,6 +187,7 @@ const CompanyJobListPage: React.FC = () => {
       toast.success("Job published successfully");
       fetchJobs(pagination.currentPage);
     } catch (error) {
+      console.error("Error publishing job:", error);
       toast.error("Failed to publish job");
     }
   };

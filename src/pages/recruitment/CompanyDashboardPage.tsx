@@ -159,7 +159,7 @@ const CompanyDashboardPage: React.FC = () => {
           <div className="flex flex-col space-y-4">
             <div className="flex justify-between">
               <h2 className="text-xl font-semibold">All Applicants</h2>
-              <Link to={ROUTES.COMPANY.APPLICATIONS}>
+              <Link to={ROUTES.COMPANY.APPLICATIONS.LIST}>
                 <Button variant="outline">View All Applicants</Button>
               </Link>
             </div>

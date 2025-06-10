@@ -89,12 +89,6 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
             Search
           </Button>
         </form>
-
-        {/* Create job button */}
-        <Button onClick={onCreateJob} className="bg-primary hover:bg-primary/90 text-white">
-          <Plus className="mr-2 size-4" />
-          Create Job
-        </Button>
       </div>
 
       {/* Status filter tabs */}

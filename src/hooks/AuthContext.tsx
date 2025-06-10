@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext, useEffect, useState } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { LoginCredentials, RegisterData, authService, getAccessToken } from "@/services/auth";
 import { useNavigate } from "react-router-dom";
@@ -15,7 +15,7 @@ interface AuthContextType {
   updateProfile: (userId: string, data: any) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<any | null>(() => {
@@ -24,7 +24,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return storedUser ? JSON.parse(storedUser) : null;
   });
   const navigate = useNavigate();
-  // const getAccessToken = () => localStorage.getItem("accessToken");
 
   useEffect(() => {
     const initAuth = async () => {
@@ -115,7 +114,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       const updatedData = await response.json();
       // Cập nhật user state nếu cần
-      setUser((prev) => ({
+      setUser((prev: any) => ({
         ...prev,
         profile: updatedData.profile,
       }));
@@ -143,11 +142,3 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     </AuthContext.Provider>
   );
 }
-
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
-};

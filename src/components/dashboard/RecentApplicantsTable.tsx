@@ -66,7 +66,7 @@ const RecentApplicantsTable: React.FC<RecentApplicantsTableProps> = ({ applicant
       </CardContent>
       <CardFooter className="bg-muted/50 border-t p-2">
         <Button variant="link" asChild>
-          <Link to={ROUTES.COMPANY.APPLICATIONS}>View All Applicants</Link>
+          <Link to={ROUTES.COMPANY.APPLICATIONS.LIST}>View All Applicants</Link>
         </Button>
       </CardFooter>
     </Card>

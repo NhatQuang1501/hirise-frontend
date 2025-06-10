@@ -1,107 +1,63 @@
 import React from "react";
-import BenefitCard from "./BenefitCard";
+import { Award, Briefcase, Clock, Globe, ShieldCheck, Users } from "lucide-react";
+
+const benefits = [
+  {
+    icon: <Briefcase className="text-primary h-6 w-6" />,
+    title: "Quality Jobs",
+    description: "Access thousands of job opportunities from top companies",
+  },
+  {
+    icon: <ShieldCheck className="text-primary h-6 w-6" />,
+    title: "Verified Companies",
+    description: "All companies are verified and thoroughly vetted",
+  },
+  {
+    icon: <Clock className="text-primary h-6 w-6" />,
+    title: "Time-Saving",
+    description: "Search and apply quickly with a streamlined process",
+  },
+  {
+    icon: <Award className="text-primary h-6 w-6" />,
+    title: "Skills Analysis",
+    description: "Get assessments of your fit for the job",
+  },
+  {
+    icon: <Globe className="text-primary h-6 w-6" />,
+    title: "Global Opportunities",
+    description: "Discover remote and international work opportunities",
+  },
+  {
+    icon: <Users className="text-primary h-6 w-6" />,
+    title: "Professional Network",
+    description: "Connect with industry professionals and expand your network",
+  },
+];
 
 const BenefitsSection: React.FC = () => {
-  const benefits = [
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="size-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          />
-        </svg>
-      ),
-      title: "10,000+ jobs in IT",
-      description: "Thousands of quality IT jobs from top companies.",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="size-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      ),
-      title: "Daily updates",
-      description: "We update job listings daily from top employers.",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="size-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-          />
-        </svg>
-      ),
-      title: "Smart filters",
-      description: "Find jobs quickly with smart filters tailored to your needs.",
-    },
-    {
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="size-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"
-          />
-        </svg>
-      ),
-      title: "CV support",
-      description: "Support candidates to build a standard IT CV to increase job opportunities.",
-    },
-  ];
-
   return (
-    <section className="py-12">
+    <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        <h2 className="mb-8 text-center text-3xl font-bold">Why choose HiRise?</h2>
+        <div className="mb-12 text-center">
+          <h2 className="text-2xl font-bold md:text-3xl lg:text-4xl">
+            Why Choose <span className="text-primary">HiRise</span>?
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-gray-600">
+            We provide a modern job search platform that connects talented candidates with leading
+            companies
+          </p>
+        </div>
 
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {benefits.map((benefit, index) => (
-            <BenefitCard
+            <div
               key={index}
-              icon={benefit.icon}
-              title={benefit.title}
-              description={benefit.description}
-            />
+              className="rounded-xl bg-white p-6 shadow-sm transition-all hover:shadow-md"
+            >
+              <div className="bg-primary/10 mb-4 inline-block rounded-full p-3">{benefit.icon}</div>
+              <h3 className="mb-2 text-lg font-semibold">{benefit.title}</h3>
+              <p className="text-gray-600">{benefit.description}</p>
+            </div>
           ))}
         </div>
       </div>

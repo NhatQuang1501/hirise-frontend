@@ -1,7 +1,7 @@
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import { Bookmark, Briefcase, Building, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 const ApplicantDashboardPage = () => {

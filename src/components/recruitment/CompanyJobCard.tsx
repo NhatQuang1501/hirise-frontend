@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import { Building, Calendar, MapPin, Users } from "lucide-react";
 import { CompanyJob, JobStatus } from "@/types/company";
+import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";

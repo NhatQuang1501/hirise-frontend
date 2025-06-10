@@ -2,6 +2,7 @@ import React from "react";
 import { Briefcase, Building, DollarSign, MapPin } from "lucide-react";
 import { JobCardItem } from "@/types/job";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import JobCardSaveButton from "@/components/job/JobCardSaveButton";
 
 interface JobCardProps {
@@ -12,6 +13,9 @@ interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "grid" }) => {
+  const { user } = useAuth();
+  const isApplicant = user?.role === "applicant";
+
   // Xử lý sự kiện lưu job - ngăn không cho lan truyền sự kiện đến thẻ cha
   const handleSaveJob = (e: React.MouseEvent) => {
     e.stopPropagation(); // Ngăn sự kiện lan truyền lên thẻ cha
@@ -26,8 +30,8 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
         layout === "grid" ? "h-full flex-col p-5" : "flex-row items-center gap-4 p-4",
       )}
     >
-      {/* Save Button - Floating */}
-      <JobCardSaveButton saved={job.is_saved} onSaveJob={handleSaveJob} />
+      {/* Save Button - Chỉ hiển thị nếu là applicant */}
+      {isApplicant && <JobCardSaveButton saved={job.is_saved} onSaveJob={handleSaveJob} />}
 
       {/* Card content */}
       <div className={cn("flex", layout === "grid" ? "h-full flex-col" : "w-full flex-row gap-4")}>

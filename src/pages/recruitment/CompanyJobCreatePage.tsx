@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import jobService from "@/services/job";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,6 +7,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { DEFAULT_JOB_FORM_VALUES, JobFormValues, jobFormSchema } from "@/types/job";
+import { useAuth } from "@/hooks/useAuth";
 import JobFormBasicInfo from "@/components/jobPost/JobFormBasicInfo";
 import JobFormDescription from "@/components/jobPost/JobFormDescription";
 import JobFormDetails from "@/components/jobPost/JobFormDetails";

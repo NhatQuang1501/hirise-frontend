@@ -42,6 +42,7 @@ api.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${access}`;
         return api(originalRequest);
       } catch (error) {
+        console.error("Error refreshing token:", error);
         // Nếu refresh token cũng hết hạn, logout user
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");

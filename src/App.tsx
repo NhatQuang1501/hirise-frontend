@@ -1,8 +1,8 @@
 // src/App.tsx
 import { Suspense } from "react";
-import { AuthProvider } from "@/contexts/AuthContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
+import { AuthProvider } from "@/hooks/AuthContext";
 import Loading from "@/components/staticComponents/loading";
 import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "./components/footer/Footer";

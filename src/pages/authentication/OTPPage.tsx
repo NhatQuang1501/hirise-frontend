@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 

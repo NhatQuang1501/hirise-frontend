@@ -57,37 +57,37 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, initialValue = "" }) =>
 
   return (
     <div className="w-full">
-      <div className="bg-card mx-auto w-full max-w-4xl rounded-lg border p-4 shadow-sm">
-        <div className="relative">
-          <div className="flex gap-2">
-            <div className="relative flex-1">
-              <Input
-                type="text"
-                placeholder="Search for jobs, companies, skills..."
-                value={keyword}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                className="pr-10 pl-10"
-              />
-              <Search className="text-muted-foreground absolute top-1/2 left-3 size-5 -translate-y-1/2" />
+      <div className="relative">
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              placeholder="Search for jobs, companies, skills..."
+              value={keyword}
+              onChange={handleInputChange}
+              onKeyDown={handleKeyDown}
+              className="h-12 pr-10 pl-10 text-base"
+            />
+            <Search className="text-primary absolute top-1/2 left-3 size-5 -translate-y-1/2" />
 
-              {/* Autocomplete suggestions */}
-              {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute z-10 mt-1 w-full rounded-md border bg-white py-1 shadow-lg">
-                  {suggestions.map((suggestion, index) => (
-                    <div
-                      key={index}
-                      className="cursor-pointer px-4 py-2 hover:bg-gray-100"
-                      onClick={() => handleSuggestionClick(suggestion)}
-                    >
-                      {suggestion}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-            <Button onClick={handleSearch}>Search</Button>
+            {/* Autocomplete suggestions */}
+            {showSuggestions && suggestions.length > 0 && (
+              <div className="absolute z-10 mt-1 w-full rounded-md border bg-white py-1 shadow-lg">
+                {suggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className="cursor-pointer px-4 py-2 hover:bg-gray-100"
+                    onClick={() => handleSuggestionClick(suggestion)}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+          <Button onClick={handleSearch} className="h-12 px-6 text-base">
+            Search
+          </Button>
         </div>
       </div>
     </div>

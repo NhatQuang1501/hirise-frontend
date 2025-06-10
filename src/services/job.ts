@@ -31,9 +31,9 @@ export const jobService = {
 
   // Lấy danh sách job của công ty hiện tại
   getMyJobs: async (filters?: JobFilter) => {
-    // Sử dụng endpoint chung với filter phù hợp
-    // Khi gọi API với token, backend sẽ tự động lọc job của công ty hiện tại
-    const response = await api.get("/jobs/", { params: filters });
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const companyId = user.company_id || user.id;
+    const response = await api.get(`/companies/${companyId}/jobs/`, { params: filters });
     return response.data;
   },
 

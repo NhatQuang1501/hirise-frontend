@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import jobService from "@/services/job";
 import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { JobCardItem } from "@/types/job";
+import { useAuth } from "@/hooks/useAuth";
 import JobCard from "@/components/job/JobCard";
 import { ResponsivePagination } from "@/components/section/ResponsivePagination";
 import { Button } from "@/components/ui/button";
@@ -186,6 +186,7 @@ export function SavedJobsList() {
       toast.success("Job removed from saved jobs");
       fetchSavedJobs(pagination.currentPage);
     } catch (error) {
+      console.error("Error removing job from saved jobs:", error);
       toast.error("An error occurred. Please try again later.");
     }
   };

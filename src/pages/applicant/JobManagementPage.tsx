@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import { Bookmark, Briefcase, Building } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 import { FollowingCompaniesList } from "@/components/company/FollowingCompaniesList";
-// Placeholder components - You will need to create these components or use existing ones
 import { AppliedJobsList } from "@/components/job/AppliedJobsList";
 import { SavedJobsList } from "@/components/job/SavedJobsList";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";

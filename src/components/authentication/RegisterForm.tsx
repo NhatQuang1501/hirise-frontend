@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
@@ -7,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import * as z from "zod";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {

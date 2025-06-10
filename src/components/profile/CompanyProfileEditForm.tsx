@@ -1,12 +1,23 @@
 import { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { profileService } from "@/services/profile";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Briefcase, Building2, Calendar, CirclePlus, Globe, Loader2, MapPin } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  Calendar,
+  CirclePlus,
+  Globe,
+  Image,
+  Loader2,
+  MapPin,
+} from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import { TagInput } from "@/components/profile/TagInput";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -30,17 +41,13 @@ const companyProfileSchema = z.object({
   industries: z.array(z.string()),
 });
 
-// type CompanyProfileFormValues = z.infer<typeof companyProfileSchema>;
-
-// interface CompanyProfileEditFormProps {
-//   initialData?: any;
-//   onSubmitSuccess?: () => void;
-// }
-
 export function CompanyProfileEditForm() {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [logoFile, setLogoFile] = useState<File | null>(null);
+  const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [currentLogo, setCurrentLogo] = useState<string | null>(null);
 
   const form = useForm<z.infer<typeof companyProfileSchema>>({
     resolver: zodResolver(companyProfileSchema),
@@ -62,7 +69,7 @@ export function CompanyProfileEditForm() {
         setIsLoading(true);
         const data = await profileService.getMyProfile(user?.id, user?.role);
 
-        // Cập nhật form với dữ liệu từ API
+        // Update form with data from API
         form.reset({
           name: data.profile?.name || "",
           website: data.profile?.website || "",
@@ -73,6 +80,11 @@ export function CompanyProfileEditForm() {
           locations: data.profile?.location_names || [],
           industries: data.profile?.industry_names || [],
         });
+
+        // Save current logo URL
+        if (data.profile?.logo) {
+          setCurrentLogo(data.profile.logo);
+        }
       } catch (error) {
         toast.error("Failed to load profile");
         console.error(error);
@@ -86,11 +98,59 @@ export function CompanyProfileEditForm() {
     }
   }, [user?.id, form]);
 
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (!selectedFile) return;
+
+    // Check file format
+    const validExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+    const fileExtension = selectedFile.name
+      .substring(selectedFile.name.lastIndexOf("."))
+      .toLowerCase();
+
+    if (!validExtensions.includes(fileExtension)) {
+      toast.error("Only image files are accepted (JPG, JPEG, PNG, GIF)");
+      return;
+    }
+
+    // Check file size (max 2MB)
+    if (selectedFile.size > 2 * 1024 * 1024) {
+      toast.error("File size must not exceed 2MB");
+      return;
+    }
+
+    // Update state and display preview
+    setLogoFile(selectedFile);
+    const objectUrl = URL.createObjectURL(selectedFile);
+    setLogoPreview(objectUrl);
+  };
+
   const onSubmit = async (data: z.infer<typeof companyProfileSchema>) => {
     try {
       setIsSubmitting(true);
-      console.log("Submitting data:", data);
-      await profileService.updateProfile(user?.id, user?.role, data);
+
+      // Create FormData to send both form data and file
+      const formData = new FormData();
+
+      // Add form data fields
+      Object.entries(data).forEach(([key, value]) => {
+        if (Array.isArray(value)) {
+          // Handle array fields (skills, locations, industries)
+          value.forEach((item) => {
+            formData.append(key, item);
+          });
+        } else {
+          formData.append(key, value.toString());
+        }
+      });
+
+      // Add logo file if available
+      if (logoFile) {
+        formData.append("logo", logoFile);
+      }
+
+      // Call API to update profile
+      await profileService.updateProfileWithLogo(user?.id, user?.role, formData);
       toast.success("Profile updated successfully");
     } catch (error) {
       toast.error("Failed to update profile");
@@ -114,7 +174,6 @@ export function CompanyProfileEditForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="container mx-auto max-w-3xl space-y-8 px-4 py-8"
       >
-        {/* <div className="bg-card rounded-xl border p-6 shadow-sm"> */}
         <div className="mb-6 flex items-center gap-3">
           <div className="bg-primary/10 rounded-xl p-2.5">
             <Building2 className="text-primary size-6" />
@@ -122,6 +181,38 @@ export function CompanyProfileEditForm() {
           <div>
             <h2 className="text-xl font-semibold">Company Information</h2>
             <p className="text-muted-foreground text-sm">Update your company profile</p>
+          </div>
+        </div>
+
+        {/* Logo Upload Section */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <Image className="text-muted-foreground size-4" />
+            <h3 className="text-sm font-medium">Company Logo</h3>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <Avatar className="size-24 border">
+              <AvatarImage src={logoPreview || currentLogo || undefined} alt="Company logo" />
+              <AvatarFallback className="text-lg">
+                {form.getValues("name")?.charAt(0) || "C"}
+              </AvatarFallback>
+            </Avatar>
+
+            <div className="space-y-2">
+              <Input
+                type="file"
+                accept=".jpg,.jpeg,.png,.gif"
+                onChange={handleLogoChange}
+                className={cn(
+                  "focus:border-primary w-full cursor-pointer border-dashed transition-all",
+                  logoFile ? "border-green-400" : "hover:border-gray-400",
+                )}
+              />
+              <p className="text-xs text-gray-500">
+                Formats: JPG, JPEG, PNG, GIF. Maximum size: 2MB
+              </p>
+            </div>
           </div>
         </div>
 
@@ -287,7 +378,6 @@ export function CompanyProfileEditForm() {
             )}
           />
         </div>
-        {/* </div> */}
 
         <div className="flex justify-end gap-4">
           <Button type="submit" disabled={isSubmitting}>

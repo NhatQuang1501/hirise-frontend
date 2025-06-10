@@ -1,45 +1,15 @@
-// import React from "react";
-// import { ROUTES } from "@/routes/routes";
-// import { JobCardData } from "@/types/job";
-// import JobCard from "@/components/job/JobCard";
-// import { BaseCarousel } from "@/components/section/BaseCarousel";
-// interface JobCarouselProps {
-//   jobs: JobCardData[];
-//   title?: string;
-//   description?: string;
-//   viewAllLink?: string;
-//   className?: string;
-// }
-// const JobCarousel: React.FC<JobCarouselProps> = ({
-//   jobs,
-//   title = "Latest jobs",
-//   description = "More jobs you might be interested in",
-//   viewAllLink = ROUTES.PUBLIC.JOBS.LIST,
-//   className,
-// }) => {
-//   return (
-//     <BaseCarousel
-//       items={jobs}
-//       renderItem={(job) => <JobCard job={job} />}
-//       title={title}
-//       description={description}
-//       viewAllLink={viewAllLink}
-//       viewAllText="View all jobs"
-//       breakpoints={{
-//         sm: 1,
-//         md: 2,
-//         lg: 3,
-//         xl: 3,
-//       }}
-//       autoplayInterval={10000}
-//       className={className}
-//     />
-//   );
-// };
-// export default JobCarousel;
 import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ROUTES } from "@/routes/routes";
+import { ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import JobCard from "./JobCard";
 
 export interface JobCarouselProps {
@@ -50,41 +20,68 @@ export interface JobCarouselProps {
     title: string;
     salary: string;
     location: string;
+    city?: string;
+    city_display?: string;
     time: string;
     skills: string[];
+    is_saved?: boolean;
   }[];
   title?: string;
   description?: string;
+  viewAllLink?: string;
 }
 
-const JobCarousel: React.FC<JobCarouselProps> = ({ jobs, title = "Jobs", description }) => {
+const JobCarousel: React.FC<JobCarouselProps> = ({
+  jobs,
+  title = "Jobs",
+  description,
+  viewAllLink = ROUTES.PUBLIC.JOBS.LIST,
+}) => {
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
+    <div className="w-full">
+      {/* Header */}
+      <div className="mb-10 flex items-center justify-between">
         <div>
-          <h3 className="text-2xl font-bold">{title}</h3>
-          {description && <p className="text-gray-600">{description}</p>}
+          <h2 className="text-3xl font-bold">{title}</h2>
+          {description && <p className="text-muted-foreground mt-2">{description}</p>}
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="icon" className="rounded-full">
-            <ChevronLeft className="size-5" />
-          </Button>
-          <Button variant="outline" size="icon" className="rounded-full">
-            <ChevronRight className="size-5" />
-          </Button>
-        </div>
-      </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {jobs.map((job) => (
-          <JobCard key={job.id} job={job} />
-        ))}
-        {jobs.length === 0 && (
-          <div className="col-span-3 flex h-32 items-center justify-center rounded-lg border border-dashed">
-            <p className="text-gray-500">No similar jobs found at the moment</p>
-          </div>
+        {viewAllLink && (
+          <Link to={viewAllLink}>
+            <Button variant="link" className="text-primary gap-2">
+              View all <ChevronRight className="size-4" />
+            </Button>
+          </Link>
         )}
       </div>
+
+      {jobs.length === 0 ? (
+        <div className="flex h-32 items-center justify-center rounded-lg border border-dashed">
+          <p className="text-muted-foreground">No jobs found at the moment</p>
+        </div>
+      ) : (
+        <Carousel
+          opts={{
+            align: "start",
+            loop: true,
+            slidesToScroll: 1,
+          }}
+          className="w-full"
+        >
+          <CarouselContent>
+            {jobs.map((job, index) => (
+              <CarouselItem
+                key={index}
+                className="pl-4 sm:basis-full md:basis-1/3 lg:basis-1/3 xl:basis-1/3"
+              >
+                <JobCard job={job} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious className="-left-4 hidden bg-white sm:flex" />
+          <CarouselNext className="-right-4 hidden bg-white sm:flex" />
+        </Carousel>
+      )}
     </div>
   );
 };

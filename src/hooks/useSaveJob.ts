@@ -33,6 +33,7 @@ export const useSaveJob = (initialSavedState: boolean, options?: UseSaveJobOptio
         options.onSuccess();
       }
     } catch (error) {
+      console.error("Error saving job:", error);
       toast.error("An error occurred. Please try again later.");
     } finally {
       setIsLoading(false);

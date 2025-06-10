@@ -3,6 +3,7 @@ import { ROUTES } from "@/routes/routes";
 import { Building } from "lucide-react";
 import { Link } from "react-router-dom";
 import { CompanyInfoProps } from "@/types/interfaces";
+import { useAuth } from "@/hooks/useAuth";
 import SaveJobButton from "@/components/job/SaveJobButton";
 import { Button } from "@/components/ui/button";
 
@@ -12,6 +13,11 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
   saved,
   onSaveJob,
 }) => {
+  const { user, isAuthenticated } = useAuth();
+
+  // Kiểm tra xem có phải là applicant hay không
+  const isApplicant = isAuthenticated && user?.role === "applicant";
+
   return (
     <div className="mb-8 rounded-xl bg-white p-6 shadow-md lg:p-8">
       <div className="mb-6">
@@ -28,12 +34,15 @@ const CompanyInfo: React.FC<CompanyInfoProps> = ({
         </Link>
       </div>
 
-      <div className="space-y-4">
-        <Button className="w-full text-lg" size="lg">
-          Apply now
-        </Button>
-        <SaveJobButton saved={saved} onSaveJob={onSaveJob} className="w-full" />
-      </div>
+      {/* Chỉ hiển thị các nút khi là applicant */}
+      {isApplicant && (
+        <div className="space-y-4">
+          <Button className="w-full text-lg" size="lg">
+            Apply now
+          </Button>
+          <SaveJobButton saved={saved} onSaveJob={onSaveJob} className="w-full" />
+        </div>
+      )}
     </div>
   );
 };

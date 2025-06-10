@@ -37,7 +37,7 @@ export interface JobCardItem {
   level?: string;
 }
 export interface JobCardData {
-  id: number;
+  id: string | number;
   company: string;
   logo: string;
   title: string;
@@ -45,6 +45,9 @@ export interface JobCardData {
   location: string;
   time: string;
   skills: string[];
+  city: string;
+  city_display: string;
+  is_saved: boolean;
 }
 
 // Update jobFormSchema

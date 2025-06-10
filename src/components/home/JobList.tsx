@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { ChevronRight } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { JobCardData } from "@/types/job";
 import JobCard from "@/components/job/JobCard";
+import { Button } from "@/components/ui/button";
 import {
   Pagination,
   PaginationContent,
@@ -13,7 +15,6 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import JobFilterButtons from "./JobFilterButtons";
 
 interface JobListProps {
   jobs: JobCardData[];
@@ -42,6 +43,14 @@ const JobList: React.FC<JobListProps> = ({
     document.getElementById("jobs-section")?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const filters = [
+    { id: "all", label: "All" },
+    { id: "latest", label: "Latest" },
+    { id: "featured", label: "Featured" },
+    { id: "remote", label: "Remote" },
+    { id: "freelance", label: "Freelance" },
+  ];
+
   return (
     <section id="jobs-section" className="py-16">
       <div className="container mx-auto px-4">
@@ -55,7 +64,18 @@ const JobList: React.FC<JobListProps> = ({
           </Link>
         </div>
 
-        <JobFilterButtons activeFilter={activeFilter} onFilter={onFilterChange} />
+        <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
+          {filters.map((filter) => (
+            <Button
+              key={filter.id}
+              variant={activeFilter === filter.id ? "default" : "outline"}
+              onClick={() => onFilterChange(filter.id)}
+              className="min-w-24"
+            >
+              {filter.label}
+            </Button>
+          ))}
+        </div>
 
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
           {loading ? (
@@ -132,6 +152,16 @@ const JobList: React.FC<JobListProps> = ({
             </Pagination>
           </div>
         )}
+
+        {loading ? (
+          <div className="flex justify-center py-16">
+            <Loader2 className="text-primary h-8 w-8 animate-spin" />
+          </div>
+        ) : jobs.length === 0 ? (
+          <div className="py-16 text-center">
+            <p className="text-lg text-gray-500">No matching jobs found.</p>
+          </div>
+        ) : null}
       </div>
     </section>
   );

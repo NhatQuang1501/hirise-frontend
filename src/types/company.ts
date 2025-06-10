@@ -1,3 +1,37 @@
+export interface ApiCompany {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+  is_verified: boolean;
+  is_locked: boolean;
+  created_at: string;
+  updated_at: string;
+  profile: {
+    name: string;
+    website: string;
+    logo: string | null;
+    description: string;
+    benefits: string;
+    founded_year: number | null;
+    locations: string[];
+    industries: string[];
+    skills: string[];
+    location_names: string[];
+    industry_names: string[];
+    skill_names: string[];
+  };
+}
+
+export interface ApiResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  current_page: number;
+  total_pages: number;
+  data: T[];
+}
+
 export interface Company {
   id: string;
   name: string;
@@ -9,6 +43,11 @@ export interface Company {
   isFollowing: boolean;
   newJobsToday: number;
   description: string;
+  website?: string;
+  foundedYear?: number | null;
+  industries?: string[];
+  locations?: string[];
+  skills?: string[];
 }
 
 export interface CompanyCardProps {
@@ -30,6 +69,7 @@ export interface CompanyDetails extends Company {
     twitter?: string;
   };
   openPositions: number;
+  benefits?: string;
 }
 
 export interface Applicant {

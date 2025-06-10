@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { ROUTES } from "@/routes/routes";
+import { Application, applicationService } from "@/services/application";
 import jobService from "@/services/job";
-import { ClipboardList } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { format } from "date-fns";
+import { ArrowRight, ChevronRight, ClipboardList, FileText, Users } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { Applicant, CompanyJob } from "@/types/company";
+import { CompanyJob } from "@/types/company";
+import { useAuth } from "@/hooks/useAuth";
 import CompanyInfo from "@/components/company/CompanyInfo";
 import JobBenefits from "@/components/job/JobBenefits";
 import JobDescription from "@/components/job/JobDescription";
@@ -14,8 +16,10 @@ import JobResponsibilities from "@/components/job/JobResponsibilities";
 import SkillTags from "@/components/job/SkillTags";
 import { CustomDialog } from "@/components/popup/CustomDialog";
 import CompanyJobHeader from "@/components/recruitment/CompanyJobHeader";
-import ApplicantListSection from "@/components/section/ApplicantListSection";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const CompanyJobDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -24,8 +28,9 @@ const CompanyJobDetailPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
-  const [applicants, setApplicants] = useState<Applicant[]>([]);
-  const { user, isAuthenticated } = useAuth();
+  const [recentApplications, setRecentApplications] = useState<Application[]>([]);
+  const [isLoadingApplications, setIsLoadingApplications] = useState(false);
+  const { user } = useAuth();
 
   useEffect(() => {
     // Lấy thông tin token từ localStorage
@@ -153,6 +158,9 @@ const CompanyJobDetailPage: React.FC = () => {
 
         setJob(formattedJob);
         document.title = `${formattedJob.title} - Company View | HiRise`;
+
+        // Fetch recent applications after job data is loaded
+        fetchRecentApplications(jobData.id);
       } catch (error) {
         console.error("Error fetching job:", error);
         toast.error("Cannot load job information", {
@@ -164,31 +172,27 @@ const CompanyJobDetailPage: React.FC = () => {
       }
     };
 
+    const fetchRecentApplications = async (jobId: string) => {
+      try {
+        setIsLoadingApplications(true);
+        const response = await applicationService.getJobApplications(jobId, {
+          ordering: "-created_at",
+          page: 1,
+          page_size: 3,
+        });
+        setRecentApplications(response.data);
+      } catch (error) {
+        console.error("Error fetching recent applications:", error);
+      } finally {
+        setIsLoadingApplications(false);
+      }
+    };
+
     if (id) {
       fetchJob();
     }
     window.scrollTo(0, 0);
   }, [id]);
-
-  useEffect(() => {
-    const fetchApplicants = async () => {
-      try {
-        // Đây là nơi bạn sẽ gọi API để lấy danh sách ứng viên
-        // Ví dụ: const response = await api.get(`/jobs/${id}/applications/`);
-        // setApplicants(response.data.results);
-
-        // Tạm thời sử dụng mảng rỗng
-        setApplicants([]);
-      } catch (error) {
-        console.error("Error fetching applicants:", error);
-        toast.error("Cannot load applicant list");
-      }
-    };
-
-    if (job) {
-      fetchApplicants();
-    }
-  }, [job]);
 
   const handleEdit = () => {
     navigate(ROUTES.COMPANY.JOBS.EDIT.replace(":id", id || ""));
@@ -234,6 +238,34 @@ const CompanyJobDetailPage: React.FC = () => {
     }
   };
 
+  // Function to get status badge color
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case "pending":
+        return "bg-yellow-100 text-yellow-800";
+      case "reviewing":
+        return "bg-blue-100 text-blue-800";
+      case "processing":
+        return "bg-purple-100 text-purple-800";
+      case "accepted":
+        return "bg-green-100 text-green-800";
+      case "rejected":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  // Function to get initials for avatar
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .substring(0, 2);
+  };
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -272,9 +304,7 @@ const CompanyJobDetailPage: React.FC = () => {
                 Job Details
               </h2>
 
-              {/* Thêm JobDescription component ở đây */}
               <JobDescription description={job.description || ""} className="mb-8" />
-
               <JobResponsibilities responsibilities={job.responsibilities || []} />
               <JobRequirements
                 basicRequirements={job.basicRequirements || []}
@@ -283,9 +313,73 @@ const CompanyJobDetailPage: React.FC = () => {
               <JobBenefits benefits={job.benefits || []} />
             </div>
 
-            {/* Add ApplicantListSection here */}
+            {/* Recent Applications Section */}
             <div className="rounded-xl bg-white p-6 shadow-md lg:p-8">
-              <ApplicantListSection applicants={applicants} />
+              <div className="mb-6 flex items-center justify-between">
+                <h2 className="flex items-center text-2xl font-bold">
+                  <Users className="text-primary mr-2" />
+                  Recent Applications
+                </h2>
+                <Link
+                  to={ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || "")}
+                  className="text-primary hover:text-primary/80 flex items-center text-sm font-medium"
+                >
+                  View all ({job.applicationCount})
+                  <ChevronRight className="ml-1 h-4 w-4" />
+                </Link>
+              </div>
+
+              {isLoadingApplications ? (
+                <div className="flex justify-center py-8">
+                  <div className="border-primary h-8 w-8 animate-spin rounded-full border-b-2"></div>
+                </div>
+              ) : recentApplications.length === 0 ? (
+                <div className="rounded-lg bg-gray-50 py-4 text-center">
+                  <p className="text-gray-500">No applications received yet.</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {recentApplications.map((application) => (
+                    <Card
+                      key={application.id}
+                      className="border-l-primary overflow-hidden border-l-4"
+                    >
+                      <CardContent className="p-4">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <h3 className="font-medium">
+                              {application.applicant_profile.full_name}
+                            </h3>
+                            <p className="text-xs text-gray-500">
+                              Applied {format(new Date(application.created_at), "MMM dd, yyyy")}
+                            </p>
+                          </div>
+                          <Badge className={getStatusColor(application.status)}>
+                            {application.status_display}
+                          </Badge>
+                        </div>
+                        <div className="mt-3 flex items-center text-sm text-gray-600">
+                          <FileText size={14} className="mr-1 text-gray-400" />
+                          {application.cv_filename}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+
+                  <div className="flex justify-center pt-4">
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() =>
+                        navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
+                      }
+                    >
+                      View All Applications
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
@@ -299,6 +393,32 @@ const CompanyJobDetailPage: React.FC = () => {
               onSaveJob={() => {}}
             />
             <SkillTags skills={job.skills || []} />
+
+            {/* Application Stats Card */}
+            <Card className="border-primary/20">
+              <CardHeader className="bg-primary/5 pb-3">
+                <CardTitle className="flex items-center text-lg">
+                  <Users className="text-primary mr-2 h-5 w-5" />
+                  Application Statistics
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-4">
+                <div className="mb-2 text-3xl font-bold">{job.applicationCount}</div>
+                <p className="text-sm text-gray-500">Total applications received</p>
+
+                <div className="mt-4">
+                  <Button
+                    className="w-full"
+                    onClick={() =>
+                      navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
+                    }
+                  >
+                    <Users size={16} className="mr-2" />
+                    Manage Applications
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
 

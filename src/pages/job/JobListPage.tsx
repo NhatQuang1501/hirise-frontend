@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { JobCardItem } from "@/types/job";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import JobCard from "@/components/job/JobCard";
 import AdvancedFilters from "@/components/search/AdvancedFilters";
 import SearchBar from "@/components/search/SearchBar";
@@ -147,6 +148,9 @@ const JobListPage: React.FC = () => {
     itemsPerPage: 2,
     totalItems: 0,
   });
+
+  const { user } = useAuth();
+  const isApplicant = user?.role === "applicant";
 
   const fetchJobs = async (page = 1) => {
     setIsLoading(true);
@@ -290,6 +294,10 @@ const JobListPage: React.FC = () => {
 
   // Handle save job
   const handleSaveJob = async (jobId: string) => {
+    if (!isApplicant) {
+      return;
+    }
+
     try {
       const jobIndex = filteredJobs.findIndex((job) => job.id === jobId);
       if (jobIndex === -1) return;
@@ -340,6 +348,7 @@ const JobListPage: React.FC = () => {
         }
       }
     } catch (error) {
+      console.error("Error saving job:", error);
       toast.error("An error occurred. Please try again later.");
     }
   };
@@ -383,11 +392,17 @@ const JobListPage: React.FC = () => {
   return (
     <>
       {/* Search & Filters */}
-      <div className="bg-gray-50 py-8">
+      <div className="from-primary/10 to-background bg-gradient-to-b py-12">
         <div className="container mx-auto px-4">
-          <h1 className="mb-8 text-3xl font-bold">Find Your Dream Job</h1>
-          <SearchBar onSearch={handleSearch} initialValue={keyword} />
-          <AdvancedFilters onChange={handleFilterChange} initialFilters={activeFilters} />
+          <h1 className="mb-4 text-3xl font-bold">Find Your Dream Job</h1>
+          <p className="text-muted-foreground mb-8">
+            Discover opportunities that match your skills and experience
+          </p>
+
+          <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-md transition-shadow hover:shadow-lg">
+            <SearchBar onSearch={handleSearch} initialValue={keyword} />
+            <AdvancedFilters onChange={handleFilterChange} initialFilters={activeFilters} />
+          </div>
         </div>
       </div>
 
@@ -519,21 +534,23 @@ const JobListPage: React.FC = () => {
                       className="hover:border-primary/30 group relative cursor-pointer rounded-md border border-gray-100 p-4 transition-colors"
                       onClick={() => handleViewJob(job.id)}
                     >
-                      {/* Save button - improved hover effect */}
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className={cn(
-                          "absolute top-1 right-1 z-10 rounded-full opacity-70 transition-opacity group-hover:opacity-100",
-                          job.is_saved ? "text-rose-500" : "text-gray-400 hover:text-gray-600",
-                        )}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleSaveJob(job.id);
-                        }}
-                      >
-                        <Bookmark className={`size-4 ${job.is_saved ? "fill-rose-500" : ""}`} />
-                      </Button>
+                      {/* Save button chỉ hiển thị với applicant */}
+                      {user?.role === "applicant" && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className={cn(
+                            "absolute top-1 right-1 z-10 rounded-full opacity-70 transition-opacity group-hover:opacity-100",
+                            job.is_saved ? "text-rose-500" : "text-gray-400 hover:text-gray-600",
+                          )}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleSaveJob(job.id);
+                          }}
+                        >
+                          <Bookmark className={`size-4 ${job.is_saved ? "fill-rose-500" : ""}`} />
+                        </Button>
+                      )}
 
                       {/* Company and title */}
                       <div className="mb-3 flex items-center gap-2">

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Bookmark } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -18,21 +19,23 @@ interface JobCardSaveButtonProps {
 
 const JobCardSaveButton: React.FC<JobCardSaveButtonProps> = ({ saved, onSaveJob }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { user } = useAuth();
 
-  // Xử lý click vào nút save
+  if (!user || user.role === "company") {
+    return null;
+  }
+
   const handleSaveButtonClick = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Ngăn không cho event lan truyền đến thẻ cha
+    e.stopPropagation();
     setIsDialogOpen(true);
   };
 
-  // Xử lý khi người dùng xác nhận lưu/bỏ lưu job
   const handleConfirm = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDialogOpen(false);
     onSaveJob(e);
   };
 
-  // Xử lý khi người dùng hủy
   const handleCancel = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsDialogOpen(false);
