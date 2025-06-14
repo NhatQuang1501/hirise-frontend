@@ -21,6 +21,8 @@ const CompanyJobCreatePage = lazy(() => import("@/pages/recruitment/CompanyJobCr
 const CompanyJobEditPage = lazy(() => import("@/pages/recruitment/CompanyJobEditPage"));
 const ApplicantDashboardPage = lazy(() => import("@/pages/applicant/ApplicantDashboardPage"));
 const JobApplicationsPage = lazy(() => import("@/pages/company/JobApplicationsPage"));
+const ApplicationDetailPage = lazy(() => import("@/pages/company/ApplicationDetailPage"));
+const ApplicationsMatchingPage = lazy(() => import("@/pages/company/ApplicationsMatchingPage"));
 
 const userRoutes: RouteObject[] = [
   {
@@ -128,6 +130,22 @@ const userRoutes: RouteObject[] = [
         element: (
           <ProtectedRoute allowedRoles={["company"]}>
             <JobApplicationsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.JOBS.APPLICATION_DETAIL,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <ApplicationDetailPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: ROUTES.COMPANY.JOBS.MATCH_ANALYSIS,
+        element: (
+          <ProtectedRoute allowedRoles={["company"]}>
+            <ApplicationsMatchingPage />
           </ProtectedRoute>
         ),
       },

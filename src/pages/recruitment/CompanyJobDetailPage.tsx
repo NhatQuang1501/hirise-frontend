@@ -72,34 +72,18 @@ const CompanyJobDetailPage: React.FC = () => {
         const responsibilities = jobData.responsibilities
           ? jobData.responsibilities.split("\n").filter((item: string) => item.trim() !== "")
           : [];
-        // Trong hàm fetchJob, thay đổi phần xử lý requirements
+
+        // Xử lý requirements và preferred_skills trực tiếp từ API
         const requirements = jobData.requirements || "";
-        const preferredSkillsMarker = "### PREFERRED SKILLS ###";
-        const markerIndex = requirements.indexOf(preferredSkillsMarker);
+        const preferredSkills = jobData.preferred_skills || "";
 
-        let basicRequirementsList: string[] = [];
-        let preferredSkillsList: string[] = [];
+        const basicRequirementsList = requirements
+          .split("\n")
+          .filter((item: string) => item.trim() !== "");
 
-        if (markerIndex !== -1) {
-          // Nếu tìm thấy marker, tách thành hai phần
-          const basicPart = requirements.substring(0, markerIndex).trim();
-          const preferredPart = requirements
-            .substring(markerIndex + preferredSkillsMarker.length)
-            .trim();
-
-          basicRequirementsList = basicPart
-            .split("\n")
-            .filter((item: string) => item.trim() !== "");
-
-          preferredSkillsList = preferredPart
-            .split("\n")
-            .filter((item: string) => item.trim() !== "");
-        } else {
-          // Nếu không tìm thấy marker, tất cả đều là basic requirements
-          basicRequirementsList = requirements
-            .split("\n")
-            .filter((item: string) => item.trim() !== "");
-        }
+        const preferredSkillsList = preferredSkills
+          .split("\n")
+          .filter((item: string) => item.trim() !== "");
 
         const benefits = jobData.benefits
           ? jobData.benefits.split("\n").filter((item: string) => item.trim() !== "")
@@ -123,7 +107,7 @@ const CompanyJobDetailPage: React.FC = () => {
           city_display: jobData.city_display || "Not specified",
           contractType: jobData.job_type
             ? jobData.job_type.charAt(0).toUpperCase() + jobData.job_type.slice(1)
-            : "Full-time",
+            : "Full time",
           salary:
             jobData.salary_display ||
             `${jobData.min_salary || 0} - ${jobData.max_salary || 0} ${jobData.currency || "VND"}`,
@@ -256,16 +240,6 @@ const CompanyJobDetailPage: React.FC = () => {
     }
   };
 
-  // Function to get initials for avatar
-  const getInitials = (name: string) => {
-    return name
-      .split(" ")
-      .map((n) => n[0])
-      .join("")
-      .toUpperCase()
-      .substring(0, 2);
-  };
-
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
@@ -370,9 +344,10 @@ const CompanyJobDetailPage: React.FC = () => {
                     <Button
                       variant="outline"
                       className="w-full"
-                      onClick={() =>
-                        navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
-                      }
+                      // onClick={() =>
+                      //   navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
+                      // }
+                      onClick={() => navigate(ROUTES.COMPANY.APPLICATIONS.LIST)}
                     >
                       View All Applications
                       <ArrowRight className="ml-2 h-4 w-4" />

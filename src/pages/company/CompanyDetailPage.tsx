@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import { companyService } from "@/services/company";
+import { AlertCircle } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { CompanyDetails } from "@/types/company";
-import { jobsData, mockCompanyData } from "@/types/mockData";
+import { JobCardItem } from "@/types/job";
+import api from "@/config/api";
 import { cn } from "@/lib/utils";
 import CompanyHeader from "@/components/company/CompanyHeader";
 import CompanySidebar from "@/components/company/CompanySidebar";
@@ -9,13 +12,16 @@ import CompanyTabs from "@/components/company/CompanyTabs";
 import StickyCompanyInfo from "@/components/company/StickyCompanyInfo";
 import JobListingSection from "@/components/job/JobListingSection";
 import SocialMediaLinks from "@/components/section/SocialMediaLinks";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const CompanyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
   const [company, setCompany] = useState<CompanyDetails | null>(null);
+  const [companyJobs, setCompanyJobs] = useState<JobCardItem[]>([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [showStickyHeader, setShowStickyHeader] = useState(false);
 
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -23,19 +29,108 @@ const CompanyDetailPage = () => {
 
   // Fetch company data
   useEffect(() => {
-    const fetchCompany = async () => {
+    const fetchCompanyData = async () => {
       try {
-        // Replace with actual API call
-        setCompany(mockCompanyData);
-        updateMetadata(mockCompanyData);
-      } catch (error) {
+        setLoading(true);
+        setError(null);
+
+        // Fetch company details
+        const response = await api.get(`/companies/${id}`);
+        const companyData = response.data;
+
+        // Transform API data to match CompanyDetails interface
+        const formattedCompany: CompanyDetails = {
+          id: companyData.id,
+          name: companyData.profile.name,
+          description: companyData.profile.description,
+          logo: companyData.profile.logo || "/placeholder-company-logo.png",
+          location: companyData.profile.location_names?.[0] || "No location specified",
+          website: companyData.profile.website || "",
+          foundedYear: companyData.profile.founded_year,
+          size: "", // API doesn't provide this
+          industry: companyData.profile.industry_names?.join(", ") || "",
+          openPositions: 0, // Will be updated after fetching jobs
+          followerCount: 0, // API doesn't provide this
+          isFollowing: false, // API doesn't provide this
+          employees: [], // API doesn't provide this
+          benefits: companyData.profile.benefits,
+          locations: companyData.profile.location_names || [],
+          socialMedia: {
+            website: companyData.profile.website || "",
+            facebook: "",
+            twitter: "",
+            linkedin: "",
+            instagram: "",
+          },
+          rating: 0, // API doesn't provide this
+          reviews: [], // API doesn't provide this
+          profile: {
+            // Lưu toàn bộ dữ liệu profile để sử dụng sau này
+            ...companyData.profile,
+          },
+        };
+
+        setCompany(formattedCompany);
+        updateMetadata(formattedCompany);
+
+        if (!id) return;
+        // Fetch company jobs
+        await fetchCompanyJobs(id);
+      } catch (error: any) {
         console.error("Error fetching company:", error);
-        // Handle error (show toast, error boundary, etc.)
+        setError(error.response?.data?.message || "Failed to load company details");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchCompany();
+    if (id) {
+      fetchCompanyData();
+    }
   }, [id]);
+
+  // Fetch company jobs
+  const fetchCompanyJobs = async (companyId: string) => {
+    try {
+      // Sử dụng companyService thay vì api trực tiếp
+      const response = await companyService.getCompanyJobs(companyId);
+
+      // Xử lý dữ liệu
+      const jobsData = response.data || [];
+
+      console.log("Jobs data:", jobsData);
+
+      // Transform API data to match JobCardItem interface
+      const formattedJobs: JobCardItem[] = jobsData.map((job: any) => ({
+        id: job.id,
+        company: job.company_name || company?.name || "",
+        logo: job.company?.logo || company?.logo || "/placeholder-company-logo.png",
+        title: job.title,
+        salary: job.salary_display || "",
+        location:
+          job.locations?.length > 0 ? job.locations[0].address : job.city_display || "Remote",
+        city: job.city || "",
+        city_display: job.city_display || "",
+        time: new Date(job.created_at).toLocaleDateString(),
+        skills: job.skills?.map((skill: any) => skill.name) || [],
+        is_saved: job.is_saved || false,
+        type: job.job_type || "",
+        level: job.experience_level || "",
+      }));
+
+      setCompanyJobs(formattedJobs);
+
+      // Update open positions count
+      if (company) {
+        setCompany({
+          ...company,
+          openPositions: formattedJobs.length,
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching company jobs:", error);
+    }
+  };
 
   // Handle scroll spy
   useEffect(() => {
@@ -111,11 +206,32 @@ const CompanyDetailPage = () => {
     tag.setAttribute("content", content);
   };
 
+  // Follow/Unfollow company
+  const handleFollowToggle = () => {
+    // In a real app, this would make an API call to follow/unfollow
+    setIsFollowing(!isFollowing);
+  };
+
   // Loading state
-  if (!company) {
+  if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
         <div className="border-primary h-16 w-16 animate-spin rounded-full border-4 border-t-transparent" />
+      </div>
+    );
+  }
+
+  // Error state
+  if (error || !company) {
+    return (
+      <div className="container mx-auto px-4 py-16">
+        <Alert variant="destructive" className="mx-auto max-w-2xl">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>
+            {error || "Failed to load company details. Please try again later."}
+          </AlertDescription>
+        </Alert>
       </div>
     );
   }
@@ -126,7 +242,7 @@ const CompanyDetailPage = () => {
       <CompanyHeader
         company={company}
         isFollowing={isFollowing}
-        onFollow={() => setIsFollowing(!isFollowing)}
+        onFollow={handleFollowToggle}
         className="border-b bg-white px-4 py-6 lg:px-8 lg:py-8"
       />
 
@@ -135,7 +251,7 @@ const CompanyDetailPage = () => {
         <StickyCompanyInfo
           company={company}
           isFollowing={isFollowing}
-          onFollow={() => setIsFollowing(!isFollowing)}
+          onFollow={handleFollowToggle}
           isVisible={showStickyHeader}
           className="fixed top-16 right-0 left-0 z-30"
         />
@@ -179,15 +295,24 @@ const CompanyDetailPage = () => {
                 <div className="prose max-w-none">
                   <p>{company.description}</p>
                 </div>
+
+                {company.benefits && (
+                  <div className="mt-8">
+                    <h3 className="mb-3 text-xl font-semibold">Benefits</h3>
+                    <div className="prose max-w-none">
+                      <p>{company.benefits}</p>
+                    </div>
+                  </div>
+                )}
               </section>
 
               {/* Jobs Section */}
               <section ref={jobsRef} className="scroll-mt-48">
                 <JobListingSection
-                  title={`Opening Jobs (${company.openPositions})`}
-                  jobs={jobsData}
+                  title={`Opening Jobs (${companyJobs.length})`}
+                  jobs={companyJobs}
                   viewType="list"
-                  itemsPerPage={5}
+                  emptyMessage="No job openings at the moment. Check back later!"
                   className="rounded-xl bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-md lg:p-8"
                 />
               </section>
@@ -195,9 +320,20 @@ const CompanyDetailPage = () => {
 
             {/* Sidebar */}
             <div className="lg:col-span-4">
-              <div className="sticky top-32 space-y-6">
+              <div className="sticky top-48 space-y-6">
                 <CompanySidebar company={company}>
-                  <SocialMediaLinks links={company.socialMedia} className="mt-4" />
+                  {company.website && (
+                    <SocialMediaLinks
+                      links={{
+                        website: company.website,
+                        facebook: "",
+                        twitter: "",
+                        linkedin: "",
+                        instagram: "",
+                      }}
+                      className="mt-4"
+                    />
+                  )}
                 </CompanySidebar>
               </div>
             </div>

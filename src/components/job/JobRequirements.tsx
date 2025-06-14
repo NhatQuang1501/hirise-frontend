@@ -11,38 +11,22 @@ const JobRequirements: React.FC<JobRequirementsProps> = ({
   basicRequirements,
   preferredSkills,
 }) => {
-  // Xử lý trường hợp chỉ có requirements (chuỗi)
-  if (requirements && !basicRequirements) {
-    if (typeof requirements !== "string" && !Array.isArray(requirements)) return null;
+  // Xử lý các trường đầu vào
+  let basicLines: string[] = [];
+  let preferredLines: string[] = [];
 
-    // Chuyển đổi sang chuỗi nếu là mảng
-    const reqString = Array.isArray(requirements) ? requirements.join("\n") : requirements;
-
-    // Tìm phần preferred skills bằng marker
-    const preferredSkillsMarker = "### PREFERRED SKILLS ###";
-    const markerIndex = reqString.indexOf(preferredSkillsMarker);
-
-    if (markerIndex === -1) {
-      // Không tìm thấy marker, tất cả đều là basic requirements
-      const basicLines = reqString.split("\n").filter((line) => line.trim() !== "");
-
-      return renderRequirements(basicLines, []);
-    } else {
-      // Tìm thấy marker, phân chia nội dung
-      const basicPart = reqString.substring(0, markerIndex).trim();
-      const preferredPart = reqString.substring(markerIndex + preferredSkillsMarker.length).trim();
-
-      const basicLines = basicPart.split("\n").filter((line) => line.trim() !== "");
-
-      const preferredLines = preferredPart.split("\n").filter((line) => line.trim() !== "");
-
-      return renderRequirements(basicLines, preferredLines);
-    }
+  // Ưu tiên sử dụng basicRequirements và preferredSkills nếu có
+  if (basicRequirements) {
+    basicLines = processInput(basicRequirements);
+  } else if (requirements) {
+    // Nếu không có basicRequirements, sử dụng requirements
+    basicLines = processInput(requirements);
   }
 
-  // Xử lý trường hợp có sẵn basicRequirements và preferredSkills
-  const basicLines = processInput(basicRequirements);
-  const preferredLines = processInput(preferredSkills);
+  // Xử lý preferredSkills nếu có
+  if (preferredSkills) {
+    preferredLines = processInput(preferredSkills);
+  }
 
   return renderRequirements(basicLines, preferredLines);
 };

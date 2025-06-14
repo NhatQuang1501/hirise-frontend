@@ -1,86 +1,55 @@
 import React from "react";
+import { FileX } from "lucide-react";
 import { JobCardItem } from "@/types/job";
+import { cn } from "@/lib/utils";
 import JobCard from "@/components/job/JobCard";
 
 interface JobListingSectionProps {
+  title: string;
   jobs: JobCardItem[];
-  isLoading: boolean;
-  error: string | null;
-  onSaveJob: (id: string) => void;
-  onViewJob: (id: string) => void;
+  viewType?: "grid" | "list";
+  className?: string;
+  emptyMessage?: string;
 }
 
 const JobListingSection: React.FC<JobListingSectionProps> = ({
+  title,
   jobs,
-  isLoading,
-  error,
-  onSaveJob,
-  onViewJob,
+  viewType = "grid",
+  className,
+  emptyMessage = "No jobs found",
 }) => {
-  if (isLoading) {
-    return (
-      <section className="bg-white py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-8 text-2xl font-bold">Job Listings</h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, index) => (
-              <div key={index} className="h-96 animate-pulse rounded-lg bg-gray-200" />
-            ))}
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  if (error) {
-    return (
-      <section className="bg-white py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-8 text-2xl font-bold">Job Listings</h2>
-          <div className="rounded-lg bg-red-50 p-6 text-center text-red-600">
-            <p>{error}</p>
-            <button
-              className="mt-4 rounded-md bg-red-100 px-4 py-2 font-medium text-red-600 hover:bg-red-200"
-              onClick={() => window.location.reload()}
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      </section>
-    );
-  }
+  // Khai báo các biến class bên ngoài khối lệnh điều kiện
+  const gridClass = "grid gap-6 md:grid-cols-2 lg:grid-cols-3";
+  const listClass = "flex flex-col gap-4";
 
   if (jobs.length === 0) {
     return (
-      <section className="bg-white py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="mb-8 text-2xl font-bold">Job Listings</h2>
-          <div className="rounded-lg bg-gray-50 p-12 text-center">
-            <h3 className="mb-2 text-xl font-semibold">No Jobs Found</h3>
-            <p className="text-gray-600">There are no jobs matching your search criteria.</p>
+      <div className={cn("space-y-6", className)}>
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold md:text-2xl">{title}</h2>
+        </div>
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="text-muted-foreground mb-4 text-center">
+            <FileX className="mx-auto mb-3 h-12 w-12 opacity-40" />
+            <p>{emptyMessage}</p>
           </div>
         </div>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="bg-white py-12">
-      <div className="container mx-auto px-4">
-        <h2 className="mb-8 text-2xl font-bold">Job Listings</h2>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {jobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              onSaveJob={() => onSaveJob(job.id)}
-              onClick={() => onViewJob(job.id)}
-            />
-          ))}
-        </div>
+    <div className={cn("space-y-6", className)}>
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold md:text-2xl">{title}</h2>
       </div>
-    </section>
+      <div className={viewType === "grid" ? gridClass : listClass}>
+        {jobs.map((job) => (
+          <JobCard key={job.id} job={job} onSaveJob={() => {}} onClick={() => {}} />
+        ))}
+      </div>
+    </div>
   );
 };
 

@@ -1,20 +1,20 @@
 import React from "react";
 import {
-  Building2,
+  Briefcase,
+  Building,
   Calendar,
   Facebook,
   Github,
   Globe,
   Instagram,
   Linkedin,
-  Mail,
   MapPin,
-  Phone,
   Twitter,
-  Users,
   Youtube,
 } from "lucide-react";
 import { CompanyDetails } from "@/types/company";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent } from "@/components/ui/card";
 
 interface CompanySidebarProps {
   company: CompanyDetails;
@@ -30,117 +30,113 @@ const socialIcons = {
   youtube: { icon: Youtube, color: "hover:text-[#FF0000]" },
 } as const;
 
-const CompanySidebar = ({ company }: CompanySidebarProps) => {
+const CompanySidebar: React.FC<CompanySidebarProps> = ({ company, children }) => {
   return (
-    <div className="space-y-6 lg:top-24">
-      {/* General Information */}
-      <div className="rounded-xl bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-semibold">General Information</h3>
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <Building2 className="text-primary mt-1 size-5" />
-            <div>
-              <p className="text-sm font-medium">Industry</p>
-              <p className="text-muted-foreground">{company.industry}</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <Users className="text-primary mt-1 size-5" />
-            <div>
-              <p className="text-sm font-medium">Company size</p>
-              <p className="text-muted-foreground">{company.size}</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-3">
-            <Calendar className="text-primary mt-1 size-5" />
-            <div>
-              <p className="text-sm font-medium">Founded</p>
-              <p className="text-muted-foreground">{company.founded}</p>
-            </div>
-          </div>
+    <Card className="overflow-hidden border-gray-200 shadow-md transition-all hover:shadow-lg">
+      <CardContent className="p-0">
+        <div className="bg-primary/5 border-primary/10 flex items-center gap-2 border-b p-5">
+          <Building className="text-primary h-5 w-5" />
+          <h3 className="text-lg font-semibold">Company Information</h3>
         </div>
-      </div>
-
-      {/* Contact Information */}
-      <div className="rounded-xl bg-white p-6 shadow-sm">
-        <h3 className="mb-4 text-lg font-semibold">Contact Information</h3>
-        <div className="space-y-4">
-          <div className="flex items-start gap-3">
-            <Globe className="text-primary mt-1 size-5" />
-            <div>
-              <p className="text-sm font-medium">Website</p>
-              <a
-                href={company.website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                {new URL(company.website).hostname}
-              </a>
-            </div>
-          </div>
-          {company.email && (
+        <div className="space-y-5 p-5">
+          {company.foundedYear && (
             <div className="flex items-start gap-3">
-              <Mail className="text-primary mt-1 size-5" />
+              <div className="bg-primary/10 rounded-full p-2">
+                <Calendar className="text-primary h-4 w-4" />
+              </div>
               <div>
-                <p className="text-sm font-medium">Email</p>
-                <a href={`mailto:${company.email}`} className="text-primary hover:underline">
-                  {company.email}
-                </a>
+                <p className="text-sm font-medium">Founded Year</p>
+                <p className="text-muted-foreground text-sm">{company.foundedYear}</p>
               </div>
             </div>
           )}
-          {company.phone && (
+
+          {company.locations && company.locations.length > 0 && (
             <div className="flex items-start gap-3">
-              <Phone className="text-primary mt-1 size-5" />
-              <div>
-                <p className="text-sm font-medium">Phone</p>
-                <a href={`tel:${company.phone}`} className="text-primary hover:underline">
-                  {company.phone}
-                </a>
+              <div className="bg-primary/10 rounded-full p-2">
+                <MapPin className="text-primary h-4 w-4" />
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium">Office Locations</p>
+                <div className="text-muted-foreground mt-1 text-sm">
+                  {company.locations.map((location, index) => (
+                    <div key={index} className="mb-1 rounded-md bg-gray-50 p-2">
+                      {location}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           )}
-          <div className="flex items-start gap-3">
-            <MapPin className="text-primary mt-1 size-5" />
-            <div>
-              <p className="text-sm font-medium">Address</p>
-              <p className="text-muted-foreground">{company.address}</p>
+
+          {company.industry && (
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <Building className="text-primary h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Industry</p>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {company.industry.split(",").map((industry, index) => (
+                    <Badge key={index} variant="outline" className="bg-gray-50">
+                      {industry.trim()}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+          )}
 
-      {/* Replace the existing Social Media Links section with: */}
-      {company.socialMedia && Object.keys(company.socialMedia).length > 0 && (
-        <div className="rounded-xl bg-white p-6 shadow-sm">
-          <h3 className="mb-4 text-lg font-semibold">Connect with us</h3>
-          <div className="flex flex-wrap gap-4">
-            {Object.entries(company.socialMedia).map(([platform, url]) => {
-              if (!url) return null;
-              const socialType = platform.toLowerCase() as keyof typeof socialIcons;
-              const { icon: Icon, color } = socialIcons[socialType] || {
-                icon: Globe,
-                color: "hover:text-primary",
-              };
-
-              return (
+          {company.website && (
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <Globe className="text-primary h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Website</p>
                 <a
-                  key={platform}
-                  href={url}
+                  href={company.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`text-muted-foreground transition-colors ${color}`}
-                  title={`Visit our ${platform}`}
+                  className="text-primary hover:text-primary/80 text-sm hover:underline"
                 >
-                  <Icon className="size-8" />
+                  {company.website.replace(/^https?:\/\//, "")}
                 </a>
-              );
-            })}
-          </div>
+              </div>
+            </div>
+          )}
+
+          {company.openPositions !== undefined && (
+            <div className="flex items-start gap-3">
+              <div className="bg-primary/10 rounded-full p-2">
+                <Briefcase className="text-primary h-4 w-4" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Open Positions</p>
+                <p className="text-muted-foreground text-sm">
+                  {company.openPositions} {company.openPositions === 1 ? "position" : "positions"}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {company.profile?.skill_names && company.profile.skill_names.length > 0 && (
+            <div className="mt-6 space-y-2 border-t pt-4">
+              <p className="mb-2 text-sm font-medium">Top Skills</p>
+              <div className="flex flex-wrap gap-2">
+                {company.profile.skill_names.map((skill, index) => (
+                  <Badge key={index} variant="secondary" className="bg-gray-100 text-xs">
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {children && <div className="mt-4 border-t pt-4">{children}</div>}
         </div>
-      )}
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 

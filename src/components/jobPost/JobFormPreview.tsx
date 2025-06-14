@@ -10,24 +10,17 @@ interface JobFormPreviewProps {
 const JobFormPreview: React.FC<JobFormPreviewProps> = ({ form, companies }) => {
   const skills = form.watch("skills") || [];
   const responsibilities = form.watch("responsibilities") || "";
-  const requirements = form.watch("requirements") || "";
+  const basicRequirements = form.watch("basicRequirements") || "";
+  const preferredSkills = form.watch("preferredSkills") || "";
   const benefits = form.watch("benefits") || "";
-
-  // Phân tách requirements thành basic và preferred
-  const [basicRequirements, preferredSkills] = React.useMemo(() => {
-    if (!requirements) return ["", ""];
-
-    const parts = requirements.split("### PREFERRED SKILLS ###");
-    return [parts[0].trim(), parts.length > 1 ? parts[1].trim() : ""];
-  }, [requirements]);
 
   // Chuyển đổi text có định dạng bullet thành mảng
   const parseToArray = (text: string) => {
     if (!text) return [];
     return text
       .split("\n")
-      .filter((line) => line.trim().startsWith("-"))
-      .map((line) => line.trim().substring(1).trim());
+      .filter((line) => line.trim().length > 0)
+      .map((line) => line.trim().replace(/^-\s*/, "").trim());
   };
 
   const getCityDisplay = (cityCode: string) => {

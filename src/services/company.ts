@@ -164,7 +164,14 @@ export const companyService = {
       return response.data;
     } catch (error) {
       console.error(`Error fetching jobs for company ${id}:`, error);
-      return { results: [], count: 0 };
+      return {
+        count: 0,
+        next: null,
+        previous: null,
+        current_page: 1,
+        total_pages: 1,
+        data: [],
+      };
     }
   },
 

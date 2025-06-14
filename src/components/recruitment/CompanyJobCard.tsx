@@ -132,7 +132,7 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({
           </div>
 
           {isOwnJob && (
-            <div className="flex flex-row items-center justify-center gap-2 border-t bg-gray-50 p-4 md:flex-col md:border-t-0 md:border-l md:py-2">
+            <div className="flex flex-row items-center justify-center gap-2 border-t bg-gray-50 p-4 md:flex-col md:border-t-0 md:border-l md:py-4">
               <Button
                 size="sm"
                 variant="outline"
@@ -140,7 +140,7 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({
                   e.stopPropagation();
                   onEdit(job.id);
                 }}
-                className="flex-1"
+                className="hover:bg-secondary/80 w-full flex-1 transition-colors hover:text-white"
               >
                 Edit
               </Button>
@@ -151,24 +151,40 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({
                     size="sm"
                     variant="outline"
                     onClick={(e) => e.stopPropagation()}
-                    className="flex-1"
+                    className="hover:bg-secondary/80 w-full flex-1 transition-colors hover:text-white"
                   >
                     More
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent onClick={(e) => e.stopPropagation()}>
+                <DropdownMenuContent className="w-48" onClick={(e) => e.stopPropagation()}>
                   {job.status === "Draft" && onPublish && (
-                    <DropdownMenuItem onClick={() => handlePublish(job.id)}>
-                      Publish Job
+                    <DropdownMenuItem
+                      onClick={() => handlePublish(job.id)}
+                      className="flex cursor-pointer items-center gap-2"
+                    >
+                      <div className="flex w-full items-center gap-2 py-0.5 text-blue-700">
+                        <span className="h-2 w-2 rounded-full bg-blue-600"></span>
+                        <span>Publish Job</span>
+                      </div>
                     </DropdownMenuItem>
                   )}
                   {job.status === "Published" && (
-                    <DropdownMenuItem onClick={() => handleClose(job.id)}>
-                      Close Job
+                    <DropdownMenuItem
+                      onClick={() => handleClose(job.id)}
+                      className="flex cursor-pointer items-center gap-2 !text-amber-700 hover:!text-white"
+                    >
+                      <div className="flex w-full items-center gap-2 py-0.5 font-medium">
+                        <span>Close Job</span>
+                      </div>
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={() => handleDelete(job.id)} className="text-red-600">
-                    Delete
+                  <DropdownMenuItem
+                    onClick={() => handleDelete(job.id)}
+                    className="flex cursor-pointer items-center gap-2 !text-red-600 hover:!bg-red-600 hover:!text-white"
+                  >
+                    <div className="flex w-full items-center gap-2 py-0.5 font-medium">
+                      <span>Delete</span>
+                    </div>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

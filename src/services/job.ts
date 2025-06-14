@@ -99,29 +99,40 @@ export const jobService = {
 // Hàm hỗ trợ chuyển đổi dữ liệu từ form sang API format
 function formatJobData(jobData: JobFormValues) {
   // Chuyển đổi status từ "Draft"/"Published"/"Closed" sang "draft"/"published"/"closed"
-  const status = jobData.status.toLowerCase();
+  const status = jobData.status?.toLowerCase();
 
   // Sử dụng level thay vì experience để đặt experience_level
-  const experienceLevel = jobData.level.toLowerCase();
+  const experienceLevel = jobData.level?.toLowerCase();
+
+  // Hàm loại bỏ dấu gạch đầu dòng
+  const removeBulletPoints = (text: string): string => {
+    if (!text) return "";
+    return text
+      .split("\n")
+      .map((line) => line.replace(/^-\s*/, "").trim())
+      .filter((line) => line.length > 0) // Loại bỏ các dòng trống
+      .join("\n");
+  };
 
   // Chuyển đổi các trường khác nếu cần
   return {
     title: jobData.title,
     description: jobData.description || "",
     city: jobData.city,
-    responsibilities: jobData.responsibilities || "",
-    requirements: jobData.requirements || "",
-    benefits: jobData.benefits || "",
-    job_type: jobData.jobType.toLowerCase() || "full time",
+    responsibilities: removeBulletPoints(jobData.responsibilities || ""),
+    requirements: removeBulletPoints(jobData.basicRequirements || ""),
+    preferred_skills: removeBulletPoints(jobData.preferredSkills || ""),
+    benefits: removeBulletPoints(jobData.benefits || ""),
+    job_type: jobData.jobType?.toLowerCase() || "full time",
     experience_level: experienceLevel,
     min_salary: jobData.salaryMin ? parseInt(jobData.salaryMin) : null,
     max_salary: jobData.salaryMax ? parseInt(jobData.salaryMax) : null,
     currency: jobData.currency || "VND",
     is_salary_negotiable: true,
     closed_date: jobData.deadline || null,
-    status: status,
+    status, // Đảm bảo status được gửi đi
     location_names: [jobData.location],
-    industry_names: [], // Đã xóa level từ đây vì đã dùng cho experience_level
+    industry_names: [],
     skill_names: jobData.skills || [],
   };
 }

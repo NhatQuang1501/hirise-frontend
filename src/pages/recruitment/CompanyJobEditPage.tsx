@@ -51,22 +51,21 @@ const CompanyJobEditPage: React.FC = () => {
         setIsLoading(true);
         const jobData = await jobService.getJobById(id as string);
 
-        // Xử lý requirements để tách thành basicRequirements và preferredSkills
-        let basicRequirements = "";
-        let preferredSkills = "";
-
-        if (jobData.requirements) {
-          const parts = jobData.requirements.split("### PREFERRED SKILLS ###");
-          basicRequirements = parts[0].trim();
-          preferredSkills = parts.length > 1 ? parts[1].trim() : "";
-        }
+        // Hàm thêm dấu gạch đầu dòng cho nội dung hiển thị
+        const addBulletPoints = (text: string): string => {
+          if (!text) return "";
+          return text
+            .split("\n")
+            .map((line) => (line.trim() ? (line.startsWith("- ") ? line : `- ${line}`) : line))
+            .join("\n");
+        };
 
         // Cập nhật form với dữ liệu hiện có
         form.reset({
           title: jobData.title || "",
           companyId: jobData.company?.id || "",
           location: jobData.locations?.[0]?.address || "",
-          city: jobData.city || "", // Thêm trường city
+          city: jobData.city || "",
           jobType: jobData.job_type || "",
           salaryMin: jobData.min_salary?.toString() || "",
           salaryMax: jobData.max_salary?.toString() || "",
@@ -74,11 +73,10 @@ const CompanyJobEditPage: React.FC = () => {
           skills: jobData.skills?.map((s: any) => s.name) || [],
           level: jobData.experience_level || "",
           deadline: jobData.closed_date || "",
-          responsibilities: jobData.responsibilities || "",
-          basicRequirements: basicRequirements,
-          preferredSkills: preferredSkills,
-          requirements: jobData.requirements || "",
-          benefits: jobData.benefits || "",
+          responsibilities: addBulletPoints(jobData.responsibilities || ""),
+          basicRequirements: addBulletPoints(jobData.requirements || ""),
+          preferredSkills: addBulletPoints(jobData.preferred_skills || ""),
+          benefits: addBulletPoints(jobData.benefits || ""),
           interviewProcess: jobData.interview_process || [],
           description: jobData.description || "",
           visibility: jobData.visibility || "public",
@@ -114,10 +112,9 @@ const CompanyJobEditPage: React.FC = () => {
       // Log dữ liệu trước khi gửi (để debug)
       console.log("Submitting job data:", data);
 
-      // Đã đặt status trong các button, nhưng cần đảm bảo status được gửi chính xác
-      if (data.status !== "Draft" && data.status !== "Published") {
-        // Mặc định set là "Published" khi nhấn "Update & Publish"
-        data.status = "Published";
+      // Đảm bảo status đã được chuyển đổi đúng
+      if (data.status === "Published") {
+        console.log("Publishing job with status:", data.status);
       }
 
       await jobService.updateJob(id as string, data);
@@ -178,10 +175,25 @@ const CompanyJobEditPage: React.FC = () => {
         <Button
           type="button"
           disabled={isSubmitting}
-          onClick={() => {
-            // Luôn chuyển sang PUBLISHED khi nhấn nút "Update & Publish"
-            form.setValue("status", "Published");
-            form.handleSubmit(onSubmit as SubmitHandler<any>)();
+          onClick={async () => {
+            try {
+              setIsSubmitting(true);
+
+              // 1. Lưu các thay đổi của form với status "Draft" trước
+              form.setValue("status", "Draft");
+              await jobService.updateJob(id as string, form.getValues());
+
+              // 2. Sau đó cập nhật status thành "published" bằng API riêng
+              await jobService.updateJobStatus(id as string, "published");
+
+              toast.success("Job has been updated and published!");
+              navigate(ROUTES.COMPANY.JOBS.LIST);
+            } catch (error: any) {
+              console.error("Error publishing job:", error);
+              toast.error(error.message || "Failed to publish job");
+            } finally {
+              setIsSubmitting(false);
+            }
           }}
         >
           {isSubmitting ? (

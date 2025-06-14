@@ -25,6 +25,23 @@ interface CompanyJobHeaderProps {
 }
 
 const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClose, onDelete }) => {
+  // Format contract type to keep first letter uppercase only (Full time)
+  const formatContractType = (type: string) => {
+    if (!type) return "";
+    return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+  };
+
+  // Format date to match JobHeader (e.g., "Jun 10, 2025")
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return "Recently";
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="mb-10 rounded-xl bg-white p-6 shadow-md lg:p-8">
       <div className="grid gap-8 md:grid-cols-3">
@@ -85,7 +102,7 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
           {/* Job details grid */}
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
             <div className="flex items-center gap-2">
-              <Award className="size-5 text-gray-500" />
+              <Award className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Experience</p>
                 <p className="font-medium">{job.experience}</p>
@@ -93,7 +110,7 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
             </div>
 
             <div className="flex items-center gap-2">
-              <Briefcase className="size-5 text-gray-500" />
+              <Briefcase className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Job Level</p>
                 <p className="font-medium">{job.level}</p>
@@ -101,23 +118,15 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
             </div>
 
             <div className="flex items-center gap-2">
-              <Calendar className="size-5 text-gray-500" />
+              <Calendar className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Contract type</p>
-                <p className="font-medium">{job.contractType}</p>
+                <p className="font-medium">{formatContractType(job.contractType)}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <MapPin className="size-5 text-gray-500" />
-              <div>
-                <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium">{job.location}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Building className="size-5 text-gray-500" />
+              <Building className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">City</p>
                 <p className="font-medium">{job.city_display || "N/A"}</p>
@@ -125,19 +134,28 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
             </div>
 
             <div className="flex items-center gap-2">
-              <Clock className="size-5 text-gray-500" />
+              <Clock className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Posted</p>
-                <p className="font-medium">{job.createdDate || "Recently"}</p>
+                <p className="font-medium">{formatDate(job.createdDate)}</p>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <Users className="size-5 text-gray-500" />
+              <Users className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Applications</p>
                 <p className="font-medium">{job.applicantCount || 0} candidates</p>
               </div>
+            </div>
+          </div>
+
+          {/* Địa điểm công việc (riêng) */}
+          <div className="mt-6 flex items-start gap-2 rounded-md">
+            <MapPin className="text-secondary/80 mt-0.5 h-5 w-5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-gray-500">Location</p>
+              <p className="font-medium">{job.location}</p>
             </div>
           </div>
         </div>
@@ -150,7 +168,7 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
             onClick={onEdit}
             className="bg-secondary hover:bg-secondary/10 hover:text-secondary w-full text-white md:w-[150px]"
           >
-            <Edit className="mr-2 size-4" />
+            <Edit className="mr-2 h-4 w-4" />
             Edit Job
           </Button>
 
@@ -161,7 +179,7 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
               onClick={onClose}
               className="bg-foreground/80 hover:bg-foreground/10 hover:text-foreground/80 w-full text-white md:w-[150px]"
             >
-              <XCircle className="mr-2 size-4" />
+              <XCircle className="mr-2 h-4 w-4" />
               Close Job
             </Button>
           )}
@@ -172,7 +190,7 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
             onClick={onDelete}
             className="w-full bg-red-500 text-white hover:bg-red-50 hover:text-red-600 md:w-[150px]"
           >
-            <Trash2 className="mr-2 size-4" />
+            <Trash2 className="mr-2 h-4 w-4" />
             Delete Job
           </Button>
         </div>

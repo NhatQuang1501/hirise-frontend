@@ -1,8 +1,10 @@
 import React from "react";
 import { ROUTES } from "@/routes/routes";
+import { aiMatchingService } from "@/services/ai-matching";
 import { format } from "date-fns";
-import { ArrowRight, ChevronRight, Users } from "lucide-react";
+import { ArrowRight, BarChart, ChevronRight, Eye, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -18,6 +20,16 @@ export const TopJobsSection: React.FC<TopJobsSectionProps> = ({
   handleJobSelect,
 }) => {
   const navigate = useNavigate();
+
+  const handleAnalyzeAll = async (jobId: string) => {
+    try {
+      await aiMatchingService.matchAllApplications(jobId);
+      toast.success("Analysis completed for all applications");
+    } catch (error) {
+      console.error("Error analyzing all applications:", error);
+      toast.error("Failed to analyze applications");
+    }
+  };
 
   return (
     <div className="rounded-xl bg-white p-6 shadow-sm">
@@ -72,15 +84,21 @@ export const TopJobsSection: React.FC<TopJobsSectionProps> = ({
                 </div>
               </CardContent>
               <CardFooter>
-                <Button
-                  variant="outline"
-                  className="hover:bg-primary/5 w-full gap-1"
-                  onClick={() => handleJobSelect(job.id)}
-                  disabled={job.applicationCount === 0}
-                >
-                  View Applications
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Button>
+                <div className="flex space-x-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => handleJobSelect(job.id)}
+                    disabled={job.applicationCount === 0}
+                  >
+                    <Eye className="mr-1 h-4 w-4" />
+                    View
+                  </Button>
+                  <Button variant="outline" size="sm" onClick={() => handleAnalyzeAll(job.id)}>
+                    <BarChart className="mr-1 h-4 w-4" />
+                    Analyze All
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
           ))

@@ -50,6 +50,8 @@ export const ROUTES = {
       DETAIL: "/company/jobs/:id",
       EDIT: "/company/jobs/:id/edit",
       APPLICATIONS: "/company/jobs/:id/applications",
+      APPLICATION_DETAIL: "/company/jobs/:id/applications/:applicationId",
+      MATCH_ANALYSIS: "/company/jobs/:id/match-analysis",
     },
     APPLICATIONS: {
       LIST: "/company/recruitment-management/applications",

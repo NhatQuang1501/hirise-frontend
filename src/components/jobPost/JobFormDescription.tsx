@@ -18,51 +18,6 @@ interface JobFormDescriptionProps {
 }
 
 const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
-  // Hàm để xử lý khi basic requirements thay đổi
-  const handleBasicRequirementsChange = (value: string) => {
-    const preferredSkills = form.getValues("preferredSkills") || "";
-
-    // Kết hợp cả hai phần vào trường requirements
-    let combinedRequirements = value;
-
-    // Thêm phần preferred skills nếu có
-    if (preferredSkills && preferredSkills.trim() !== "") {
-      combinedRequirements += "\n\n### PREFERRED SKILLS ###\n" + preferredSkills;
-    }
-
-    form.setValue("requirements", combinedRequirements);
-  };
-
-  // Hàm để xử lý khi preferred skills thay đổi
-  const handlePreferredSkillsChange = (value: string) => {
-    const basicRequirements = form.getValues("basicRequirements") || "";
-
-    // Kết hợp cả hai phần vào trường requirements
-    let combinedRequirements = basicRequirements;
-
-    // Thêm phần preferred skills nếu có
-    if (value && value.trim() !== "") {
-      combinedRequirements += "\n\n### PREFERRED SKILLS ###\n" + value;
-    }
-
-    form.setValue("requirements", combinedRequirements);
-  };
-
-  // Phân tách requirements hiện tại thành basic và preferred khi component được mount
-  React.useEffect(() => {
-    const currentRequirements = form.getValues("requirements") || "";
-
-    if (currentRequirements) {
-      const parts = currentRequirements.split("### PREFERRED SKILLS ###");
-      const basicReq = parts[0].trim();
-      const preferredSkills = parts.length > 1 ? parts[1].trim() : "";
-
-      // Cập nhật các trường tạm thời
-      form.setValue("basicRequirements", basicReq);
-      form.setValue("preferredSkills", preferredSkills);
-    }
-  }, [form]);
-
   return (
     <Card>
       <CardContent className="pt-6">
@@ -120,10 +75,7 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
                   <BulletTextarea
                     placeholder="- Minimum 2 years of experience&#10;- Good understanding of RESTful APIs&#10;- Experience with PostgreSQL/MySQL"
                     value={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      handleBasicRequirementsChange(value);
-                    }}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormDescription>List the essential requirements for the position.</FormDescription>
@@ -143,10 +95,7 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
                   <BulletTextarea
                     placeholder="- Knowledge of Docker and CI/CD&#10;- Experience with Kubernetes&#10;- Familiar with Agile methodologies"
                     value={field.value}
-                    onChange={(value) => {
-                      field.onChange(value);
-                      handlePreferredSkillsChange(value);
-                    }}
+                    onChange={field.onChange}
                   />
                 </FormControl>
                 <FormDescription>
@@ -156,9 +105,6 @@ const JobFormDescription: React.FC<JobFormDescriptionProps> = ({ form }) => {
               </FormItem>
             )}
           />
-
-          {/* Ẩn trường requirements thật sự, nhưng vẫn lưu giá trị */}
-          <input type="hidden" {...form.register("requirements")} />
 
           <FormField
             control={form.control}

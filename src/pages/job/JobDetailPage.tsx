@@ -78,6 +78,7 @@ interface JobDetail {
   is_saved: boolean;
   city: string;
   city_display: string;
+  preferred_skills: string;
 }
 
 const JobDetailPage: React.FC = () => {
@@ -102,30 +103,15 @@ const JobDetailPage: React.FC = () => {
           ? jobData.responsibilities.split("\n").filter((item: string) => item.trim() !== "")
           : [];
 
-        // Xử lý requirements để tách thành basic và preferred
+        // Xử lý requirements và preferred_skills trực tiếp từ API
         const requirements = jobData.requirements || "";
-        const preferredSkillsMarker = "### PREFERRED SKILLS ###";
-        const markerIndex = requirements.indexOf(preferredSkillsMarker);
+        const preferredSkills = jobData.preferred_skills || "";
 
-        if (markerIndex !== -1) {
-          // Nếu tìm thấy marker, tách thành hai phần
-          const basicPart = requirements.substring(0, markerIndex).trim();
-          const preferredPart = requirements
-            .substring(markerIndex + preferredSkillsMarker.length)
-            .trim();
+        setBasicRequirements(requirements.split("\n").filter((item: string) => item.trim() !== ""));
 
-          setBasicRequirements(basicPart.split("\n").filter((item: string) => item.trim() !== ""));
-
-          setPreferredSkills(
-            preferredPart.split("\n").filter((item: string) => item.trim() !== ""),
-          );
-        } else {
-          // Nếu không tìm thấy marker, tất cả đều là basic requirements
-          setBasicRequirements(
-            requirements.split("\n").filter((item: string) => item.trim() !== ""),
-          );
-          setPreferredSkills([]);
-        }
+        setPreferredSkills(
+          preferredSkills.split("\n").filter((item: string) => item.trim() !== ""),
+        );
 
         jobData.benefits = jobData.benefits
           ? jobData.benefits.split("\n").filter((item: string) => item.trim() !== "")
@@ -215,7 +201,7 @@ const JobDetailPage: React.FC = () => {
       experience: capitalizeFirstLetter(jobData.experience_level),
       level: formatExperienceLevel(jobData.experience_level),
       contractType: formatJobType(jobData.job_type),
-      interviewProcess: ["Phone Interview", "Technical Assessment", "Onsite Interview"],
+      interviewProcess: ["Phone interview", "Technical assessment", "Onsite interview"],
       companyDescription: jobData.company.description,
       responsibilities:
         typeof jobData.responsibilities === "string"
@@ -225,6 +211,10 @@ const JobDetailPage: React.FC = () => {
         typeof jobData.requirements === "string"
           ? jobData.requirements
           : String(jobData.requirements || ""),
+      preferred_skills:
+        typeof jobData.preferred_skills === "string"
+          ? jobData.preferred_skills
+          : String(jobData.preferred_skills || ""),
       benefits:
         typeof jobData.benefits === "string" ? jobData.benefits : String(jobData.benefits || ""),
     };
@@ -258,9 +248,9 @@ const JobDetailPage: React.FC = () => {
   const formatJobType = (type: string): string => {
     switch (type.toLowerCase()) {
       case "full time":
-        return "Full Time";
+        return "Full time";
       case "part time":
-        return "Part Time";
+        return "Part time";
       case "contract":
         return "Contract";
       case "freelance":

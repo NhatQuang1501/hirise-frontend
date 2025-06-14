@@ -55,21 +55,35 @@ export interface CompanyCardProps {
   onFollowToggle?: (companyId: string) => void;
 }
 
-export interface CompanyDetails extends Company {
-  size: string;
-  founded: string;
-  type: string;
+export interface CompanyDetails {
+  id: string;
+  name: string;
+  description: string;
+  logo: string;
+  location: string;
   website: string;
-  email?: string;
-  phone?: string;
-  address: string;
-  socialMedia?: {
-    linkedin?: string;
-    facebook?: string;
-    twitter?: string;
-  };
+  foundedYear: number;
+  size: string;
+  industry: string;
   openPositions: number;
-  benefits?: string;
+  followerCount: number;
+  isFollowing: boolean;
+  employees: any[];
+  benefits: string;
+  locations: string[];
+  socialMedia: {
+    website: string;
+    facebook: string;
+    twitter: string;
+    linkedin: string;
+    instagram: string;
+  };
+  rating: number;
+  reviews: any[];
+  profile?: {
+    skill_names?: string[];
+    [key: string]: any;
+  };
 }
 
 export interface Applicant {

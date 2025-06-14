@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { format } from "date-fns";
-import { ArrowRight, CheckCircle, FileText, Filter, Search, User, XCircle } from "lucide-react";
+import { ArrowRight, FileText, Filter, Search, User } from "lucide-react";
+import { ApplicationStatusButtons } from "@/components/application/ApplicationStatusButtons";
 import { ResponsivePagination } from "@/components/section/ResponsivePagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -47,8 +48,6 @@ export const ApplicationsList: React.FC<ApplicationsListProps> = ({
   handleStatusFilterChange,
   fetchApplications,
   handleAnalyzeCV,
-  handleAcceptApplication,
-  handleRejectApplication,
   getStatusColor,
   handlePageChange,
 }) => {
@@ -197,26 +196,13 @@ export const ApplicationsList: React.FC<ApplicationsListProps> = ({
                             >
                               {processingId === application.id ? "Processing..." : "Analyze CV"}
                             </Button>
-                            <Button
-                              variant="outline"
+
+                            <ApplicationStatusButtons
+                              applicationId={application.id}
+                              status={application.status}
+                              onStatusChange={fetchApplications}
                               size="sm"
-                              onClick={() => handleAcceptApplication(application.id)}
-                              className="border-green-500 text-green-500 hover:bg-green-50 hover:text-green-700"
-                              disabled={application.status === "accepted"}
-                            >
-                              <CheckCircle className="mr-1 h-3.5 w-3.5" />
-                              Accept
-                            </Button>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleRejectApplication(application.id)}
-                              className="border-red-500 text-red-500 hover:bg-red-50 hover:text-red-700"
-                              disabled={application.status === "rejected"}
-                            >
-                              <XCircle className="mr-1 h-3.5 w-3.5" />
-                              Reject
-                            </Button>
+                            />
                           </div>
                         </div>
                       </div>

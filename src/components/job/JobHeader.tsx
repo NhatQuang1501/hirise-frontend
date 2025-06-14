@@ -54,6 +54,11 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
     checkApplication();
   }, [isAuthenticated, user, job.id]);
 
+  const formatContractType = (type: string) => {
+    if (!type) return "";
+    return type.charAt(0).toUpperCase() + type.slice(1).toLowerCase();
+  };
+
   const handleApplyClick = () => {
     if (!isAuthenticated) {
       toast.error("Please log in to apply for this job");
@@ -136,15 +141,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
               <Calendar className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Contract type</p>
-                <p className="font-medium">{job.contractType}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <MapPin className="text-secondary/80 h-5 w-5" />
-              <div>
-                <p className="text-sm text-gray-500">Location</p>
-                <p className="font-medium">{job.location}</p>
+                <p className="font-medium">{formatContractType(job.contractType)}</p>
               </div>
             </div>
 
@@ -162,6 +159,15 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
                 <p className="text-sm text-gray-500">Posted</p>
                 <p className="font-medium">{job.time}</p>
               </div>
+            </div>
+          </div>
+
+          {/* Địa điểm công việc (riêng) */}
+          <div className="mt-6 flex items-start gap-2 rounded-md">
+            <MapPin className="text-secondary/80 mt-0.5 h-5 w-5 flex-shrink-0" />
+            <div>
+              <p className="text-sm font-medium text-gray-500">Location</p>
+              <p className="font-medium">{job.location}</p>
             </div>
           </div>
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export interface Job {
-  id: number;
+  id: string | number;
   company: string;
   logo: string;
   title: string;
@@ -17,6 +17,7 @@ export interface Job {
   interviewProcess: string[];
   responsibilities: string;
   requirements: string;
+  preferred_skills?: string;
   benefits: string;
   companyDescription: string;
   description?: string;
