@@ -128,7 +128,9 @@ const OTPPage = () => {
               type="text"
               maxLength={1}
               value={otp[index]}
-              ref={(el) => el && (inputRefs.current[index] = el)}
+              ref={(el) => {
+                if (el) inputRefs.current[index] = el;
+              }}
               onChange={(e) => handleChange(e.target, index)}
               onKeyDown={(e) => handleKeyDown(e, index)}
               onPaste={handlePaste}

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { contactMetadata } from "@/utils/contactMetadata";
 import { updatePageMetadata } from "@/utils/metadataUtils";
 import ContactForm from "@/components/staticComponents/ContactForm";

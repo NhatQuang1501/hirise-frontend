@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { aboutMetadata } from "@/utils/aboutMetadata";
 import { updatePageMetadata } from "@/utils/metadataUtils";
 import AboutHeroSection from "@/components/staticComponents/AboutHeroSection";
