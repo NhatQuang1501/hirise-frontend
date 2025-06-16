@@ -1,166 +1,200 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { companyService } from "@/services/company";
+import { jobService } from "@/services/job";
+import { homeMetadata } from "@/utils/homeMetadata";
+import { Loader2, Sparkles, Star } from "lucide-react";
+import { Company } from "@/types/company";
+import { JobCardData } from "@/types/job";
+import CompanyCarousel from "@/components/company/CompanyCarousel";
 import BenefitsSection from "@/components/home/BenefitsSection";
-import { CompanyCarousel } from "@/components/home/CompanyCarousel";
 import HeroSection from "@/components/home/HeroSection";
 import JobList from "@/components/home/JobList";
 import NewsletterSection from "@/components/home/NewsletterSection";
-import { homeMetadata } from "./homeMetadata";
+import { Badge } from "@/components/ui/badge";
+import placeholderLogo from "@/assets/images/companyPlaceholder.png";
 
-// Dữ liệu mẫu (thực tế sẽ được lấy từ API/Redux/Context)
-const jobsData = [
-  {
-    id: 1,
-    company: "FPT Software",
-    logo: "/company-logos/fpt.png",
-    title: "Senior Frontend Developer",
-    salary: "$1,500 - $2,500",
-    location: "Hà Nội",
-    time: "2 giờ trước",
-    skills: ["ReactJS", "TypeScript", "TailwindCSS"],
-  },
-  {
-    id: 2,
-    company: "VNG Corporation",
-    logo: "/company-logos/vng.png",
-    title: "Backend Engineer - Python",
-    salary: "$1,800 - $3,000",
-    location: "TP. Hồ Chí Minh",
-    time: "5 giờ trước",
-    skills: ["Python", "Django", "PostgreSQL"],
-  },
-  {
-    id: 3,
-    company: "Tiki",
-    logo: "/company-logos/tiki.png",
-    title: "DevOps Engineer",
-    salary: "$2,000 - $3,500",
-    location: "Remote",
-    time: "1 ngày trước",
-    skills: ["Docker", "Kubernetes", "AWS"],
-  },
-  {
-    id: 4,
-    company: "Shopee",
-    logo: "/company-logos/shopee.png",
-    title: "Data Engineer",
-    salary: "$1,500 - $2,800",
-    location: "TP. Hồ Chí Minh",
-    time: "2 ngày trước",
-    skills: ["Python", "Spark", "SQL"],
-  },
-  {
-    id: 5,
-    company: "Zalo",
-    logo: "/company-logos/zalo.png",
-    title: "Mobile Developer (iOS)",
-    salary: "$1,700 - $2,700",
-    location: "TP. Hồ Chí Minh",
-    time: "3 ngày trước",
-    skills: ["Swift", "iOS", "UIKit"],
-  },
-  {
-    id: 6,
-    company: "Grab",
-    logo: "/company-logos/grab.png",
-    title: "QA Engineer",
-    salary: "$1,200 - $2,200",
-    location: "Hà Nội",
-    time: "3 ngày trước",
-    skills: ["Selenium", "Cypress", "Automation"],
-  },
-  {
-    id: 7,
-    company: "NashTech",
-    logo: "/company-logos/nashtech.png",
-    title: "Solution Architect",
-    salary: "$3,000 - $5,000",
-    location: "TP. Hồ Chí Minh",
-    time: "4 ngày trước",
-    skills: ["AWS", "Microservices", "System Design"],
-  },
-  {
-    id: 8,
-    company: "Sendo",
-    logo: "/company-logos/sendo.png",
-    title: "UI/UX Designer",
-    salary: "$1,300 - $2,300",
-    location: "TP. Hồ Chí Minh",
-    time: "5 ngày trước",
-    skills: ["Figma", "Adobe XD", "UI Design"],
-  },
-];
-
-const companiesData = [
-  {
-    id: 1,
-    name: "FPT Software",
-    logo: "/company-logos/fpt.png",
-    jobCount: "120+",
-    industry: "Software Development",
-  },
-  {
-    id: 2,
-    name: "VNG Corporation",
-    logo: "/company-logos/vng.png",
-    jobCount: "85+",
-    industry: "Digital Products & Services",
-  },
-  {
-    id: 3,
-    name: "Shopee",
-    logo: "/company-logos/shopee.png",
-    jobCount: "50+",
-    industry: "E-commerce",
-  },
-  {
-    id: 4,
-    name: "Tiki",
-    logo: "/company-logos/tiki.png",
-    jobCount: "45+",
-    industry: "E-commerce",
-  },
-  {
-    id: 5,
-    name: "Momo",
-    logo: "/company-logos/momo.png",
-    jobCount: "30+",
-    industry: "Fintech",
-  },
-  {
-    id: 6,
-    name: "VNPAY",
-    logo: "/company-logos/vnpay.png",
-    jobCount: "25+",
-    industry: "Fintech",
-  },
-  {
-    id: 7,
-    name: "Grab",
-    logo: "/company-logos/grab.png",
-    jobCount: "40+",
-    industry: "Transportation & Delivery",
-  },
-  {
-    id: 8,
-    name: "Zalo",
-    logo: "/company-logos/zalo.png",
-    jobCount: "35+",
-    industry: "Social Media & Communications",
-  },
-];
+const DEFAULT_LOGO = placeholderLogo;
 
 const HomePage: React.FC = () => {
-  // Cập nhật title cho trang - React 19 approach
+  const [jobs, setJobs] = useState<JobCardData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [loadingCompanies, setLoadingCompanies] = useState(true);
+
+  // Update page title
   useEffect(() => {
     document.title = homeMetadata.title;
   }, []);
 
+  // Fetch companies data from API
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      try {
+        setLoadingCompanies(true);
+        const response = await companyService.getCompanies({
+          page_size: 10,
+          ordering: "-follower_count",
+        });
+
+        if (response?.data?.length > 0) {
+          const formattedCompanies = response.data.map((company: any) => ({
+            id: company.id,
+            name: company.name,
+            logo: company.logo || DEFAULT_LOGO,
+            jobCount: company.job_count || 0,
+            industry: company.industry || "Technology",
+            location: company.location || "Vietnam",
+            followerCount: company.follower_count || 0,
+            isFollowing: company.is_following || false,
+            newJobsToday: company.new_jobs_today || 0,
+            description: company.description || "",
+          }));
+          setCompanies(formattedCompanies);
+        }
+      } catch (err) {
+        console.error("Error fetching companies:", err);
+      } finally {
+        setLoadingCompanies(false);
+      }
+    };
+
+    fetchCompanies();
+  }, []);
+
+  // Fetch jobs data from API
+  useEffect(() => {
+    const fetchJobs = async () => {
+      try {
+        setLoading(true);
+
+        // Build filter parameters based on current filter
+        const filters: any = {
+          page: 1,
+          page_size: 8,
+          status: "published",
+        };
+
+        // Add filter parameters based on activeFilter
+        if (activeFilter === "latest") {
+          filters.ordering = "-created_at";
+        } else if (activeFilter === "remote") {
+          filters.location_type = "remote";
+        } else if (activeFilter === "freelance") {
+          filters.job_type = "freelance";
+        } else if (activeFilter === "featured") {
+          filters.is_featured = true;
+        }
+
+        const response = await jobService.getJobs(filters);
+
+        if (response?.data?.length > 0) {
+          // Convert API data to JobCardData format
+          const formattedJobs: JobCardData[] = response.data.map((job: any) => ({
+            id: job.id,
+            company: job.company?.name || job.company_name || "Unknown Company",
+            logo: job.company?.logo || DEFAULT_LOGO,
+            title: job.title,
+            salary:
+              job.min_salary && job.max_salary
+                ? `${job.min_salary.toLocaleString()} - ${job.max_salary.toLocaleString()} ${job.currency}`
+                : job.salary_display || "Negotiable",
+            location: job.locations?.[0]?.address || job.location || "Remote",
+            time: new Date(job.created_at).toLocaleDateString("en-US"),
+            skills: job.skills?.map((skill: any) => skill.name) || [],
+            city: job.city || "",
+            city_display: job.city_display || "",
+            is_saved: job.is_saved || false,
+          }));
+
+          setJobs(formattedJobs);
+        } else {
+          setJobs([]);
+        }
+      } catch (err) {
+        console.error("Error fetching jobs:", err);
+        setError("Unable to load job data. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchJobs();
+  }, [activeFilter]);
+
+  const handleFilterChange = (filter: string) => {
+    setActiveFilter(filter);
+  };
+
   return (
     <div className="flex flex-col">
+      {/* Hero Section */}
       <HeroSection />
-      <JobList jobs={jobsData} />
-      <CompanyCarousel companies={companiesData} />
+
+      {/* Job opportunities section */}
+      <div className="container mx-auto px-4 py-16">
+        <div className="mb-8 text-center">
+          <Badge variant="outline" className="bg-primary/5 text-primary mb-2">
+            <Sparkles className="mr-1 size-3" /> Latest Opportunities
+          </Badge>
+          <h2 className="text-3xl font-bold">
+            Discover <span className="text-primary">Career Opportunities</span>
+          </h2>
+          <p className="text-muted-foreground mx-auto mt-4 max-w-2xl">
+            Find your next role from our curated selection of top tech positions
+          </p>
+        </div>
+
+        {error ? (
+          <div className="py-12 text-center">
+            <p className="text-destructive">{error}</p>
+          </div>
+        ) : (
+          <JobList
+            jobs={jobs}
+            loading={loading}
+            activeFilter={activeFilter}
+            onFilterChange={handleFilterChange}
+          />
+        )}
+      </div>
+
+      {/* Featured companies section */}
+      <section className="from-highlight to-highlight/30 relative bg-gradient-to-br py-16">
+        <div className="bg-primary/10 absolute top-0 right-0 h-64 w-64 rounded-full opacity-70 blur-3xl"></div>
+        <div className="bg-secondary/10 absolute bottom-0 left-20 h-80 w-80 rounded-full opacity-70 blur-3xl"></div>
+
+        <div className="relative container mx-auto px-4">
+          <div className="mb-10 text-center">
+            <Badge variant="outline" className="bg-primary/10 text-primary mb-2">
+              <Star className="mr-1 size-3" /> Top Employers
+            </Badge>
+            <h2 className="text-3xl font-bold">Featured Companies</h2>
+            <p className="text-muted-foreground mx-auto mt-4 max-w-2xl">
+              Work with the industry's leading technology companies
+            </p>
+          </div>
+
+          {loadingCompanies ? (
+            <div className="flex justify-center py-12">
+              <Loader2 className="text-primary h-8 w-8 animate-spin" />
+            </div>
+          ) : (
+            <CompanyCarousel
+              companies={companies}
+              title="Featured Companies"
+              description="Work with top technology companies"
+              loading={false}
+            />
+          )}
+        </div>
+      </section>
+
+      {/* Enhanced benefits section */}
       <BenefitsSection />
+
+      {/* Enhanced newsletter section */}
       <NewsletterSection />
     </div>
   );

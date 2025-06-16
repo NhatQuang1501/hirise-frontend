@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import * as z from "zod";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,10 +19,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 
-// Định nghĩa schema validation
+// Schema validation using Zod
 const loginSchema = z.object({
-  email: z.string().email({ message: "Email không hợp lệ" }),
-  password: z.string().min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" }),
+  username: z.string().min(2, { message: "Username must be at least 2 characters" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -26,26 +30,27 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
-  // Khởi tạo form
+  // Create form instance using react-hook-form
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
-  // Xử lý submit form
+  // Process form submission
   async function onSubmit(data: LoginFormValues) {
     setIsLoading(true);
     try {
-      // Gọi API đăng nhập ở đây
-      console.log("Đăng nhập với:", data);
-      // await loginUser(data);
-      // Chuyển hướng sau khi đăng nhập thành công
-    } catch (error) {
-      console.error("Lỗi đăng nhập:", error);
+      await login(data);
+      toast.success("Login successfully");
+      // Navigation will be handled in AuthContext after successful login
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || "Login failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -54,9 +59,9 @@ export function LoginForm() {
   return (
     <div className="bg-card mx-auto w-full max-w-md space-y-6 rounded-lg p-8 px-4 shadow-md sm:p-10 sm:px-0">
       <div className="mx-2 text-center">
-        <h1 className="text-foreground text-xl font-bold sm:text-2xl">Đăng nhập</h1>
+        <h1 className="text-foreground text-xl font-bold sm:text-2xl">Login</h1>
         <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-          Chào mừng bạn trở lại! Vui lòng nhập thông tin của bạn
+          Welcome back to HiRise! Please enter your information
         </p>
       </div>
 
@@ -64,13 +69,13 @@ export function LoginForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="mx-2 space-y-5 sm:space-y-6">
           <FormField
             control={form.control}
-            name="email"
+            name="username"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">Email</FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Username</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="email@example.com"
+                    placeholder="username"
                     className="border-input bg-background text-foreground mx-0.5 h-11 rounded-md px-4 py-2 shadow-sm"
                     {...field}
                   />
@@ -85,29 +90,28 @@ export function LoginForm() {
             name="password"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">Mật khẩu</FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Password</FormLabel>
                 <FormControl>
                   <div className="relative mx-0.5">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 shadow-sm"
+                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 pr-10 shadow-sm"
                       {...field}
                     />
                     <Button
                       type="button"
                       variant="ghost"
-                      size="icon"
                       className="absolute top-0 right-0 h-full px-3"
+                      tabIndex={-1}
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="size-4" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="size-4" />
                       )}
                       <span className="sr-only">
-                        {showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                        {showPassword ? "Hide password" : "Show password"}
                       </span>
                     </Button>
                   </div>
@@ -119,10 +123,10 @@ export function LoginForm() {
 
           <div className="flex items-center justify-end px-1 pt-1">
             <Link
-              to="/forgot-password"
+              to={ROUTES.AUTH.FORGOT_PASSWORD}
               className="text-primary hover:text-primary/80 text-sm font-medium"
             >
-              Quên mật khẩu?
+              Forgot password?
             </Link>
           </div>
 
@@ -131,15 +135,15 @@ export function LoginForm() {
             className="bg-primary hover:bg-primary/90 text-primary-foreground mx-0.5 mt-2 h-11 w-full rounded-md font-medium"
             disabled={isLoading}
           >
-            {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+            {isLoading ? "Logging in..." : "Login"}
           </Button>
         </form>
       </Form>
 
       <div className="mx-2 mt-6 text-center text-sm">
-        <span className="text-muted-foreground">Bạn chưa có tài khoản? </span>
-        <Link to="/register" className="text-primary hover:text-primary/80 font-medium">
-          Đăng ký ngay
+        <span className="text-muted-foreground">You don't have an account? </span>
+        <Link to={ROUTES.AUTH.REGISTER} className="text-primary hover:text-primary/80 font-medium">
+          Register now
         </Link>
       </div>
     </div>

@@ -1,9 +1,12 @@
 import { useState } from "react";
+import { ROUTES } from "@/routes/routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { toast } from "sonner";
 import * as z from "zod";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -15,20 +18,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-// Định nghĩa schema validation
 const registerSchema = z
   .object({
-    fullName: z.string().min(2, { message: "Họ tên phải có ít nhất 2 ký tự" }),
-    email: z.string().email({ message: "Email không hợp lệ" }),
-    password: z.string().min(6, { message: "Mật khẩu phải có ít nhất 6 ký tự" }),
+    username: z.string().min(2, { message: "Username must be at least 2 characters" }),
+    email: z.string().email({ message: "Email is not valid" }),
+    password: z.string().min(6, { message: "Password must be at least 6 characters" }),
     confirmPassword: z.string(),
+    role: z.enum(["applicant", "company"], {
+      required_error: "Please select a role",
+    }),
     acceptTerms: z.boolean().refine((val) => val === true, {
-      message: "Bạn phải đồng ý với điều khoản dịch vụ",
+      message: "You must agree to the terms of service",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    message: "Mật khẩu xác nhận không khớp",
+    message: "Password confirmation does not match",
     path: ["confirmPassword"],
   });
 
@@ -38,29 +44,28 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { register } = useAuth();
 
-  // Khởi tạo form
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
-      fullName: "",
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
+      role: "applicant",
       acceptTerms: false,
     },
   });
 
-  // Xử lý submit form
   async function onSubmit(data: RegisterFormValues) {
     setIsLoading(true);
     try {
-      // Gọi API đăng ký ở đây
-      console.log("Đăng ký với:", data);
-      // await registerUser(data);
-      // Chuyển hướng sau khi đăng ký thành công
-    } catch (error) {
-      console.error("Lỗi đăng ký:", error);
+      const { confirmPassword, acceptTerms, ...registerData } = data;
+      await register(registerData);
+      toast.success("Registration successful! Please check your email for verification.");
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || "Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -69,9 +74,9 @@ export function RegisterForm() {
   return (
     <div className="bg-card mx-auto w-full max-w-md space-y-6 rounded-lg p-8 px-4 shadow-md sm:p-10 sm:px-0">
       <div className="mx-2 text-center">
-        <h1 className="text-foreground text-xl font-bold sm:text-2xl">Đăng ký tài khoản</h1>
+        <h1 className="text-foreground text-xl font-bold sm:text-2xl">Register</h1>
         <p className="text-muted-foreground mt-2 text-sm sm:text-base">
-          Tạo tài khoản để bắt đầu sử dụng dịch vụ của chúng tôi
+          Welcome to HiRise! Create an account to start using our services
         </p>
       </div>
 
@@ -79,13 +84,13 @@ export function RegisterForm() {
         <form onSubmit={form.handleSubmit(onSubmit)} className="mx-2 space-y-5 sm:space-y-6">
           <FormField
             control={form.control}
-            name="fullName"
+            name="username"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">Họ và tên</FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Username</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Nguyễn Văn A"
+                    placeholder="johndoe"
                     className="border-input bg-background text-foreground mx-0.5 h-11 rounded-md px-4 py-2 shadow-sm"
                     {...field}
                   />
@@ -115,16 +120,46 @@ export function RegisterForm() {
 
           <FormField
             control={form.control}
+            name="role"
+            render={({ field }) => (
+              <FormItem className="space-y-2 p-2">
+                <FormLabel className="text-foreground px-1 font-medium">Account Type</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    className="flex flex-col space-y-1"
+                  >
+                    <FormItem className="flex items-center space-y-0 space-x-3">
+                      <FormControl>
+                        <RadioGroupItem value="applicant" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Applicant</FormLabel>
+                    </FormItem>
+                    <FormItem className="flex items-center space-y-0 space-x-3">
+                      <FormControl>
+                        <RadioGroupItem value="company" />
+                      </FormControl>
+                      <FormLabel className="font-normal">Company</FormLabel>
+                    </FormItem>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage className="text-destructive px-1 text-sm" />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
             name="password"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">Mật khẩu</FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Password</FormLabel>
                 <FormControl>
                   <div className="relative mx-0.5">
                     <Input
                       type={showPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 shadow-sm"
+                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 pr-10 shadow-sm"
                       {...field}
                     />
                     <Button
@@ -135,12 +170,12 @@ export function RegisterForm() {
                       onClick={() => setShowPassword(!showPassword)}
                     >
                       {showPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="size-4" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="size-4" />
                       )}
                       <span className="sr-only">
-                        {showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                        {showPassword ? "Hide password" : "Show password"}
                       </span>
                     </Button>
                   </div>
@@ -155,15 +190,12 @@ export function RegisterForm() {
             name="confirmPassword"
             render={({ field }) => (
               <FormItem className="space-y-2 p-2">
-                <FormLabel className="text-foreground px-1 font-medium">
-                  Xác nhận mật khẩu
-                </FormLabel>
+                <FormLabel className="text-foreground px-1 font-medium">Confirm password</FormLabel>
                 <FormControl>
                   <div className="relative mx-0.5">
                     <Input
                       type={showConfirmPassword ? "text" : "password"}
-                      placeholder="••••••••"
-                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 shadow-sm"
+                      className="border-input bg-background text-foreground h-11 rounded-md px-4 py-2 pr-10 shadow-sm"
                       {...field}
                     />
                     <Button
@@ -174,12 +206,12 @@ export function RegisterForm() {
                       onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     >
                       {showConfirmPassword ? (
-                        <EyeOffIcon className="h-4 w-4" />
+                        <EyeOffIcon className="size-4" />
                       ) : (
-                        <EyeIcon className="h-4 w-4" />
+                        <EyeIcon className="size-4" />
                       )}
                       <span className="sr-only">
-                        {showConfirmPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+                        {showConfirmPassword ? "Hide password" : "Show password"}
                       </span>
                     </Button>
                   </div>
@@ -199,15 +231,20 @@ export function RegisterForm() {
                 </FormControl>
                 <div className="space-y-1 leading-none">
                   <div className="text-foreground flex flex-wrap text-sm">
-                    Tôi đồng ý với{" "}
-                    <Link to="/terms" className="text-primary hover:text-primary/80 mx-1">
-                      điều khoản dịch vụ
+                    I agree to the{" "}
+                    <Link
+                      to={ROUTES.PUBLIC.TERMS}
+                      className="text-primary hover:text-primary/80 mx-1"
+                    >
+                      terms of service
                     </Link>{" "}
-                    và{" "}
-                    <Link to="/privacy" className="text-primary hover:text-primary/80 mx-1">
-                      chính sách bảo mật
+                    and{" "}
+                    <Link
+                      to={ROUTES.PUBLIC.PRIVACY}
+                      className="text-primary hover:text-primary/80 mx-1"
+                    >
+                      privacy policy
                     </Link>
-                    .
                   </div>
                   <FormMessage className="text-destructive text-sm" />
                 </div>
@@ -220,15 +257,15 @@ export function RegisterForm() {
             className="bg-primary hover:bg-primary/90 text-primary-foreground mx-0.5 mt-3 h-11 w-full rounded-md font-medium"
             disabled={isLoading}
           >
-            {isLoading ? "Đang đăng ký..." : "Đăng ký"}
+            {isLoading ? "Registering..." : "Register"}
           </Button>
         </form>
       </Form>
 
       <div className="mx-2 mt-6 text-center text-sm">
-        <span className="text-muted-foreground">Bạn đã có tài khoản? </span>
-        <Link to="/login" className="text-primary hover:text-primary/80 font-medium">
-          Đăng nhập
+        <span className="text-muted-foreground">Already have an account? </span>
+        <Link to={ROUTES.AUTH.LOGIN} className="text-primary hover:text-primary/80 font-medium">
+          Login
         </Link>
       </div>
     </div>

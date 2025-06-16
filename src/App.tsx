@@ -1,50 +1,55 @@
-import { Suspense, lazy } from "react";
+// src/App.tsx
+import { Suspense } from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Route, BrowserRouter as Router, Routes, useLocation } from "react-router-dom";
+import { AuthProvider } from "@/hooks/AuthContext";
+import Loading from "@/components/staticComponents/loading";
+import { Toaster } from "@/components/ui/sonner";
 import { Footer } from "./components/footer/Footer";
 import { Header } from "./components/header/Header";
+import userRoutes, { AUTH_PATHS } from "./routes/userRoutes";
 
-const HomePage = lazy(() => import("./pages/home/HomePage"));
-const LoginPage = lazy(() => import("./pages/authentication/LoginPage"));
-const RegisterPage = lazy(() => import("./pages/authentication/RegisterPage"));
-const JobDetailPage = lazy(() => import("./pages/job/JobDetailPage"));
-
-const Loading = () => (
-  <div className="flex min-h-screen items-center justify-center">
-    <div className="border-primary h-16 w-16 animate-spin rounded-full border-4 border-t-transparent"></div>
-  </div>
-);
-
-// Pages require authentication
-const AUTH_PAGES = ["/login", "/register"];
+const queryClient = new QueryClient();
 
 function AppLayout() {
   const { pathname } = useLocation();
-  const isAuthPage = AUTH_PAGES.includes(pathname);
+  const isAuthPage = AUTH_PATHS.some((path) => pathname.startsWith(path));
 
   return (
     <div className="flex min-h-screen flex-col">
       {!isAuthPage && <Header />}
-      <main className="flex-1">
-        <Suspense fallback={<Loading />}>
+      <main className={`flex-1 ${isAuthPage ? "bg-gray-50" : ""}`}>
+        <Suspense fallback={<Loading fullScreen size="lg" />}>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/jobs/:id" element={<JobDetailPage />} />
+            {userRoutes.map((route) => (
+              <Route key={route.path} path={route.path} element={route.element}>
+                {route.children?.map((childRoute) => (
+                  <Route
+                    key={childRoute.path}
+                    path={childRoute.path}
+                    element={childRoute.element}
+                  />
+                ))}
+              </Route>
+            ))}
           </Routes>
         </Suspense>
       </main>
-      {/* {!isAuthPage && <Footer />} */}
-      <Footer />
+      {!isAuthPage && <Footer />}
+      <Toaster position="bottom-right" richColors closeButton />
     </div>
   );
 }
 
 function App() {
   return (
-    <Router>
-      <AppLayout />
-    </Router>
+    <QueryClientProvider client={queryClient}>
+      <Router>
+        <AuthProvider>
+          <AppLayout />
+        </AuthProvider>
+      </Router>
+    </QueryClientProvider>
   );
 }
 

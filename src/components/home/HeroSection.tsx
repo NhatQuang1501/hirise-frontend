@@ -1,51 +1,92 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import SearchBox from "./SearchBox";
+import { ROUTES } from "@/routes/routes";
+import { Search, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 
 const HeroSection: React.FC = () => {
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const navigate = useNavigate();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate({
+      pathname: ROUTES.PUBLIC.JOBS.LIST,
+      search: `?search=${encodeURIComponent(searchTerm)}`,
+    });
+  };
+
+  const handleTrendingSearch = (term: string) => {
+    navigate({
+      pathname: ROUTES.PUBLIC.JOBS.LIST,
+      search: `?search=${encodeURIComponent(term)}`,
+    });
+  };
+
+  // Trending keywords - có thể lấy từ API trong tương lai
+  const trendingKeywords = ["React", "Java", "Python", "Product Manager", "UI/UX Designer"];
+
   return (
-    <section className="from-primary/10 to-secondary/10 bg-gradient-to-r py-12 md:py-20">
-      <div className="container mx-auto px-4">
-        <div className="grid gap-8 md:grid-cols-2 md:gap-12">
-          <div className="flex flex-col justify-center">
-            <h1 className="mb-4 text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-              Tìm kiếm công việc <span className="text-primary">IT mơ ước</span> của bạn
-            </h1>
-            <p className="mb-6 text-lg text-gray-600 md:text-xl">
-              Kết nối bạn với hàng nghìn công việc từ những công ty công nghệ hàng đầu.
-            </p>
+    <section className="from-secondary to-primary relative bg-gradient-to-r py-24 text-white">
+      {/* Abstract shapes decoration */}
+      <div className="absolute inset-0 overflow-hidden opacity-20">
+        <div className="bg-primary-foreground absolute -top-20 -left-20 h-64 w-64 rounded-full blur-3xl"></div>
+        <div className="bg-primary-foreground absolute top-40 right-10 h-96 w-96 rounded-full blur-3xl"></div>
+        <div className="bg-secondary-foreground absolute bottom-10 left-1/3 h-80 w-80 rounded-full blur-3xl"></div>
+      </div>
 
-            <SearchBox />
+      <div className="relative container mx-auto px-4">
+        <div className="mx-auto max-w-3xl text-center">
+          <Badge
+            variant="outline"
+            className="mb-4 border-white/30 bg-white/10 px-4 py-1 text-white"
+          >
+            <Sparkles className="mr-1 size-4" /> The Future of Tech Recruitment
+          </Badge>
 
-            <div className="flex items-center gap-2 text-sm text-gray-500">
-              <p>Phổ biến:</p>
-              <div className="flex flex-wrap gap-2">
-                <Link to="/jobs?q=react" className="hover:text-primary">
-                  ReactJS
-                </Link>
-                ,
-                <Link to="/jobs?q=java" className="hover:text-primary">
-                  Java
-                </Link>
-                ,
-                <Link to="/jobs?q=python" className="hover:text-primary">
-                  Python
-                </Link>
-                ,
-                <Link to="/jobs?q=devops" className="hover:text-primary">
-                  DevOps
-                </Link>
+          <h1 className="mb-6 text-4xl leading-tight font-bold md:text-5xl lg:text-6xl">
+            Find Your Dream <span className="text-primary-foreground">Tech Career</span>
+          </h1>
+          <p className="text-primary-foreground mb-10 text-lg">
+            Discover thousands of job opportunities from top companies in the technology industry
+          </p>
+
+          {/* Search form - styled similar to CompanyListPage */}
+          <form onSubmit={handleSearch} className="mx-auto max-w-xl">
+            <div className="bg-card flex flex-col gap-2 rounded-xl p-2 shadow-lg sm:flex-row">
+              <div className="relative flex-1">
+                <Search className="text-muted-foreground absolute top-1/2 left-3 size-4 -translate-y-1/2" />
+                <Input
+                  type="text"
+                  placeholder="Search jobs, skills, companies..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="text-foreground border-0 pl-10 focus-visible:ring-0 focus-visible:ring-offset-0"
+                />
               </div>
+              <Button
+                type="submit"
+                className="from-primary to-secondary w-full bg-gradient-to-r text-white hover:opacity-90 sm:w-auto"
+              >
+                Search Jobs
+              </Button>
             </div>
-          </div>
+          </form>
 
-          <div className="hidden md:flex md:items-center md:justify-center">
-            <img
-              src="/hero-image.svg"
-              alt="IT Jobs Illustration"
-              className="max-w-md"
-              loading="eager"
-            />
+          {/* Trending searches */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 text-sm">
+            <span className="text-white/70">Trending:</span>
+            {trendingKeywords.map((keyword) => (
+              <button
+                key={keyword}
+                onClick={() => handleTrendingSearch(keyword)}
+                className="rounded-full bg-white/10 px-3 py-1 transition-colors hover:bg-white/20"
+              >
+                {keyword}
+              </button>
+            ))}
           </div>
         </div>
       </div>
