@@ -248,9 +248,9 @@ export function Header() {
           </div>
 
           {/* Notification - Desktop */}
-          <div className="mr-3 hidden md:flex md:items-center md:gap-4">
+          {/* <div className="mr-3 hidden md:flex md:items-center md:gap-4">
             <NotificationPopover />
-          </div>
+          </div> */}
 
           {/* Desktop Auth Buttons or User Info */}
           <div className="hidden items-center gap-3 md:flex">
@@ -315,7 +315,7 @@ export function Header() {
           </div>
 
           {/* Mobile Notification Icon */}
-          <div className="mr-2 flex items-center md:hidden">
+          {/* <div className="mr-2 flex items-center md:hidden">
             <Dialog open={notificationOpen} onOpenChange={setNotificationOpen}>
               <DialogTrigger asChild>
                 <Button
@@ -372,7 +372,7 @@ export function Header() {
                 </div>
               </DialogContent>
             </Dialog>
-          </div>
+          </div> */}
 
           {/* Mobile Menu Button */}
           <button
