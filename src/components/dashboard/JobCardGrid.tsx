@@ -101,11 +101,11 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => handleViewJob(job.id)}>
+                        <DropdownMenuItem onClick={() => handleViewJob(Number(job.id))}>
                           <Eye className="mr-2 size-4" />
                           View Details
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={() => handleEditJob(job.id)}>
+                        <DropdownMenuItem onClick={() => handleEditJob(Number(job.id))}>
                           <Edit className="mr-2 size-4" />
                           Edit
                         </DropdownMenuItem>
@@ -168,11 +168,11 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
 
                 <div className="bg-muted/50 border-t p-4">
                   <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handleViewJob(job.id)}>
+                    <Button variant="outline" size="sm" onClick={() => handleViewJob(Number(job.id))}>
                       <Eye className="mr-2 size-4" />
                       View
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleEditJob(job.id)}>
+                    <Button variant="outline" size="sm" onClick={() => handleEditJob(Number(job.id))}>
                       <Edit className="mr-2 size-4" />
                       Edit
                     </Button>

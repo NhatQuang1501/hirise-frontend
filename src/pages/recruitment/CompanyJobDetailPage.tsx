@@ -361,9 +361,8 @@ const CompanyJobDetailPage: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6 lg:col-span-1">
             <CompanyInfo
-              company={{ id: job.companyId }}
+              company={{ id: job.companyId || "" }}
               companyDescription={job.companyDescription}
-              showActions={false}
               saved={false}
               onSaveJob={() => {}}
             />
