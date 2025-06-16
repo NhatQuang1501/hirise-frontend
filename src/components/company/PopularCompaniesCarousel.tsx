@@ -92,9 +92,9 @@ const PopularCompaniesCarousel = () => {
           }}
         />
         <h3 className="mb-2 line-clamp-1 text-center text-lg font-bold">{company.name}</h3>
-        <div className="text-muted-foreground mb-4 flex items-center justify-center gap-2">
-          <Users className="size-4" />
-          <span>{company.followerCount.toLocaleString()} followers</span>
+        <div className="text-muted-foreground flex items-center gap-1.5 text-xs">
+          <Users className="h-3 w-3" />
+          <span>{company.followerCount} followers</span>
         </div>
       </Link>
       <Button

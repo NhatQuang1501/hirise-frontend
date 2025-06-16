@@ -26,7 +26,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
     <div
       onClick={onClick}
       className={cn(
-        "group border-border bg-card relative flex cursor-pointer overflow-hidden rounded-lg border shadow-sm transition-all hover:shadow-md",
+        "group border-muted/60 bg-card relative flex cursor-pointer overflow-hidden rounded-lg border shadow-sm transition-all hover:-translate-y-1 hover:shadow-md",
         layout === "grid" ? "h-full flex-col p-5" : "flex-row items-center gap-4 p-4",
       )}
     >
@@ -39,18 +39,24 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
         <div
           className={cn("flex items-center", layout === "grid" ? "mb-4 gap-3" : "flex-shrink-0")}
         >
-          <img
-            src={job.logo || "/placeholder-logo.png"}
-            alt={job.company}
+          <div
             className={cn(
-              "rounded-md bg-gray-50 object-contain",
-              layout === "grid" ? "size-14" : "size-16",
+              "bg-muted flex items-center justify-center overflow-hidden rounded-lg",
+              layout === "grid" ? "h-14 w-14" : "h-16 w-16",
             )}
-            loading="lazy"
-          />
+          >
+            <img
+              src={job.logo || "/placeholder-logo.png"}
+              alt={job.company}
+              className="h-10 w-10 object-contain transition-transform duration-300 group-hover:scale-110"
+              loading="lazy"
+            />
+          </div>
           {layout === "grid" && (
             <div>
-              <h3 className="line-clamp-1 text-sm font-medium text-gray-600">{job.company}</h3>
+              <h3 className="text-muted-foreground line-clamp-1 text-sm font-medium">
+                {job.company}
+              </h3>
             </div>
           )}
         </div>
@@ -60,7 +66,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
           <div className={layout === "list" ? "w-2/3 pr-4" : "w-full"}>
             {/* Company name (list view only) */}
             {layout === "list" && (
-              <h3 className="mb-1 text-sm font-medium text-gray-600">{job.company}</h3>
+              <h3 className="text-muted-foreground mb-1 text-sm font-medium">{job.company}</h3>
             )}
 
             {/* Job title with hover effect */}
@@ -80,7 +86,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
                   </span>
                 ))}
                 {job.skills.length > 3 && (
-                  <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
+                  <span className="bg-muted text-muted-foreground rounded-full px-2 py-1 text-xs">
                     +{job.skills.length - 3}
                   </span>
                 )}
@@ -90,7 +96,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
 
           <div className={layout === "list" ? "w-1/3" : "w-full"}>
             {/* Job details */}
-            <div className={cn("space-y-2 text-gray-600", layout === "grid" ? "mb-4" : "")}>
+            <div className={cn("text-muted-foreground space-y-2", layout === "grid" ? "mb-4" : "")}>
               <div className="text-primary flex items-center gap-2 text-sm">
                 <DollarSign className="size-4 flex-shrink-0" />
                 <span className="line-clamp-1">{job.salary}</span>
@@ -124,7 +130,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
                   </span>
                 ))}
                 {job.skills.length > 3 && (
-                  <span className="rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600">
+                  <span className="bg-muted text-muted-foreground rounded-full px-2 py-1 text-xs">
                     +{job.skills.length - 3}
                   </span>
                 )}

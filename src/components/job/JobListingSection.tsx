@@ -9,7 +9,7 @@ interface JobListingSectionProps {
   jobs: JobCardItem[];
   viewType?: "grid" | "list";
   className?: string;
-  emptyMessage?: string;
+  emptyMessage?: React.ReactNode;
 }
 
 const JobListingSection: React.FC<JobListingSectionProps> = ({

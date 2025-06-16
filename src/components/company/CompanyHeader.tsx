@@ -1,88 +1,167 @@
-import React from "react";
-import { Building, Globe, MapPin, Users } from "lucide-react";
+import { useEffect, useState } from "react";
+import { companyService } from "@/services/company";
+import { Award, Building, MapPin, Users } from "lucide-react";
+import { toast } from "sonner";
 import { CompanyDetails } from "@/types/company";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
+import { Badge } from "@/components/ui/badge";
+import { FollowButton } from "./FollowButton";
 
 interface CompanyHeaderProps {
   company: CompanyDetails;
-  isFollowing: boolean;
-  onFollow: () => void;
+  isFollowing?: boolean;
+  onFollow?: () => void;
   className?: string;
+  followerCount?: number;
+  onFollowChange?: (isFollowing: boolean, newCount: number) => void;
 }
 
-const CompanyHeader: React.FC<CompanyHeaderProps> = ({
+export default function CompanyHeader({
   company,
-  isFollowing,
+  isFollowing: initialIsFollowing = false,
   onFollow,
+  followerCount: initialFollowerCount = 0,
+  onFollowChange,
   className,
-}) => {
+}: CompanyHeaderProps) {
+  const { user } = useAuth();
+  const [isFollowing, setIsFollowing] = useState<boolean>(initialIsFollowing);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [count, setCount] = useState<number>(initialFollowerCount || company.followerCount || 0);
+
+  useEffect(() => {
+    setIsFollowing(initialIsFollowing);
+  }, [initialIsFollowing]);
+
+  useEffect(() => {
+    setCount(initialFollowerCount || company.followerCount || 0);
+  }, [initialFollowerCount, company.followerCount]);
+
+  const handleFollow = async () => {
+    if (!company.id || user?.role !== "applicant") {
+      toast.error("Only applicants can follow companies");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await companyService.followCompany(company.id);
+      const newCount = count + 1;
+      setCount(newCount);
+      setIsFollowing(true);
+      if (onFollowChange) {
+        onFollowChange(true, newCount);
+      }
+      if (onFollow) {
+        onFollow();
+      }
+    } catch (error) {
+      console.error("Failed to follow company:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    if (!company.id || user?.role !== "applicant") {
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      await companyService.unfollowCompany(company.id);
+      const newCount = Math.max(0, count - 1);
+      setCount(newCount);
+      setIsFollowing(false);
+      if (onFollowChange) {
+        onFollowChange(false, newCount);
+      }
+      if (onFollow) {
+        onFollow();
+      }
+    } catch (error) {
+      console.error("Failed to unfollow company:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <header className={cn("", className)}>
+    <header className={cn("bg-white", className)}>
       <div className="container mx-auto">
-        <div className="flex flex-col items-center gap-6 md:flex-row md:gap-8">
-          {/* Company Logo */}
-          <div className="h-20 w-20 overflow-hidden rounded-lg border bg-white p-1 shadow-sm md:h-24 md:w-24">
-            <img
-              src={company.logo || "/placeholder-company-logo.png"}
-              alt={`${company.name} logo`}
-              className="h-full w-full object-contain"
-              onError={(e) => {
-                e.currentTarget.src = "/placeholder-company-logo.png";
-              }}
-            />
-          </div>
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+          <div className="flex flex-col items-start gap-6 md:flex-row md:items-center">
+            {/* Company Logo with enhanced styling */}
+            <div className="flex-shrink-0">
+              <div className="h-24 w-24 overflow-hidden rounded-xl border bg-white p-1 shadow-md transition-transform duration-300 hover:scale-105 md:h-28 md:w-28">
+                <img
+                  src={company.logo || "/placeholder-company-logo.png"}
+                  alt={`${company.name} logo`}
+                  className="h-full w-full object-contain"
+                />
+              </div>
+            </div>
 
-          {/* Company Info */}
-          <div className="flex-1 text-center md:text-left">
-            <h1 className="text-2xl font-bold md:text-3xl">{company.name}</h1>
+            {/* Company Info */}
+            <div className="flex-grow">
+              <div className="flex flex-wrap items-center gap-3">
+                <h1 className="from-primary to-secondary bg-gradient-to-r bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
+                  {company.name}
+                </h1>
+                {company.foundedYear && (
+                  <Badge variant="outline" className="border-gray-200 bg-gray-50">
+                    Est. {company.foundedYear}
+                  </Badge>
+                )}
+              </div>
 
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-gray-600 md:justify-start">
-              {company.location && (
-                <div className="flex items-center gap-1">
-                  <MapPin className="h-4 w-4" />
-                  <span>{company.location}</span>
+              <div className="text-muted-foreground mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
+                {company.industry && (
+                  <div className="flex items-center gap-1.5">
+                    <Building className="text-primary/70 h-4 w-4" />
+                    <span>{company.industry}</span>
+                  </div>
+                )}
+                {company.location && (
+                  <div className="flex items-center gap-1.5">
+                    <MapPin className="text-secondary/70 h-4 w-4" />
+                    <span>{company.location}</span>
+                  </div>
+                )}
+                <div className="flex items-center gap-1.5">
+                  <Users className="text-accent/70 h-4 w-4" />
+                  <span>{count} followers</span>
                 </div>
-              )}
-
-              {company.industry && (
-                <div className="flex items-center gap-1">
-                  <Building className="h-4 w-4" />
-                  <span>{company.industry}</span>
-                </div>
-              )}
-
-              {company.website && (
-                <div className="flex items-center gap-1">
-                  <Globe className="h-4 w-4" />
-                  <a
-                    href={company.website}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="hover:text-primary hover:underline"
-                  >
-                    Website
-                  </a>
-                </div>
-              )}
+                {company.openPositions > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <Award className="h-4 w-4 text-amber-500" />
+                    <span>{company.openPositions} open positions</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
           {/* Follow Button */}
-          <div>
-            <Button
-              variant={isFollowing ? "outline" : "default"}
-              onClick={onFollow}
-              className="w-full md:w-auto"
-            >
-              <Users className="mr-2 h-4 w-4" />
-              {isFollowing ? "Following" : "Follow"}
-            </Button>
-          </div>
+          {user?.role === "applicant" && (
+            <div className="mt-6 flex items-center justify-start md:mt-0 md:justify-end">
+              <FollowButton
+                companyId={company.id}
+                companyName={company.name}
+                isFollowing={isFollowing}
+                isLoading={isLoading}
+                onFollow={handleFollow}
+                onUnfollow={handleUnfollow}
+                variant="outline"
+                size="lg"
+                className={isFollowing ? "" : "border-2"}
+                showToast={true}
+              />
+            </div>
+          )}
         </div>
       </div>
     </header>
   );
-};
-
-export default CompanyHeader;
+}

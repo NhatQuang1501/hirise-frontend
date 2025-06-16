@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { CompanyFilter, companyService } from "@/services/company";
 import { companiesMetadata } from "@/utils/companyMetadata";
-import { Building2, Filter, Rocket, Search, Sparkles, TrendingUp, Users, X } from "lucide-react";
-import { useCompanyPagination } from "@/hooks/useCompanyPagination";
+import { Building2, Filter, Rocket, Search, Sparkles, Users, X } from "lucide-react";
+import { Company } from "@/types/company";
+import { CompanyCard } from "@/components/company/CompanyCard";
 import CompanyCarousel from "@/components/company/CompanyCarousel";
-import NewJobsCompanyGrid from "@/components/company/NewJobsCompanyGrid";
-import PopularCompaniesCarousel from "@/components/company/PopularCompaniesCarousel";
+import { ResponsivePagination } from "@/components/section/ResponsivePagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -31,46 +31,154 @@ interface Location {
 
 const CompanyListPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [industry, setIndustry] = useState("");
-  const [location, setLocation] = useState("");
+  const [industry, setIndustry] = useState("all");
+  const [location, setLocation] = useState("all");
   const [industries, setIndustries] = useState<Industry[]>([]);
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [sortBy, setSortBy] = useState("-follower_count");
 
-  const { companies: topCompanies, loading: topCompaniesLoading } = useCompanyPagination({
-    initialFilters: {
-      page_size: 5,
-      ordering: "-follower_count",
-    },
+  // Thêm state để lưu trữ danh sách công ty và phân trang
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [pagination, setPagination] = useState({
+    currentPage: 1,
+    totalPages: 1,
+    totalItems: 0,
   });
 
-  // Update metadata when component mounts
+  // Thêm state để theo dõi trạng thái tìm kiếm
+  const [isSearching, setIsSearching] = useState(false);
+
+  // Thêm state để lưu các công ty nổi bật
+  const [topCompanies, setTopCompanies] = useState<Company[]>([]);
+  const [topCompaniesLoading, setTopCompaniesLoading] = useState(true);
+
+  // Fetch companies với filter
+  const fetchCompanies = async (page = 1) => {
+    setIsLoading(true);
+    try {
+      const filters: CompanyFilter = {
+        page,
+        page_size: 9,
+        ordering: sortBy,
+      };
+
+      // Thêm filter theo từ khóa tìm kiếm
+      if (searchQuery) {
+        filters.search = searchQuery;
+      }
+
+      // Thêm filter theo ngành nghề nếu có
+      if (industry && industry !== "all") {
+        filters.industry = industry;
+      }
+
+      // Thêm filter theo địa điểm nếu có
+      if (location && location !== "all") {
+        filters.location = location;
+      }
+
+      const response = await companyService.getCompanies(filters);
+      setCompanies(response.data);
+      setPagination({
+        currentPage: response.current_page,
+        totalPages: response.total_pages,
+        totalItems: response.count,
+      });
+    } catch (error) {
+      console.error("Error fetching companies:", error);
+    } finally {
+      setIsLoading(false);
+      setIsSearching(false);
+    }
+  };
+
+  // Fetch industries và locations
   useEffect(() => {
     document.title = companiesMetadata.title;
 
-    // Instead of fetching from API endpoints that don't exist yet,
-    // we'll use static data for now
-    setIndustries([
-      { id: "tech", name: "Technology" },
-      { id: "finance", name: "Fintech" },
-      { id: "ecommerce", name: "E-commerce" },
-      { id: "healthcare", name: "Healthcare Tech" },
-      { id: "edu", name: "Education Tech" },
-    ]);
+    const fetchData = async () => {
+      try {
+        // Fetch industries
+        const industriesResponse = await companyService.getIndustries();
+        setIndustries(industriesResponse.results);
 
-    setLocations([
-      { id: "hanoi", address: "Hanoi", country: "Vietnam" },
-      { id: "hcm", address: "Ho Chi Minh City", country: "Vietnam" },
-      { id: "danang", address: "Da Nang", country: "Vietnam" },
-      { id: "remote", address: "Remote", country: "Vietnam" },
-    ]);
+        // Fetch locations
+        const locationsResponse = await companyService.getLocations();
+        setLocations(locationsResponse.results);
 
-    setIsLoading(false);
+        // Fetch top companies
+        const fetchTopCompanies = async () => {
+          try {
+            setTopCompaniesLoading(true);
+            const response = await companyService.getPopularCompanies({
+              page_size: 6,
+              ordering: "-follower_count",
+            });
+            setTopCompanies(response.data);
+          } catch (error) {
+            console.error("Error fetching top companies:", error);
+          } finally {
+            setTopCompaniesLoading(false);
+          }
+        };
+
+        await Promise.all([fetchTopCompanies()]);
+        fetchCompanies();
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
   }, []);
 
+  // Fetch companies khi filter thay đổi
+  useEffect(() => {
+    if (!isSearching) return;
+    fetchCompanies(1);
+  }, [isSearching]);
+
   const clearFilters = () => {
-    setIndustry("");
-    setLocation("");
+    setIndustry("all");
+    setLocation("all");
+    setSearchQuery("");
+    fetchCompanies(1);
+  };
+
+  // Xử lý tìm kiếm
+  const handleSearch = () => {
+    setIsSearching(true);
+  };
+
+  // Xử lý khi thay đổi sort
+  const handleSortChange = (value: string) => {
+    setSortBy(value);
+    setIsSearching(true);
+  };
+
+  // Xử lý phân trang
+  const handlePageChange = (page: number) => {
+    fetchCompanies(page);
+  };
+
+  // Xử lý follow/unfollow công ty
+  const handleFollowChange = async (companyId: string, isFollowing: boolean) => {
+    try {
+      setCompanies(
+        companies.map((company) =>
+          company.id === companyId
+            ? {
+                ...company,
+                isFollowing,
+                followerCount: isFollowing ? company.followerCount + 1 : company.followerCount - 1,
+              }
+            : company,
+        ),
+      );
+    } catch (error) {
+      console.error("Error updating follow status:", error);
+    }
   };
 
   const stats = [
@@ -91,11 +199,12 @@ const CompanyListPage = () => {
     },
   ];
 
-  const featuredIndustries = [
-    { name: "Technology", icon: <Rocket className="size-6" />, count: 150 },
-    { name: "Fintech", icon: <TrendingUp className="size-6" />, count: 85 },
-    { name: "E-commerce", icon: <Building2 className="size-6" />, count: 120 },
-    { name: "Healthcare Tech", icon: <Users className="size-6" />, count: 75 },
+  const sortOptions = [
+    { value: "name", label: "Name (A-Z)" },
+    { value: "-name", label: "Name (Z-A)" },
+    { value: "-follower_count", label: "Most Popular" },
+    { value: "-created_at", label: "Newest" },
+    { value: "created_at", label: "Oldest" },
   ];
 
   return (
@@ -164,10 +273,25 @@ const CompanyListPage = () => {
                   ))}
                 </SelectContent>
               </Select>
-              <Button className="from-primary to-secondary w-full bg-gradient-to-r md:w-auto">
+              <Select value={sortBy} onValueChange={handleSortChange}>
+                <SelectTrigger className="w-full border-0 md:w-[180px]">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  {sortOptions.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                className="from-primary to-secondary w-full bg-gradient-to-r md:w-auto"
+                onClick={handleSearch}
+              >
                 Search Companies
               </Button>
-              {(industry || location) && (
+              {(industry || location || searchQuery) && (
                 <Button variant="ghost" onClick={clearFilters} className="w-full md:w-auto">
                   Clear filters
                 </Button>
@@ -220,7 +344,25 @@ const CompanyListPage = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    {(industry || location) && (
+                    <div className="space-y-3">
+                      <h3 className="text-sm font-medium">Sort by</h3>
+                      <Select value={sortBy} onValueChange={handleSortChange}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Sort by" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {sortOptions.map((option) => (
+                            <SelectItem key={option.value} value={option.value}>
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button onClick={handleSearch} className="w-full">
+                      Apply Filters
+                    </Button>
+                    {(industry || location || searchQuery) && (
                       <Button variant="outline" onClick={clearFilters} className="w-full">
                         <X className="mr-2 h-4 w-4" />
                         Clear all filters
@@ -253,91 +395,74 @@ const CompanyListPage = () => {
         </div>
       </section>
 
-      {/* Featured Industries */}
-      <section className="bg-muted py-16">
+      {/* Companies List Section */}
+      <section className="py-16">
         <div className="container mx-auto px-4">
-          <div className="mb-10 text-center">
-            <h2 className="mb-3 text-3xl font-bold">Browse by Industry</h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl">
-              Explore companies by industry and find your perfect match in your field of expertise
-            </p>
+          <div className="mb-10">
+            <h2 className="text-3xl font-bold">
+              {searchQuery ? `Search Results for "${searchQuery}"` : "All Companies"}
+            </h2>
+            <p className="text-muted-foreground mt-2">{pagination.totalItems} companies found</p>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-4">
-            {featuredIndustries.map((industry, index) => (
-              <Card
-                key={index}
-                className="group cursor-pointer transition-all hover:-translate-y-1 hover:shadow-md"
-              >
-                <CardContent className="flex flex-col items-center p-6 text-center">
-                  <div className="bg-primary/10 text-primary mb-4 flex h-16 w-16 items-center justify-center rounded-full">
-                    {industry.icon}
-                  </div>
-                  <CardTitle className="mb-2">{industry.name}</CardTitle>
-                  <CardDescription>{industry.count} companies</CardDescription>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              {Array(9)
+                .fill(0)
+                .map((_, index) => (
+                  <div key={index} className="h-64 animate-pulse rounded-lg bg-gray-200"></div>
+                ))}
+            </div>
+          ) : (
+            <>
+              {companies.length === 0 ? (
+                <div className="rounded-lg border border-dashed p-8 text-center">
+                  <h3 className="mb-2 text-xl font-semibold">No companies found</h3>
+                  <p className="text-muted-foreground">
+                    Try searching with different keywords or adjusting the filters.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                  {companies.map((company) => (
+                    <CompanyCard
+                      key={company.id}
+                      company={company}
+                      onFollowChange={handleFollowChange}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {/* Pagination */}
+              {pagination.totalPages > 1 && (
+                <div className="mt-8">
+                  <ResponsivePagination
+                    currentPage={pagination.currentPage}
+                    totalPages={pagination.totalPages}
+                    onPageChange={handlePageChange}
+                  />
+                  <p className="text-muted-foreground mt-2 text-center text-sm">
+                    Showing {(pagination.currentPage - 1) * 9 + 1}-
+                    {Math.min(pagination.currentPage * 9, pagination.totalItems)} of{" "}
+                    {pagination.totalItems} companies
+                  </p>
+                </div>
+              )}
+            </>
+          )}
         </div>
       </section>
 
-      {/* Top Companies */}
-      <section className="py-16">
+      {/* CompanyCarousel - Giữ lại phần Featured Companies */}
+      <section className="bg-muted py-16">
         <div className="container mx-auto px-4">
           <CompanyCarousel
             companies={topCompanies}
             loading={topCompaniesLoading}
-            title="Top Companies"
+            title="Featured Companies"
             description="Leading employers in the tech industry"
           />
-        </div>
-      </section>
-
-      {/* Popular Companies with gradient background */}
-      <section className="from-highlight to-highlight/30 relative bg-gradient-to-br py-16">
-        <div className="bg-primary/10 absolute top-0 right-0 h-64 w-64 rounded-full opacity-70 blur-3xl"></div>
-        <div className="bg-secondary/10 absolute bottom-0 left-20 h-80 w-80 rounded-full opacity-70 blur-3xl"></div>
-
-        <div className="relative container mx-auto px-4">
-          <PopularCompaniesCarousel />
-        </div>
-      </section>
-
-      {/* Companies with New Jobs */}
-      <section className="py-16">
-        <div className="container mx-auto px-4">
-          <div className="mb-10 text-center">
-            <h2 className="mb-3 text-3xl font-bold">Companies Actively Hiring</h2>
-            <p className="text-muted-foreground mx-auto max-w-2xl">
-              These companies have posted new job opportunities in the last 24 hours
-            </p>
-          </div>
-          <NewJobsCompanyGrid searchQuery={searchQuery} industry={industry} location={location} />
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="from-secondary to-primary bg-gradient-to-r py-16 text-white">
-        <div className="container mx-auto px-4">
-          <div className="mx-auto max-w-3xl text-center">
-            <h2 className="mb-6 text-3xl font-bold">Ready to Take the Next Step?</h2>
-            <p className="text-primary-foreground mb-8 text-lg">
-              Create your profile now and get noticed by top companies in your industry
-            </p>
-            <div className="flex flex-col justify-center gap-4 sm:flex-row">
-              <Button size="lg" className="text-secondary hover:bg-primary-foreground bg-white">
-                Sign Up Now
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="border-white text-white hover:bg-white/10"
-              >
-                Learn More
-              </Button>
-            </div>
-          </div>
         </div>
       </section>
     </div>

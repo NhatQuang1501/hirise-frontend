@@ -43,6 +43,11 @@ export const profileService = {
 
     try {
       if (role === "company") {
+        // In ra dữ liệu để debug
+        for (const pair of formData?.entries() || []) {
+          console.log(pair[0], pair[1]);
+        }
+
         const response = await axiosInstance.put(`/api/companies/${userId}/`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -58,8 +63,12 @@ export const profileService = {
         return response.data;
       }
       throw new Error("Invalid role");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error updating profile with file:", error);
+      // Log chi tiết lỗi từ API
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+      }
       throw error;
     }
   },

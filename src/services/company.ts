@@ -10,6 +10,29 @@ export interface CompanyFilter {
   ordering?: string;
 }
 
+export interface CompanyFollower {
+  id: string;
+  applicant_id: string;
+  applicant_name: string;
+  company_id: string;
+  company_name: string;
+  company_logo: string | null;
+  created_at: string;
+}
+
+export interface CompanyFollowerResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  current_page: number;
+  total_pages: number;
+  data: CompanyFollower[];
+}
+
+export interface FollowStatusResponse {
+  is_following: boolean;
+}
+
 // Function to convert API data to UI format
 const mapApiCompanyToCompany = (apiCompany: ApiCompany): Company => {
   return {
@@ -19,7 +42,7 @@ const mapApiCompanyToCompany = (apiCompany: ApiCompany): Company => {
     industry: apiCompany.profile.industry_names?.[0] || "",
     location: apiCompany.profile.location_names?.[0] || "Multiple locations",
     jobCount: 0, // Will be updated from statistics if available
-    followerCount: 0, // Will be updated from statistics if available
+    followerCount: apiCompany.profile.follower_count || 0, // Lấy follower_count từ API
     isFollowing: false, // Need API to check if user is following company
     newJobsToday: 0, // Will be updated from statistics if available
     description: apiCompany.profile.description || "",
@@ -91,25 +114,60 @@ export const companyService = {
     }
   },
 
-  followCompany: async (id: string) => {
+  // Updated follow company method to use the new endpoint
+  followCompany: async (companyId: string) => {
     try {
-      // This endpoint doesn't exist yet in the backend
-      const response = await api.post(`/companies/${id}/follow/`);
+      const response = await api.post(`/companies/${companyId}/follow/`);
       return response.data;
     } catch (error) {
-      console.error(`Error following company ${id}:`, error);
+      console.error(`Error following company ${companyId}:`, error);
       throw error;
     }
   },
 
-  unfollowCompany: async (id: string) => {
+  // Updated unfollow company method to use the new endpoint
+  unfollowCompany: async (companyId: string) => {
     try {
-      // This endpoint doesn't exist yet in the backend
-      const response = await api.post(`/companies/${id}/unfollow/`);
+      const response = await api.delete(`/companies/${companyId}/follow/`);
+      return response.data;
+    } catch (error: any) {
+      // Nếu lỗi là 404, có thể công ty đã được unfollow hoặc chưa từng được follow
+      // Trong trường hợp này, chúng ta trả về thành công để UI cập nhật đúng
+      if (error.response && error.response.status === 404) {
+        console.warn(`Company ${companyId} was not followed or already unfollowed.`);
+        return { success: true };
+      }
+      console.error(`Error unfollowing company ${companyId}:`, error);
+      throw error;
+    }
+  },
+
+  // New method to check if user is following a company
+  checkFollowStatus: async (companyId: string) => {
+    try {
+      const response = await api.get<FollowStatusResponse>(`/companies/${companyId}/check-follow/`);
       return response.data;
     } catch (error) {
-      console.error(`Error unfollowing company ${id}:`, error);
-      throw error;
+      console.error(`Error checking follow status for company ${companyId}:`, error);
+      return { is_following: false };
+    }
+  },
+
+  // New method to get list of companies user is following
+  getFollowingCompanies: async () => {
+    try {
+      const response = await api.get<CompanyFollowerResponse>("/following/");
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching following companies:", error);
+      return {
+        count: 0,
+        next: null,
+        previous: null,
+        current_page: 1,
+        total_pages: 1,
+        data: [],
+      };
     }
   },
 

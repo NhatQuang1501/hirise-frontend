@@ -20,6 +20,7 @@ export interface ApiCompany {
     location_names: string[];
     industry_names: string[];
     skill_names: string[];
+    follower_count: number;
   };
 }
 

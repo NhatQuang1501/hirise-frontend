@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import QuillEditor from "@/components/jobPost/QuillEditor";
 import { TagInput } from "@/components/profile/TagInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -28,14 +29,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 
 const companyProfileSchema = z.object({
   name: z.string().min(2, "Company name must be at least 2 characters"),
   website: z.string().url("Invalid website URL").or(z.literal("")),
   description: z.string(),
   benefits: z.string(),
-  founded_year: z.number().min(1900).max(new Date().getFullYear()),
+  founded_year: z.number().min(1900).max(new Date().getFullYear()).nullable(),
   skills: z.array(z.string()),
   locations: z.array(z.string()),
   industries: z.array(z.string()),
@@ -56,7 +56,7 @@ export function CompanyProfileEditForm() {
       website: "",
       description: "",
       benefits: "",
-      founded_year: new Date().getFullYear(),
+      founded_year: null,
       skills: [],
       locations: [],
       industries: [],
@@ -75,7 +75,7 @@ export function CompanyProfileEditForm() {
           website: data.profile?.website || "",
           description: data.profile?.description || "",
           benefits: data.profile?.benefits || "",
-          founded_year: data.profile?.founded_year || new Date().getFullYear(),
+          founded_year: data.profile?.founded_year || null,
           skills: data.profile?.skill_names || [],
           locations: data.profile?.location_names || [],
           industries: data.profile?.industry_names || [],
@@ -129,31 +129,46 @@ export function CompanyProfileEditForm() {
     try {
       setIsSubmitting(true);
 
-      // Create FormData to send both form data and file
-      const formData = new FormData();
-
-      // Add form data fields
-      Object.entries(data).forEach(([key, value]) => {
-        if (Array.isArray(value)) {
-          // Handle array fields (skills, locations, industries)
-          value.forEach((item) => {
-            formData.append(key, item);
-          });
-        } else {
-          formData.append(key, value.toString());
-        }
-      });
-
-      // Add logo file if available
       if (logoFile) {
+        // Sử dụng FormData khi có file logo
+        const formData = new FormData();
+
+        // Thêm các trường dữ liệu thông thường
+        formData.append("name", data.name);
+        formData.append("website", data.website);
+        formData.append("description", data.description);
+        formData.append("benefits", data.benefits);
+
+        // Chỉ thêm founded_year nếu có giá trị
+        if (data.founded_year !== null) {
+          formData.append("founded_year", data.founded_year.toString());
+        }
+
+        // Xử lý các mảng
+        data.skills.forEach((item) => {
+          formData.append("skills", item);
+        });
+
+        data.locations.forEach((item) => {
+          formData.append("locations", item);
+        });
+
+        data.industries.forEach((item) => {
+          formData.append("industries", item);
+        });
+
+        // Thêm file logo
         formData.append("logo", logoFile);
+
+        await profileService.updateProfileWithLogo(user?.id, user?.role, formData);
+      } else {
+        // Sử dụng JSON khi không có file logo
+        await profileService.updateProfile(user?.id, user?.role, data);
       }
 
-      // Call API to update profile
-      await profileService.updateProfileWithLogo(user?.id, user?.role, formData);
-      toast.success("Profile updated successfully");
+      toast.success("Cập nhật hồ sơ thành công");
     } catch (error) {
-      toast.error("Failed to update profile");
+      toast.error("Không thể cập nhật hồ sơ");
       console.error(error);
     } finally {
       setIsSubmitting(false);
@@ -264,10 +279,9 @@ export function CompanyProfileEditForm() {
                   <Input
                     {...field}
                     type="number"
+                    value={field.value || ""}
                     onChange={(e) => {
-                      const value = e.target.value
-                        ? parseInt(e.target.value)
-                        : new Date().getFullYear();
+                      const value = e.target.value ? parseInt(e.target.value) : null;
                       field.onChange(value);
                     }}
                     min={1900}
@@ -291,7 +305,12 @@ export function CompanyProfileEditForm() {
                   Company Description
                 </FormLabel>
                 <FormControl>
-                  <Textarea {...field} rows={4} />
+                  <QuillEditor
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="Describe your company..."
+                    minHeight="200px"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -308,7 +327,12 @@ export function CompanyProfileEditForm() {
                   Benefits
                 </FormLabel>
                 <FormControl>
-                  <Textarea {...field} rows={4} />
+                  <QuillEditor
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="List the benefits your company offers..."
+                    minHeight="200px"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
