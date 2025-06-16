@@ -45,13 +45,9 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
 }) => {
   const [applications, setApplications] = useState<Application[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
-  const [filters, setFilters] = useState<ApplicationFilter>({
+  const [filters] = useState<ApplicationFilter>({
     ordering: "-created_at",
   });
-  const [processingId, setProcessingId] = useState<string | null>(null);
   const [matchResults, setMatchResults] = useState<any[]>([]);
   const navigate = useNavigate();
 
@@ -61,11 +57,9 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
     try {
       const response = await applicationService.getJobApplications(jobId, {
         ...filters,
-        page: currentPage,
+        page: 1,
       });
       setApplications(response.data);
-      setTotalPages(response.total_pages);
-      setTotalCount(response.count);
     } catch (error) {
       console.error("Failed to fetch applications:", error);
       toast.error("Failed to load applications");
@@ -84,92 +78,10 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
     }
   };
 
-  // Handle page change
-  // const handlePageChange = (page: number) => {
-  //   setCurrentPage(page);
-  // };
-
-  // // Handle filter change
-  // const handleFilterChange = (key: keyof ApplicationFilter, value: string | undefined) => {
-  //   setFilters((prev) => ({ ...prev, [key]: value }));
-  //   setCurrentPage(1);
-  // };
-
-  // // Handle analyze CV
-  // const handleAnalyzeCV = async (applicationId: string) => {
-  //   setProcessingId(applicationId);
-  //   try {
-  //     await applicationService.analyzeCV(applicationId);
-  //     toast.success("CV analysis completed");
-  //     fetchApplications();
-  //   } catch (error) {
-  //     console.error("Failed to analyze CV:", error);
-  //     toast.error("Failed to analyze CV");
-  //   } finally {
-  //     setProcessingId(null);
-  //   }
-  // };
-
-  // Handle accept application
-  // const handleAccept = async (applicationId: string) => {
-  //   if (window.confirm("Are you sure you want to accept this application?")) {
-  //     try {
-  //       await applicationService.acceptApplication(applicationId);
-  //       toast.success("Application accepted successfully");
-  //       fetchApplications();
-  //     } catch (error) {
-  //       console.error("Failed to accept application:", error);
-  //       toast.error("Failed to accept application");
-  //     }
-  //   }
-  // };
-
-  // // Handle reject application
-  // const handleReject = async (applicationId: string) => {
-  //   if (window.confirm("Are you sure you want to reject this application?")) {
-  //     try {
-  //       await applicationService.rejectApplication(applicationId);
-  //       toast.success("Application rejected successfully");
-  //       fetchApplications();
-  //     } catch (error) {
-  //       console.error("Failed to reject application:", error);
-  //       toast.error("Failed to reject application");
-  //     }
-  //   }
-  // };
-
-  // Get status badge color
-  // const getStatusColor = (status: string) => {
-  //   switch (status) {
-  //     case "pending":
-  //       return "bg-yellow-100 text-yellow-800";
-  //     case "reviewing":
-  //       return "bg-blue-100 text-blue-800";
-  //     case "processing":
-  //       return "bg-purple-100 text-purple-800";
-  //     case "accepted":
-  //       return "bg-green-100 text-green-800";
-  //     case "rejected":
-  //       return "bg-red-100 text-red-800";
-  //     default:
-  //       return "bg-gray-100 text-gray-800";
-  //   }
-  // };
-
-  // // Get initials for avatar
-  // const getInitials = (name: string) => {
-  //   return name
-  //     .split(" ")
-  //     .map((n) => n[0])
-  //     .join("")
-  //     .toUpperCase()
-  //     .substring(0, 2);
-  // };
-
   useEffect(() => {
     fetchApplications();
     fetchMatchResults();
-  }, [jobId, currentPage, filters]);
+  }, [jobId, filters]);
 
   const getStatusBadge = (status: string) => {
     switch (status) {

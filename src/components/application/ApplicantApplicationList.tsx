@@ -27,7 +27,7 @@ export const ApplicantApplicationList: React.FC<ApplicantApplicationListProps> =
   const [isLoading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalCount, setTotalCount] = useState(0);
+  // const [totalCount, setTotalCount] = useState(0);
   const [filters, setFilters] = useState<ApplicationFilter>({
     ordering: "-created_at",
   });
@@ -43,7 +43,7 @@ export const ApplicantApplicationList: React.FC<ApplicantApplicationListProps> =
       });
       setApplications(response.data);
       setTotalPages(response.total_pages);
-      setTotalCount(response.count);
+      // setTotalCount(response.count);
     } catch (error) {
       console.error("Failed to fetch applications:", error);
       toast.error("Failed to load your applications");

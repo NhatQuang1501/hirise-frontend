@@ -2,7 +2,6 @@ import React from "react";
 import { FileText, Info } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface JobDescriptionProps {
   description?: string; // Thêm dấu ? để cho phép undefined

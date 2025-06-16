@@ -13,7 +13,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
-const CompanyJobs = ({ companyId, openPositions }: CompanyJobsProps) => {
+const CompanyJobs = ({ openPositions }: CompanyJobsProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 5;
 

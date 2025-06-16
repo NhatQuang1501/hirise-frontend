@@ -28,6 +28,7 @@ const SocialMediaLinks: React.FC<SocialMediaLinksProps> = ({ links, className })
   };
 
   // Lọc ra những link thực sự có giá trị
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const validLinks = Object.entries(links).filter(([_, value]) => value && value.trim() !== "");
 
   if (validLinks.length === 0) return null;

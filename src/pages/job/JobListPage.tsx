@@ -11,7 +11,6 @@ import {
   LayoutList,
   MapPin,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { JobCardItem } from "@/types/job";
 import { cn } from "@/lib/utils";
@@ -118,8 +117,7 @@ const formatTimeAgo = (date: Date): string => {
 };
 
 const JobListPage: React.FC = () => {
-  const navigate = useNavigate();
-  const [jobs, setJobs] = useState<JobData[]>([]);
+  // const [jobs, setJobs] = useState<JobData[]>([]);
   const [filteredJobs, setFilteredJobs] = useState<JobCardItem[]>([]);
   const [featuredJobs, setFeaturedJobs] = useState<JobCardItem[]>([]);
   const [keyword, setKeyword] = useState<string>("");
@@ -212,7 +210,7 @@ const JobListPage: React.FC = () => {
       const response = await jobService.getJobs(filters);
 
       // Lưu trữ dữ liệu gốc
-      setJobs(response.data);
+      // setJobs(response.data);
 
       // Chuyển đổi dữ liệu để hiển thị
       const jobItems = response.data.map(mapJobDataToCardItem);

@@ -1,5 +1,4 @@
 import React from "react";
-import { Plus } from "lucide-react";
 import { JobStatus } from "@/types/company";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +33,7 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
   onSearchChange,
   onStatusChange,
   onFilterChange,
-  onCreateJob,
+  // onCreateJob,
 }) => {
   // Xử lý tìm kiếm
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {

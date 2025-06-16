@@ -29,7 +29,6 @@ interface FollowButtonProps {
 }
 
 export function FollowButton({
-  companyId,
   companyName = "this company",
   isFollowing,
   isLoading = false,
@@ -68,6 +67,7 @@ export function FollowButton({
       if (showToast) {
         toast.error("Failed to follow company. Please try again.");
       }
+      console.error(error);
     } finally {
       setLocalLoading(false);
     }
@@ -85,6 +85,7 @@ export function FollowButton({
       if (showToast) {
         toast.error("Failed to unfollow company. Please try again.");
       }
+      console.error(error);
     } finally {
       setLocalLoading(false);
       setShowUnfollowDialog(false);

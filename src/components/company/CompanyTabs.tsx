@@ -1,15 +1,7 @@
-import React from "react";
 import { CompanyTabsProps } from "@/types/interfaces";
 import { cn } from "@/lib/utils";
 
-const CompanyTabs = ({
-  companyName,
-  companyLocation,
-  followerCount,
-  activeSection,
-  onTabClick,
-  className,
-}: CompanyTabsProps) => {
+const CompanyTabs = ({ activeSection, onTabClick, className }: CompanyTabsProps) => {
   return (
     <div className={cn("border-b", className)}>
       <div className="mx-auto max-w-screen-xl px-4 lg:col-span-8">

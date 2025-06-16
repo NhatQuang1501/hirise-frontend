@@ -39,7 +39,6 @@ const CompanyJobCard: React.FC<CompanyJobCardProps> = ({
   job,
   onDelete,
   onClose,
-  onView,
   onEdit,
   onPublish,
 }) => {
