@@ -3,14 +3,14 @@ import {
   Briefcase,
   Building,
   Calendar,
-  Facebook,
-  Github,
+  // Facebook,
+  // Github,
   Globe,
-  Instagram,
-  Linkedin,
+  // Instagram,
+  // Linkedin,
   MapPin,
-  Twitter,
-  Youtube,
+  // Twitter,
+  // Youtube,
 } from "lucide-react";
 import { CompanyDetails } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
@@ -21,14 +21,14 @@ interface CompanySidebarProps {
   children?: React.ReactNode;
 }
 
-const socialIcons = {
-  linkedin: { icon: Linkedin, color: "hover:text-[#0077B5]" },
-  facebook: { icon: Facebook, color: "hover:text-[#1877F2]" },
-  twitter: { icon: Twitter, color: "hover:text-[#1DA1F2]" },
-  github: { icon: Github, color: "hover:text-[#333]" },
-  instagram: { icon: Instagram, color: "hover:text-[#E4405F]" },
-  youtube: { icon: Youtube, color: "hover:text-[#FF0000]" },
-} as const;
+// const socialIcons = {
+//   linkedin: { icon: Linkedin, color: "hover:text-[#0077B5]" },
+//   facebook: { icon: Facebook, color: "hover:text-[#1877F2]" },
+//   twitter: { icon: Twitter, color: "hover:text-[#1DA1F2]" },
+//   github: { icon: Github, color: "hover:text-[#333]" },
+//   instagram: { icon: Instagram, color: "hover:text-[#E4405F]" },
+//   youtube: { icon: Youtube, color: "hover:text-[#FF0000]" },
+// } as const;
 
 const CompanySidebar: React.FC<CompanySidebarProps> = ({ company, children }) => {
   return (

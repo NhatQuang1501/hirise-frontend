@@ -1,35 +1,35 @@
 import { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import {
-  Bell,
+  // Bell,
   Bookmark,
   Briefcase,
   Building,
-  Check,
+  // Check,
   ChevronDown,
   ClipboardList,
-  Eye,
+  // Eye,
   LogOut,
   Menu,
   User,
   Users,
   X,
 } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useNotification } from "@/types/useNotification";
+import { Link, useLocation } from "react-router-dom";
+// import { useNotification } from "@/types/useNotification";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { NotificationBadge } from "@/components/notification/NotificationBadge";
-import { NotificationList } from "@/components/notification/NotificationList";
-import { NotificationPopover } from "@/components/notification/NotificationPopover";
+// import { NotificationBadge } from "@/components/notification/NotificationBadge";
+// import { NotificationList } from "@/components/notification/NotificationList";
+// import { NotificationPopover } from "@/components/notification/NotificationPopover";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,10 +41,10 @@ import hiriseLogo from "@/assets/images/hiriseLogo.png";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [notificationOpen, setNotificationOpen] = useState(false);
+  // const [notificationOpen, setNotificationOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate();
-  const { unreadCount, markAllAsRead, notifications } = useNotification();
+  // const navigate = useNavigate();
+  // const { unreadCount, markAllAsRead, notifications } = useNotification();
   const { isAuthenticated, user, logout } = useAuth();
 
   useEffect(() => {

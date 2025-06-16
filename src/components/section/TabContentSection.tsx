@@ -16,7 +16,7 @@ const TabContentSection: React.FC<TabContentSectionProps> = ({
   icon,
   iconColor = "text-primary",
   children,
-  viewAllLink,
+  // viewAllLink,
   onViewAll,
 }) => {
   return (

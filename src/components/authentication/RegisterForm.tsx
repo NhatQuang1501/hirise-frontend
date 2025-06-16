@@ -61,9 +61,10 @@ export function RegisterForm() {
   async function onSubmit(data: RegisterFormValues) {
     setIsLoading(true);
     try {
-      const { confirmPassword, acceptTerms, ...registerData } = data;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { confirmPassword: __, acceptTerms: _, ...registerData } = data;
       await register(registerData);
-      toast.success("Registration successful! Please check your email for verification.");
+      toast.success("Register successful! Please check your email for verification.");
     } catch (error: any) {
       toast.error(error.response?.data?.detail || "Registration failed. Please try again.");
     } finally {

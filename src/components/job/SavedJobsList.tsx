@@ -10,16 +10,6 @@ import JobCard from "@/components/job/JobCard";
 import { ResponsivePagination } from "@/components/section/ResponsivePagination";
 import { Button } from "@/components/ui/button";
 
-// Interface for API response
-interface SavedJobsResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  current_page: number;
-  total_pages: number;
-  data: SavedJobApiData[];
-}
-
 // Interface for saved job data from API
 interface SavedJobApiData {
   id: string;

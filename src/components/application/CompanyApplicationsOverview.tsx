@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { ROUTES } from "@/routes/routes";
+// import { ROUTES } from "@/routes/routes";
 import { ApplicationFilter, applicationService } from "@/services/application";
 import jobService from "@/services/job";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ApplicationsList } from "./ApplicationsList";
 import { JobsSelectionSidebar } from "./JobsSelectionSidebar";
@@ -10,7 +10,7 @@ import { ApplicationStats } from "./dashboard/ApplicationStats";
 import { TopJobsSection } from "./dashboard/TopJobsSection";
 
 export const CompanyApplicationsOverview: React.FC = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
   const [jobs, setJobs] = useState<any[]>([]);
   const [applications, setApplications] = useState<any[]>([]);
@@ -146,9 +146,9 @@ export const CompanyApplicationsOverview: React.FC = () => {
     setCurrentPage(1);
   };
 
-  const handleViewJobApplications = (jobId: string) => {
-    navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", jobId));
-  };
+  // const handleViewJobApplications = (jobId: string) => {
+  //   navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", jobId));
+  // };
 
   // Handle analyze CV
   const handleAnalyzeCV = async (applicationId: string) => {

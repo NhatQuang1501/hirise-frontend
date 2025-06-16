@@ -2,7 +2,7 @@ import React from "react";
 import { ROUTES } from "@/routes/routes";
 import { aiMatchingService } from "@/services/ai-matching";
 import { format } from "date-fns";
-import { ArrowRight, BarChart, ChevronRight, Eye, Users } from "lucide-react";
+import { BarChart, ChevronRight, Eye, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
-import jobService from "@/services/job";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Eye, Save, Send } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -53,8 +52,6 @@ const CompanyJobCreatePage: React.FC = () => {
 
       // Log dữ liệu trước khi gửi (để debug)
       console.log("Submitting job data:", data);
-
-      const response = await jobService.createJob(data);
 
       if (data.status === "Published") {
         toast.success("Job published successfully!");

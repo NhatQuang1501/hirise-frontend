@@ -22,7 +22,7 @@ const BulletTextarea: React.FC<BulletTextareaProps> = ({
   const addBulletPoint = () => {
     if (textareaRef.current) {
       const start = textareaRef.current.selectionStart;
-      const end = textareaRef.current.selectionEnd;
+      // const end = textareaRef.current.selectionEnd;
       const currentValue = textareaRef.current.value;
 
       // Find the beginning of the current line
