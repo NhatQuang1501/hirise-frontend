@@ -216,21 +216,35 @@ export const companyService = {
   },
 
   // Get jobs from a specific company
-  getCompanyJobs: async (id: string, filters: CompanyFilter = {}) => {
-    try {
-      const response = await api.get(`/companies/${id}/jobs/`, { params: filters });
-      return response.data;
-    } catch (error) {
-      console.error(`Error fetching jobs for company ${id}:`, error);
-      return {
-        count: 0,
-        next: null,
-        previous: null,
-        current_page: 1,
-        total_pages: 1,
-        data: [],
-      };
-    }
+  // getCompanyJobs: async (id: string, filters: CompanyFilter = {}) => {
+  //   try {
+  //     const response = await api.get(`/companies/${id}/jobs/`, { params: filters });
+  //     return response.data;
+  //   } catch (error) {
+  //     console.error(`Error fetching jobs for company ${id}:`, error);
+  //     return {
+  //       count: 0,
+  //       next: null,
+  //       previous: null,
+  //       current_page: 1,
+  //       total_pages: 1,
+  //       data: [],
+  //     };
+  //   }
+  // },
+  getCompanyJobs: async (companyId: string, status: string = 'all', page: number = 1) => {
+    const response = await api.get(`/companies/${companyId}/jobs/`, {
+      params: {
+        status,
+        page
+      }
+    });
+    return response.data;
+  },
+
+  getCompanyJobsCount: async (companyId: string) => {
+    const response = await api.get(`/companies/${companyId}/jobs-count/`);
+    return response.data;
   },
 
   // API to get trending companies (most visited or with most new jobs)

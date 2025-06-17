@@ -112,11 +112,11 @@ const JobList: React.FC<JobListProps> = ({
           ) : currentJobs.length > 0 ? (
             // Hiển thị danh sách công việc
             currentJobs.map((job) => (
-              <JobCard 
-                key={job.id} 
-                job={{...job, id: String(job.id)}} 
-                onSaveJob={() => {}} 
-                onClick={() => {}} 
+              <JobCard
+                key={job.id}
+                job={{ ...job, id: String(job.id) }}
+                onSaveJob={() => {}}
+                onClick={() => {}}
               />
             ))
           ) : (

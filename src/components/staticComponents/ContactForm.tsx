@@ -57,7 +57,9 @@ const ContactForm = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Send us a Message</h2>
+      <h2 className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-2xl font-bold text-transparent">
+        Send us a Message
+      </h2>
 
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
@@ -69,7 +71,7 @@ const ContactForm = () => {
                 <FormItem>
                   <FormLabel>Name</FormLabel>
                   <FormControl>
-                    <Input placeholder="Your name" {...field} />
+                    <Input placeholder="Your name" {...field} className="border-primary/20 focus-visible:ring-primary" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -83,7 +85,7 @@ const ContactForm = () => {
                 <FormItem>
                   <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="your.email@example.com" {...field} />
+                    <Input placeholder="your.email@example.com" {...field} className="border-primary/20 focus-visible:ring-primary" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -98,7 +100,7 @@ const ContactForm = () => {
               <FormItem>
                 <FormLabel>Subject (Optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="What is this regarding?" {...field} />
+                  <Input placeholder="What is this regarding?" {...field} className="border-primary/20 focus-visible:ring-primary" />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -114,7 +116,7 @@ const ContactForm = () => {
                 <FormControl>
                   <Textarea
                     placeholder="How can we help you?"
-                    className="min-h-[120px]"
+                    className="min-h-[120px] border-primary/20 focus-visible:ring-primary"
                     {...field}
                   />
                 </FormControl>
@@ -123,7 +125,10 @@ const ContactForm = () => {
             )}
           />
 
-          <Button type="submit" className="w-full sm:w-auto">
+          <Button 
+            type="submit" 
+            className="bg-gradient-to-r from-primary to-blue-600 transition-all hover:shadow-md w-full sm:w-auto"
+          >
             <Send className="mr-2 size-4" />
             Send Message
           </Button>

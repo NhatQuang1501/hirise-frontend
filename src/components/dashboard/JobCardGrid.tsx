@@ -168,11 +168,19 @@ const JobCardGrid: React.FC<JobCardGridProps> = ({ jobs }) => {
 
                 <div className="bg-muted/50 border-t p-4">
                   <div className="flex flex-wrap gap-2">
-                    <Button variant="outline" size="sm" onClick={() => handleViewJob(Number(job.id))}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleViewJob(Number(job.id))}
+                    >
                       <Eye className="mr-2 size-4" />
                       View
                     </Button>
-                    <Button variant="outline" size="sm" onClick={() => handleEditJob(Number(job.id))}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleEditJob(Number(job.id))}
+                    >
                       <Edit className="mr-2 size-4" />
                       Edit
                     </Button>

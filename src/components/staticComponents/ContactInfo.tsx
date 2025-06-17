@@ -3,11 +3,13 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 const ContactInfo = () => {
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-bold">Contact Information</h2>
+      <h2 className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-2xl font-bold text-transparent">
+        Contact Information
+      </h2>
 
       <div className="grid gap-6 sm:grid-cols-2">
         {/* Email */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 transition-all hover:translate-x-1">
           <div className="bg-primary/10 text-primary rounded-lg p-3">
             <Mail className="size-6" />
           </div>
@@ -20,7 +22,7 @@ const ContactInfo = () => {
         </div>
 
         {/* Phone */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 transition-all hover:translate-x-1">
           <div className="bg-primary/10 text-primary rounded-lg p-3">
             <Phone className="size-6" />
           </div>
@@ -33,7 +35,7 @@ const ContactInfo = () => {
         </div>
 
         {/* Address */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 transition-all hover:translate-x-1">
           <div className="bg-primary/10 text-primary rounded-lg p-3">
             <MapPin className="size-6" />
           </div>
@@ -48,7 +50,7 @@ const ContactInfo = () => {
         </div>
 
         {/* Office Hours */}
-        <div className="flex items-start gap-3">
+        <div className="flex items-start gap-3 transition-all hover:translate-x-1">
           <div className="bg-primary/10 text-primary rounded-lg p-3">
             <Clock className="size-6" />
           </div>

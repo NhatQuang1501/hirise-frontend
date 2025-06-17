@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { companyService } from "@/services/company";
+import { formatQuillContent } from "@/utils/formatQuillContent";
 import { motion } from "framer-motion";
 import { AlertCircle, Award, Briefcase, Building, MapPin, Star, Users } from "lucide-react";
 import { useParams } from "react-router-dom";
@@ -403,9 +404,12 @@ const CompanyDetailPage = () => {
                 </h2>
 
                 <div className="prose max-w-none">
-                  <p className="leading-relaxed">
-                    {company.description || "No description provided."}
-                  </p>
+                  <div
+                    className="leading-relaxed"
+                    dangerouslySetInnerHTML={{
+                      __html: formatQuillContent(company.description) || "No description provided.",
+                    }}
+                  />
                 </div>
 
                 {company.benefits && (
@@ -417,7 +421,12 @@ const CompanyDetailPage = () => {
                       Benefits & Perks
                     </h3>
                     <div className="prose max-w-none">
-                      <p className="leading-relaxed">{company.benefits}</p>
+                      <div
+                        className="leading-relaxed"
+                        dangerouslySetInnerHTML={{
+                          __html: formatQuillContent(company.benefits),
+                        }}
+                      />
                     </div>
                   </div>
                 )}

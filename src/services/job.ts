@@ -57,6 +57,18 @@ export const jobService = {
     return response.data;
   },
 
+  // Đóng job
+  closeJob: async (id: string) => {
+    const response = await api.patch(`/jobs/${id}/update/`, { status: "closed" });
+    return response.data;
+  },
+
+  // publish job
+  publishJob: async (id: string) => {
+    const response = await api.patch(`/jobs/${id}/update/`, { status: "published" });
+    return response.data;
+  },
+
   // Xóa job
   deleteJob: async (id: string) => {
     const response = await api.delete(`/jobs/${id}/delete/`);

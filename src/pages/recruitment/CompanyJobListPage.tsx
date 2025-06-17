@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
-import jobService, { JobFilter } from "@/services/job";
+import jobService from "@/services/job";
+import { companyService } from "@/services/company";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { CompanyJob, JobStatus } from "@/types/company";
+import { useAuth } from "@/hooks/useAuth";
 import { CustomDialog } from "@/components/popup/CustomDialog";
 import CompanyJobCard from "@/components/recruitment/CompanyJobCard";
 import CompanyJobFilters from "@/components/recruitment/CompanyJobFilters";
@@ -12,6 +14,7 @@ import { Button } from "@/components/ui/button";
 
 const CompanyJobListPage: React.FC = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [filteredJobs, setFilteredJobs] = useState<any[]>([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [activeStatus, setActiveStatus] = useState<JobStatus | "All">("All");
@@ -41,46 +44,19 @@ const CompanyJobListPage: React.FC = () => {
     city: [],
   });
 
-  // Fetch jobs
+  // Fetch jobs sử dụng API mới
   const fetchJobs = async (page = 1) => {
+    if (!user?.id) return;
+    
     setIsLoading(true);
     setError(null);
 
     try {
-      const filters: JobFilter = {
-        page,
-        page_size: 10,
-      };
-
-      // Thêm filter theo trạng thái
-      if (activeStatus !== "All") {
-        filters.status = activeStatus.toLowerCase();
-      }
-
-      // Thêm filter theo từ khóa tìm kiếm
-      if (searchKeyword) {
-        filters.search = searchKeyword;
-      }
-
-      // Thêm các filter bổ sung nếu có
-      if (activeFilters) {
-        // Filter theo loại hợp đồng
-        if (activeFilters.contractType && activeFilters.contractType.length > 0) {
-          filters.job_type = activeFilters.contractType.join(",");
-        }
-
-        // Filter theo cấp độ công việc
-        if (activeFilters.jobLevel && activeFilters.jobLevel.length > 0) {
-          filters.experience_level = activeFilters.jobLevel.join(",");
-        }
-
-        // Filter theo thành phố
-        if (activeFilters.city && activeFilters.city.length > 0) {
-          filters.city = activeFilters.city.join(",");
-        }
-      }
-
-      const response = await jobService.getMyJobs(filters);
+      // Chuyển đổi activeStatus từ "All"/"Published"/"Draft"/"Closed" sang "all"/"published"/"draft"/"closed"
+      const statusParam = activeStatus === "All" ? "all" : activeStatus.toLowerCase();
+      
+      // Gọi API mới để lấy danh sách job theo trạng thái
+      const response = await companyService.getCompanyJobs(user.id, statusParam, page);
 
       setFilteredJobs(response.data);
       setPagination({
@@ -98,8 +74,10 @@ const CompanyJobListPage: React.FC = () => {
 
   // Áp dụng filter và fetch jobs khi thay đổi
   useEffect(() => {
-    fetchJobs(1);
-  }, [searchKeyword, activeStatus]);
+    if (user?.id) {
+      fetchJobs(1);
+    }
+  }, [user?.id, searchKeyword, activeStatus]);
 
   // Xử lý tìm kiếm
   const handleSearch = (keyword: string) => {
@@ -183,7 +161,7 @@ const CompanyJobListPage: React.FC = () => {
 
   const handlePublishJob = async (id: string) => {
     try {
-      await jobService.updateJobStatus(id, "published");
+      await jobService.publishJob(id);
       toast.success("Job published successfully");
       fetchJobs(pagination.currentPage);
     } catch (error) {

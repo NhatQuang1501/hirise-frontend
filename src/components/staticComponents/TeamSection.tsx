@@ -13,13 +13,13 @@ interface TeamMember {
 
 const teamMembers: TeamMember[] = [
   {
-    name: "John Doe",
+    name: "Quang Nguyen",
     role: "Founder & CEO",
-    image: "/team/john-doe.jpg",
+    image: "/team/quang-nguyen.jpg",
     bio: "10+ years in tech recruitment and startup leadership",
     social: {
-      linkedin: "https://linkedin.com/in/johndoe",
-      github: "https://github.com/johndoe",
+      linkedin: "https://linkedin.com/in/quang-nguyen-123",
+      github: "https://github.com/quang-nguyen-123",
     },
   },
   // Add more team members
@@ -30,7 +30,7 @@ const TeamSection = () => {
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="mb-4 text-3xl font-bold md:text-4xl">Meet Our Team</h2>
+          <h2 className="mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">Meet Our Team</h2>
           <p className="text-muted-foreground mb-12">
             The passionate individuals driving innovation in tech recruitment
           </p>
@@ -40,13 +40,15 @@ const TeamSection = () => {
           {teamMembers.map((member) => (
             <div
               key={member.name}
-              className="group rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
+              className="group overflow-hidden rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
             >
-              <img
-                src={member.image}
-                alt={member.name}
-                className="mx-auto mb-4 aspect-square w-32 rounded-full object-cover"
-              />
+              <div className="mb-4 overflow-hidden rounded-full bg-gradient-to-r from-primary/20 to-blue-600/20 p-1">
+                <img
+                  src={member.image}
+                  alt={member.name}
+                  className="aspect-square w-32 rounded-full object-cover"
+                />
+              </div>
               <div className="text-center">
                 <h3 className="mb-1 text-lg font-semibold">{member.name}</h3>
                 <p className="text-primary mb-2 text-sm">{member.role}</p>

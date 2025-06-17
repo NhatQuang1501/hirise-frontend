@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { JobStatus } from "@/types/company";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { companyService } from "@/services/company";
+import { useAuth } from "@/hooks/useAuth";
+import { Plus } from "lucide-react";
 
 // Thêm các filter và parameters mới
 interface CompanyJobFiltersProps {
@@ -33,8 +36,36 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
   onSearchChange,
   onStatusChange,
   onFilterChange,
-  // onCreateJob,
+  onCreateJob,
 }) => {
+  const { user } = useAuth();
+  const [jobCounts, setJobCounts] = useState({
+    all: 0,
+    published: 0,
+    draft: 0,
+    closed: 0,
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Lấy số lượng job theo từng trạng thái
+  useEffect(() => {
+    const fetchJobCounts = async () => {
+      if (user?.id) {
+        setIsLoading(true);
+        try {
+          const counts = await companyService.getCompanyJobsCount(user.id);
+          setJobCounts(counts);
+        } catch (error) {
+          console.error("Error fetching job counts:", error);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchJobCounts();
+  }, [user?.id]);
+
   // Xử lý tìm kiếm
   const handleSearch = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -70,7 +101,6 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
     { value: "others", label: "Others" },
   ];
 
-  // Component UI được cập nhật để bao gồm các filter mới
   return (
     <div className="mb-6 space-y-4">
       {/* Search, status, và nút Create Job */}
@@ -88,19 +118,33 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
             Search
           </Button>
         </form>
+        
+        {/* Create Job button */}
+        <Button onClick={onCreateJob} className="flex items-center gap-2">
+          <Plus className="h-4 w-4" />
+          Create Job
+        </Button>
       </div>
 
-      {/* Status filter tabs */}
+      {/* Status filter tabs with counts */}
       <Tabs
         value={activeStatus}
         onValueChange={(value) => onStatusChange(value as JobStatus | "All")}
         className="w-full"
       >
         <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="All">All Jobs</TabsTrigger>
-          <TabsTrigger value="Published">Published</TabsTrigger>
-          <TabsTrigger value="Draft">Draft</TabsTrigger>
-          <TabsTrigger value="Closed">Closed</TabsTrigger>
+          <TabsTrigger value="All" disabled={isLoading}>
+            All Jobs {!isLoading && <span className="ml-1 text-xs">({jobCounts.all})</span>}
+          </TabsTrigger>
+          <TabsTrigger value="Published" disabled={isLoading}>
+            Published {!isLoading && <span className="ml-1 text-xs">({jobCounts.published})</span>}
+          </TabsTrigger>
+          <TabsTrigger value="Draft" disabled={isLoading}>
+            Draft {!isLoading && <span className="ml-1 text-xs">({jobCounts.draft})</span>}
+          </TabsTrigger>
+          <TabsTrigger value="Closed" disabled={isLoading}>
+            Closed {!isLoading && <span className="ml-1 text-xs">({jobCounts.closed})</span>}
+          </TabsTrigger>
         </TabsList>
       </Tabs>
 

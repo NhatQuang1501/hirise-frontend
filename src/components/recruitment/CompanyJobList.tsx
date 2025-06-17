@@ -168,7 +168,7 @@ export const CompanyJobList: React.FC = () => {
   const confirmCloseJob = async () => {
     if (jobToClose) {
       try {
-        await jobService.updateJobStatus(jobToClose, "closed");
+        await jobService.closeJob(jobToClose);
         toast.success("Job closed successfully");
         fetchJobs(pagination.currentPage);
       } catch (error) {
@@ -183,7 +183,7 @@ export const CompanyJobList: React.FC = () => {
 
   const handlePublishJob = async (id: string) => {
     try {
-      await jobService.updateJobStatus(id, "published");
+      await jobService.publishJob(id);
       toast.success("Job published successfully");
       fetchJobs(pagination.currentPage);
     } catch (error) {

@@ -74,13 +74,13 @@ const JobCarousel: React.FC<JobCarouselProps> = ({
                 key={index}
                 className="pl-4 sm:basis-full md:basis-1/3 lg:basis-1/3 xl:basis-1/3"
               >
-                <JobCard 
+                <JobCard
                   job={{
-                    ...job, 
+                    ...job,
                     id: String(job.id),
                     city: job.city || "",
                     city_display: job.city_display || "",
-                    is_saved: job.is_saved || false
+                    is_saved: job.is_saved || false,
                   }}
                   onSaveJob={() => {}}
                   onClick={() => {}}
