@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
-import jobService from "@/services/job";
 import { companyService } from "@/services/company";
+import jobService from "@/services/job";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { CompanyJob, JobStatus } from "@/types/company";
@@ -47,14 +47,14 @@ const CompanyJobListPage: React.FC = () => {
   // Fetch jobs sử dụng API mới
   const fetchJobs = async (page = 1) => {
     if (!user?.id) return;
-    
+
     setIsLoading(true);
     setError(null);
 
     try {
       // Chuyển đổi activeStatus từ "All"/"Published"/"Draft"/"Closed" sang "all"/"published"/"draft"/"closed"
       const statusParam = activeStatus === "All" ? "all" : activeStatus.toLowerCase();
-      
+
       // Gọi API mới để lấy danh sách job theo trạng thái
       const response = await companyService.getCompanyJobs(user.id, statusParam, page);
 

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { companyService } from "@/services/company";
+import { Plus } from "lucide-react";
 import { JobStatus } from "@/types/company";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -10,9 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { companyService } from "@/services/company";
-import { useAuth } from "@/hooks/useAuth";
-import { Plus } from "lucide-react";
 
 // Thêm các filter và parameters mới
 interface CompanyJobFiltersProps {
@@ -118,7 +118,7 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
             Search
           </Button>
         </form>
-        
+
         {/* Create Job button */}
         <Button onClick={onCreateJob} className="flex items-center gap-2">
           <Plus className="h-4 w-4" />

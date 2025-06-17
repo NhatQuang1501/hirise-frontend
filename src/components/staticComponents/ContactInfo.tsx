@@ -3,7 +3,7 @@ import { Clock, Mail, MapPin, Phone } from "lucide-react";
 const ContactInfo = () => {
   return (
     <div className="space-y-6">
-      <h2 className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-2xl font-bold text-transparent">
+      <h2 className="from-primary bg-gradient-to-r to-blue-600 bg-clip-text text-2xl font-bold text-transparent">
         Contact Information
       </h2>
 

@@ -14,25 +14,25 @@ const AboutPage = () => {
   }, []);
 
   return (
-    <main className="min-h-screen bg-gradient-to-b from-background to-secondary/5">
+    <main className="from-background to-secondary/5 min-h-screen bg-gradient-to-b">
       {/* Hero Section */}
       <AboutHeroSection />
-      
+
       {/* Story Section */}
       <div className="animate-fade-in">
         <StorySection />
       </div>
-      
+
       {/* Mission & Vision Section */}
       <div className="animate-fade-in">
         <MissionVisionSection />
       </div>
-      
+
       {/* Team Section */}
       <div className="animate-fade-in">
         <TeamSection />
       </div>
-      
+
       {/* CTA Section */}
       <div className="animate-fade-in">
         <CTASection

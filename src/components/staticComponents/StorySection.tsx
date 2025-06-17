@@ -6,7 +6,7 @@ const StorySection = () => {
       <div className="container mx-auto px-4">
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
           <div className="space-y-6">
-            <h2 className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
+            <h2 className="from-primary bg-gradient-to-r to-blue-600 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
               Our Story
             </h2>
             <div className="text-muted-foreground space-y-4">
@@ -25,9 +25,9 @@ const StorySection = () => {
               </p>
             </div>
           </div>
-          
+
           <div className={cn("grid grid-cols-2 gap-4", "md:gap-6 lg:gap-8")}>
-            <div className="overflow-hidden rounded-lg bg-gradient-to-r from-primary/20 to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
+            <div className="from-primary/20 overflow-hidden rounded-lg bg-gradient-to-r to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
               <div className="h-full w-full overflow-hidden rounded-[calc(0.5rem-1px)] bg-white">
                 <img
                   src="/images/about/team-1.jpg"
@@ -36,8 +36,8 @@ const StorySection = () => {
                 />
               </div>
             </div>
-            
-            <div className="mt-8 overflow-hidden rounded-lg bg-gradient-to-r from-primary/20 to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
+
+            <div className="from-primary/20 mt-8 overflow-hidden rounded-lg bg-gradient-to-r to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
               <div className="h-full w-full overflow-hidden rounded-[calc(0.5rem-1px)] bg-white">
                 <img
                   src="/images/about/team-2.jpg"
@@ -46,8 +46,8 @@ const StorySection = () => {
                 />
               </div>
             </div>
-            
-            <div className="overflow-hidden rounded-lg bg-gradient-to-r from-primary/20 to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
+
+            <div className="from-primary/20 overflow-hidden rounded-lg bg-gradient-to-r to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
               <div className="h-full w-full overflow-hidden rounded-[calc(0.5rem-1px)] bg-white">
                 <img
                   src="/images/about/team-3.jpg"
@@ -56,8 +56,8 @@ const StorySection = () => {
                 />
               </div>
             </div>
-            
-            <div className="-mt-8 overflow-hidden rounded-lg bg-gradient-to-r from-primary/20 to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
+
+            <div className="from-primary/20 -mt-8 overflow-hidden rounded-lg bg-gradient-to-r to-blue-600/20 p-1 shadow-lg transition-all hover:shadow-xl">
               <div className="h-full w-full overflow-hidden rounded-[calc(0.5rem-1px)] bg-white">
                 <img
                   src="/images/about/team-4.jpg"

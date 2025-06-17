@@ -347,7 +347,9 @@ const CompanyJobDetailPage: React.FC = () => {
                       // onClick={() =>
                       //   navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
                       // }
-                      onClick={() => navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))}
+                      onClick={() =>
+                        navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
+                      }
                     >
                       View All Applications
                       <ArrowRight className="ml-2 h-4 w-4" />

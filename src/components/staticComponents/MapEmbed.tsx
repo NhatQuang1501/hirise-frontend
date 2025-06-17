@@ -7,7 +7,7 @@ const DUTLocationLink: string =
 const MapEmbed = () => {
   return (
     <div className="space-y-6">
-      <h2 className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-2xl font-bold text-transparent">
+      <h2 className="from-primary bg-gradient-to-r to-blue-600 bg-clip-text text-2xl font-bold text-transparent">
         Our Location
       </h2>
       <div className="aspect-square overflow-hidden rounded-lg shadow-sm md:aspect-video">

@@ -30,7 +30,9 @@ const TeamSection = () => {
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="mb-4 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">Meet Our Team</h2>
+          <h2 className="from-primary mb-4 bg-gradient-to-r to-blue-600 bg-clip-text text-3xl font-bold text-transparent md:text-4xl">
+            Meet Our Team
+          </h2>
           <p className="text-muted-foreground mb-12">
             The passionate individuals driving innovation in tech recruitment
           </p>
@@ -42,7 +44,7 @@ const TeamSection = () => {
               key={member.name}
               className="group overflow-hidden rounded-lg bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="mb-4 overflow-hidden rounded-full bg-gradient-to-r from-primary/20 to-blue-600/20 p-1">
+              <div className="from-primary/20 mb-4 overflow-hidden rounded-full bg-gradient-to-r to-blue-600/20 p-1">
                 <img
                   src={member.image}
                   alt={member.name}

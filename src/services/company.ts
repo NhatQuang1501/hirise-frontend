@@ -232,12 +232,12 @@ export const companyService = {
   //     };
   //   }
   // },
-  getCompanyJobs: async (companyId: string, status: string = 'all', page: number = 1) => {
+  getCompanyJobs: async (companyId: string, status: string = "all", page: number = 1) => {
     const response = await api.get(`/companies/${companyId}/jobs/`, {
       params: {
         status,
-        page
-      }
+        page,
+      },
     });
     return response.data;
   },
