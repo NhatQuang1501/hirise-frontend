@@ -38,7 +38,7 @@ const mapApiCompanyToCompany = (apiCompany: ApiCompany): Company => {
   return {
     id: apiCompany.id,
     name: apiCompany.profile.name || apiCompany.username,
-    logo: apiCompany.profile.logo || "/company-logos/default-logo.png",
+    logo: apiCompany.profile.logo || "/companyPlaceholder.png",
     industry: apiCompany.profile.industry_names?.[0] || "",
     location: apiCompany.profile.location_names?.[0] || "Multiple locations",
     jobCount: 0, // Will be updated from statistics if available
