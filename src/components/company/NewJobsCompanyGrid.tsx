@@ -15,6 +15,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
 interface NewJobsCompanyGridProps {
   searchQuery: string;
@@ -88,12 +89,12 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
                 >
                   <div className="mb-4 flex items-start justify-between">
                     <img
-                      src={company.logo || "/companyPlaceholder.png"}
+                      src={company.logo || companyPlaceholder}
                       alt={company.name}
                       className="size-12 rounded-lg object-contain"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = "/companyPlaceholder.png";
+                        target.src = companyPlaceholder;
                       }}
                     />
                     <Badge variant="secondary" className="bg-green-100 text-green-800">

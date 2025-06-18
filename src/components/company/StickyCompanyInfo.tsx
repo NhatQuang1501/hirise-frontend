@@ -1,5 +1,6 @@
 import { CompanyDetails } from "@/types/company";
 import { cn } from "@/lib/utils";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
 interface StickyCompanyInfoProps {
   company: CompanyDetails;
@@ -25,7 +26,7 @@ export default function StickyCompanyInfo({
           <div className="flex items-center gap-3">
             <div className="h-8 w-8 overflow-hidden rounded-md">
               <img
-                src={company.logo || "/placeholder-company-logo.png"}
+                src={company.logo || companyPlaceholder}
                 alt={`${company.name} logo`}
                 className="h-full w-full object-contain"
               />

@@ -1,3 +1,5 @@
+import hiriseLogo from "@/assets/images/hiriseLogo.png";
+
 export const homeMetadata = {
   title: "HiRise - Top IT job platform in Vietnam",
   description:
@@ -8,7 +10,7 @@ export const homeMetadata = {
     title: "HiRise - Top IT job platform in Vietnam",
     description:
       "Connect with thousands of IT job opportunities from top technology companies in Vietnam.",
-    image: "/hiriseLogo.png",
+    image: hiriseLogo,
     url: `${import.meta.env.VITE_BASE_URL}`,
     type: "website",
   },

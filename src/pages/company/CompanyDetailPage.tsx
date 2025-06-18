@@ -19,6 +19,7 @@ import SocialMediaLinks from "@/components/section/SocialMediaLinks";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
 const CompanyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,7 +54,7 @@ const CompanyDetailPage = () => {
           id: companyData.id,
           name: companyData.profile.name,
           description: companyData.profile.description,
-          logo: companyData.profile.logo || "/placeholder-company-logo.png",
+          logo: companyData.profile.logo || companyPlaceholder,
           location: companyData.profile.location_names?.[0] || "No location specified",
           website: companyData.profile.website || "",
           foundedYear: companyData.profile.founded_year,
@@ -133,7 +134,7 @@ const CompanyDetailPage = () => {
       const formattedJobs: JobCardItem[] = jobsData.map((job: any) => ({
         id: job.id,
         company: job.company_name || company?.name || "",
-        logo: job.company?.logo || company?.logo || "/placeholder-company-logo.png",
+        logo: job.company?.logo || company?.logo || companyPlaceholder,
         title: job.title,
         salary: job.salary_display || "",
         location:

@@ -1,6 +1,6 @@
 import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
-// import hiriseLogo from "@/assets/images/hiriseLogo.png";
+import hiriseLogo from "@/assets/images/hiriseLogo.png";
 
 export function Footer() {
   return (
@@ -10,8 +10,7 @@ export function Footer() {
           {/* Logo và social links - chiếm 1 cột */}
           <div>
             <Link to={ROUTES.PUBLIC.HOME} className="mb-4 flex items-center gap-2">
-              {/* <img src={hiriseLogo} alt="HiRise Logo" className="h-8 w-auto" /> */}
-              <img src="/hiriseLogo.png" alt="HiRise Logo" className="h-8 w-auto" />
+              <img src={hiriseLogo} alt="HiRise Logo" className="h-8 w-auto" />
             </Link>
             <p className="text-muted-foreground mb-4 text-sm">
               Connect talent with the best job opportunities in the technology industry

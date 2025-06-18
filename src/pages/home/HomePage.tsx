@@ -11,9 +11,9 @@ import HeroSection from "@/components/home/HeroSection";
 import JobList from "@/components/home/JobList";
 // import NewsletterSection from "@/components/home/NewsletterSection";
 import { Badge } from "@/components/ui/badge";
-// import placeholderLogo from "@/assets/images/companyPlaceholder.png";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
-const DEFAULT_LOGO = "/companyPlaceholder.png";
+const DEFAULT_LOGO = companyPlaceholder;
 
 const HomePage: React.FC = () => {
   const [jobs, setJobs] = useState<JobCardData[]>([]);
