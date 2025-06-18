@@ -61,12 +61,14 @@ const CompanyCarousel = ({
     >
       <div className="mb-4 flex items-start justify-between">
         <img
-          src={company.logo || "../assets/images/companyPlaceholder.png"}
+          // src={company.logo || "../assets/images/companyPlaceholder.png"}
+          src={company.logo || "/companyPlaceholder.png"}
           alt={company.name}
           className="h-16 w-16 rounded-lg object-contain"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = "../assets/images/companyPlaceholder.png";
+            // target.src = "../assets/images/companyPlaceholder.png";
+            target.src = "/companyPlaceholder.png";
           }}
         />
         {company.newJobsToday > 0 && (

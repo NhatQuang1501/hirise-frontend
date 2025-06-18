@@ -37,7 +37,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import hiriseLogo from "@/assets/images/hiriseLogo.png";
+// import hiriseLogo from "@/assets/images/hiriseLogo.png";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -120,7 +120,8 @@ export function Header() {
         <div className="flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center">
             <Link to={ROUTES.PUBLIC.HOME} className="flex items-center gap-2">
-              <img src={hiriseLogo} alt="HiRise Logo" className="h-8 w-auto" />
+              {/* <img src={hiriseLogo} alt="HiRise Logo" className="h-8 w-auto" /> */}
+              <img src="/hiriseLogo.png" alt="HiRise Logo" className="h-8 w-auto" />
             </Link>
 
             {/* Desktop Navigation */}

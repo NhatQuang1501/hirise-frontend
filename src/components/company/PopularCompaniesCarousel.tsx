@@ -83,12 +83,14 @@ const PopularCompaniesCarousel = () => {
     <div className="rounded-lg bg-white p-6 shadow-sm transition-all hover:shadow-md">
       <Link to={ROUTES.PUBLIC.COMPANIES.DETAIL.replace(":id", company.id)} className="group block">
         <img
-          src={company.logo || "../assets/images/companyPlaceholder.png"}
+          // src={company.logo || "../assets/images/companyPlaceholder.png"}
+          src={company.logo || "/companyPlaceholder.png"}
           alt={company.name}
           className="mx-auto mb-4 h-16 w-16 rounded-lg object-contain"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = "../assets/images/companyPlaceholder.png";
+            // target.src = "../assets/images/companyPlaceholder.png";
+            target.src = "/companyPlaceholder.png";
           }}
         />
         <h3 className="mb-2 line-clamp-1 text-center text-lg font-bold">{company.name}</h3>
