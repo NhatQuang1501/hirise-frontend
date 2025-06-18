@@ -30,6 +30,7 @@ const CompanyJobDetailPage: React.FC = () => {
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
   const [recentApplications, setRecentApplications] = useState<Application[]>([]);
   const [isLoadingApplications, setIsLoadingApplications] = useState(false);
+  const [hasReviewedApplications, setHasReviewedApplications] = useState(false);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -165,6 +166,10 @@ const CompanyJobDetailPage: React.FC = () => {
           page_size: 3,
         });
         setRecentApplications(response.data);
+
+        // Kiểm tra xem có application nào ở trạng thái khác "pending" không
+        const hasNonPendingApplications = response.data.some((app) => app.status !== "pending");
+        setHasReviewedApplications(hasNonPendingApplications);
       } catch (error) {
         console.error("Error fetching recent applications:", error);
       } finally {
@@ -267,6 +272,7 @@ const CompanyJobDetailPage: React.FC = () => {
           onEdit={handleEdit}
           onClose={handleClose}
           onDelete={handleDelete}
+          hasReviewedApplications={hasReviewedApplications}
         />
 
         <div className="grid gap-8 lg:grid-cols-3">
@@ -344,9 +350,6 @@ const CompanyJobDetailPage: React.FC = () => {
                     <Button
                       variant="outline"
                       className="w-full"
-                      // onClick={() =>
-                      //   navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
-                      // }
                       onClick={() =>
                         navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
                       }

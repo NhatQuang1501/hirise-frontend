@@ -216,18 +216,6 @@ const ApplicationDetailPage: React.FC = () => {
           <div className="space-y-6 lg:col-span-1">
             {/* Applicant Card */}
             <Card className="overflow-hidden shadow-md transition-shadow hover:shadow-lg">
-              <div className="flex justify-center bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
-                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-3xl font-bold text-white">
-                  {application.applicant_profile?.full_name
-                    ? application.applicant_profile.full_name
-                        .split(" ")
-                        .map((n: string) => n[0])
-                        .join("")
-                        .toUpperCase()
-                        .substring(0, 2)
-                    : "A"}
-                </div>
-              </div>
               <CardContent className="p-6">
                 <div className="space-y-4">
                   <div>

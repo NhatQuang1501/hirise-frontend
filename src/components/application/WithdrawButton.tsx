@@ -17,22 +17,32 @@ import { Button } from "@/components/ui/button";
 
 interface WithdrawButtonProps {
   applicationId: string;
+  status: string;
   onWithdraw?: () => void;
   variant?: "default" | "outline" | "destructive";
   size?: "default" | "sm" | "lg";
   className?: string;
   fullWidth?: boolean;
+  children?: React.ReactNode;
 }
 
 const WithdrawButton: React.FC<WithdrawButtonProps> = ({
   applicationId,
+  status,
   onWithdraw,
   variant = "destructive",
   size = "default",
   className = "",
   fullWidth = false,
+  children,
 }) => {
   const [isWithdrawing, setIsWithdrawing] = useState(false);
+
+  const canWithdraw = status === "pending";
+
+  if (!canWithdraw) {
+    return null;
+  }
 
   const handleWithdraw = async () => {
     try {
@@ -62,6 +72,8 @@ const WithdrawButton: React.FC<WithdrawButtonProps> = ({
               <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></div>
               Withdrawing...
             </>
+          ) : children ? (
+            children
           ) : (
             <>
               <CircleX className="mr-2 h-4 w-4" />

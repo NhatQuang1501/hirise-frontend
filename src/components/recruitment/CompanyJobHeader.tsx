@@ -16,15 +16,23 @@ import { Link } from "react-router-dom";
 import { CompanyJob } from "@/types/company";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface CompanyJobHeaderProps {
   job: CompanyJob;
   onEdit: () => void;
   onClose: () => void;
   onDelete: () => void;
+  hasReviewedApplications?: boolean;
 }
 
-const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClose, onDelete }) => {
+const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({
+  job,
+  onEdit,
+  onClose,
+  onDelete,
+  hasReviewedApplications = false,
+}) => {
   // Format contract type to keep first letter uppercase only (Full time)
   const formatContractType = (type: string) => {
     if (!type) return "";
@@ -162,15 +170,31 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({ job, onEdit, onClos
 
         {/* Action Buttons */}
         <div className="flex flex-col items-start justify-center space-y-3 md:items-end">
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={onEdit}
-            className="bg-secondary hover:bg-secondary/10 hover:text-secondary w-full text-white md:w-[150px]"
-          >
-            <Edit className="mr-2 h-4 w-4" />
-            Edit Job
-          </Button>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="w-full md:w-[150px]">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    onClick={onEdit}
+                    disabled={hasReviewedApplications}
+                    className={`bg-secondary hover:bg-secondary/10 hover:text-secondary w-full text-white ${
+                      hasReviewedApplications ? "cursor-not-allowed opacity-50" : ""
+                    }`}
+                  >
+                    <Edit className="mr-2 h-4 w-4" />
+                    Edit Job
+                  </Button>
+                </div>
+              </TooltipTrigger>
+              {hasReviewedApplications && (
+                <TooltipContent>
+                  <p>Cannot edit job with reviewed applications</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
 
           {job.status !== "Closed" && (
             <Button

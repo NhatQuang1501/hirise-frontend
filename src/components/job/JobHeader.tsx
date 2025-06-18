@@ -208,6 +208,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
                   </div>
                   <WithdrawButton
                     applicationId={application.id}
+                    status={application.status}
                     onWithdraw={handleWithdrawSuccess}
                     size="lg"
                     className="w-full justify-center md:w-[180px]"
