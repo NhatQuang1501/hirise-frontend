@@ -37,7 +37,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-// import hiriseLogo from "@/assets/images/hiriseLogo.png";
+import hiriseLogo from "@/assets/images/hiriseLogo.png";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -123,12 +124,12 @@ export function Header() {
               {/* <img src={hiriseLogo} alt="HiRise Logo" className="h-8 w-auto" /> */}
               {/* <img src="/hiriseLogo.png" alt="HiRise Logo" className="h-8 w-auto" /> */}
               <img 
-                src="/assets/images/hiriseLogo.png" 
+                src={hiriseLogo} 
                 alt="HiRise Logo" 
                 className="h-8 w-auto"
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
-                  target.src = "/assets/images/companyPlaceholder.png";
+                  target.src = companyPlaceholder;
                 }}
               />
             </Link>
