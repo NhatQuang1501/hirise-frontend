@@ -46,6 +46,13 @@ export function Header() {
   // const navigate = useNavigate();
   // const { unreadCount, markAllAsRead, notifications } = useNotification();
   const { isAuthenticated, user, logout } = useAuth();
+  const [basePath, setBasePath] = useState("");
+
+  useEffect(() => {
+    // Xác định base path dựa trên môi trường
+    const currentUrl = window.location.origin;
+    setBasePath(currentUrl);
+  }, []);
 
   useEffect(() => {
     setIsMenuOpen(false);
@@ -121,7 +128,16 @@ export function Header() {
           <div className="flex flex-1 items-center">
             <Link to={ROUTES.PUBLIC.HOME} className="flex items-center gap-2">
               {/* <img src={hiriseLogo} alt="HiRise Logo" className="h-8 w-auto" /> */}
-              <img src="/hiriseLogo.png" alt="HiRise Logo" className="h-8 w-auto" />
+              {/* <img src="/hiriseLogo.png" alt="HiRise Logo" className="h-8 w-auto" /> */}
+              <img 
+                src={`${basePath}/assets/images/hiriseLogo.png`} 
+                alt="HiRise Logo" 
+                className="h-8 w-auto"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = `${basePath}/assets/images/companyPlaceholder.png`;
+                }}
+              />
             </Link>
 
             {/* Desktop Navigation */}
