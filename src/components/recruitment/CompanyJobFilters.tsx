@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { companyService } from "@/services/company";
-import { Plus } from "lucide-react";
+// import { Plus } from "lucide-react";
 import { JobStatus } from "@/types/company";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -36,7 +36,7 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
   onSearchChange,
   onStatusChange,
   onFilterChange,
-  onCreateJob,
+  // onCreateJob,
 }) => {
   const { user } = useAuth();
   const [jobCounts, setJobCounts] = useState({
@@ -120,10 +120,10 @@ const CompanyJobFilters: React.FC<CompanyJobFiltersProps> = ({
         </form>
 
         {/* Create Job button */}
-        <Button onClick={onCreateJob} className="flex items-center gap-2">
+        {/* <Button onClick={onCreateJob} className="flex items-center gap-2">
           <Plus className="h-4 w-4" />
           Create Job
-        </Button>
+        </Button> */}
       </div>
 
       {/* Status filter tabs with counts */}
