@@ -19,7 +19,7 @@ import CompanyJobHeader from "@/components/recruitment/CompanyJobHeader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 const CompanyJobDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -372,32 +372,6 @@ const CompanyJobDetailPage: React.FC = () => {
               onSaveJob={() => {}}
             />
             <SkillTags skills={job.skills || []} />
-
-            {/* Application Stats Card */}
-            <Card className="border-primary/20">
-              <CardHeader className="bg-primary/5 pb-3">
-                <CardTitle className="flex items-center text-lg">
-                  <Users className="text-primary mr-2 h-5 w-5" />
-                  Application Statistics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <div className="mb-2 text-3xl font-bold">{job.applicationCount}</div>
-                <p className="text-sm text-gray-500">Total applications received</p>
-
-                <div className="mt-4">
-                  <Button
-                    className="w-full"
-                    onClick={() =>
-                      navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
-                    }
-                  >
-                    <Users size={16} className="mr-2" />
-                    Manage Applications
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
 

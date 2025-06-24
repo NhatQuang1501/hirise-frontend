@@ -15,6 +15,7 @@ import JobFormSettings from "@/components/jobPost/JobFormSettings";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { jobService } from "@/services/job";
 
 const CompanyJobCreatePage: React.FC = () => {
   const { user, isAuthenticated } = useAuth();
@@ -53,6 +54,9 @@ const CompanyJobCreatePage: React.FC = () => {
       // Log dữ liệu trước khi gửi (để debug)
       console.log("Submitting job data:", data);
 
+      // Gọi API để tạo job
+      await jobService.createJob(data);
+      
       if (data.status === "Published") {
         toast.success("Job published successfully!");
       } else {

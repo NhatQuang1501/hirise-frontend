@@ -18,6 +18,7 @@ const BulletTextarea: React.FC<BulletTextareaProps> = ({
   className,
 }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const initialRenderRef = useRef(true);
 
   const addBulletPoint = () => {
     if (textareaRef.current) {
@@ -75,10 +76,13 @@ const BulletTextarea: React.FC<BulletTextareaProps> = ({
     }
   };
 
-  // Format on initial load
+  // Format on initial load and ensure first line has bullet
   useEffect(() => {
-    if (value && !value.startsWith("- ")) {
-      // If no bullets yet, add them to each line
+    // Xử lý khi component được tải lần đầu và đã có giá trị
+    if (initialRenderRef.current && value) {
+      initialRenderRef.current = false;
+      
+      // Format all lines with bullets
       const formattedText = value
         .split("\n")
         .map((line) => (line.trim() ? (line.startsWith("- ") ? line : `- ${line}`) : line))
@@ -89,6 +93,37 @@ const BulletTextarea: React.FC<BulletTextareaProps> = ({
       }
     }
   }, []);
+
+  // Ensure first line always has a bullet when user starts typing
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    let newValue = e.target.value;
+    
+    // If this is the first input and doesn't start with bullet, add it
+    if (newValue.trim() && !newValue.startsWith("- ")) {
+      // Check if user is typing at the beginning of the text
+      const cursorAtStart = textareaRef.current?.selectionStart === newValue.length;
+      
+      if (!newValue.includes("\n")) {
+        // Only first line exists
+        newValue = "- " + newValue;
+        
+        // Update the value
+        onChange(newValue);
+        
+        // Set cursor position after the bullet if user was typing at the start
+        if (cursorAtStart) {
+          setTimeout(() => {
+            if (textareaRef.current) {
+              textareaRef.current.selectionStart = textareaRef.current.selectionEnd = newValue.length;
+            }
+          }, 0);
+        }
+        return;
+      }
+    }
+    
+    onChange(newValue);
+  };
 
   return (
     <div className="space-y-2">
@@ -107,10 +142,22 @@ const BulletTextarea: React.FC<BulletTextareaProps> = ({
       <Textarea
         ref={textareaRef}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={handleChange}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
         className={cn("min-h-[150px]", className)}
+        onFocus={() => {
+          // Khi focus vào textarea trống, tự động thêm dấu "-" đầu tiên
+          if (!value.trim()) {
+            onChange("- ");
+            // Di chuyển con trỏ sau dấu "-"
+            setTimeout(() => {
+              if (textareaRef.current) {
+                textareaRef.current.selectionStart = textareaRef.current.selectionEnd = 2;
+              }
+            }, 0);
+          }
+        }}
       />
       <p className="text-muted-foreground text-sm">Press Enter to add a new bullet point</p>
     </div>

@@ -6,8 +6,8 @@ import { CompanyDetails } from "@/types/company";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "@/components/ui/badge";
-import { FollowButton } from "./FollowButton";
 import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
+import { FollowButton } from "./FollowButton";
 
 interface CompanyHeaderProps {
   company: CompanyDetails;

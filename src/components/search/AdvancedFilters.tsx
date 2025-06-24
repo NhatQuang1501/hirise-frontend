@@ -310,27 +310,6 @@ const AdvancedFilters: React.FC<AdvancedFiltersProps> = ({ onChange, initialFilt
                 </div>
               </div>
 
-              {/* Salary Range Filter */}
-              <div>
-                <h4 className="mb-2 font-medium">Salary Range</h4>
-                <Select
-                  value={filters.salaryRange}
-                  onValueChange={(value) => handleFilterChange("salaryRange", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select salary range" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Any Salary</SelectItem>
-                    {salaryRangeOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-
               {/* Post Date Filter */}
               <div>
                 <h4 className="mb-2 font-medium">Posted Date</h4>
