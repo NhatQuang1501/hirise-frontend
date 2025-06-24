@@ -6,7 +6,6 @@ import { ArrowDown, ArrowLeft, ArrowUp, ArrowUpDown, BarChart2, Eye } from "luci
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { BatchMatchingProgress } from "@/components/ai-matching/BatchMatchingProgress";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 
@@ -32,10 +31,11 @@ export default function ApplicationsMatchingPage() {
           aiMatchingService.getJobMatchResults(id),
         ]);
         setJob(jobData);
-        setMatchResults(matchData);
+        setMatchResults(Array.isArray(matchData) ? matchData : []);
       } catch (error) {
         console.error("Error fetching data:", error);
-        toast.error("Failed to load matching results");
+        toast.error("Không thể tải kết quả đánh giá");
+        setMatchResults([]);
       } finally {
         setIsLoading(false);
       }
@@ -58,13 +58,30 @@ export default function ApplicationsMatchingPage() {
     setTimer(intervalId);
 
     try {
-      const results = await aiMatchingService.matchAllApplications(id);
-      setMatchResults(results);
+      const response = await aiMatchingService.matchAllApplications(id);
 
-      toast.success(`Successfully analyzed ${results.length} applications`);
+      // Kiểm tra nếu response có results thì cập nhật matchResults
+      if (response.results && Array.isArray(response.results)) {
+        setMatchResults(response.results);
+        toast.success(`Đã phân tích thành công ${response.results.length} hồ sơ ứng viên`);
+      } else {
+        toast.info(response.message || "Đã bắt đầu phân tích. Kết quả sẽ sớm có.");
+        // Nếu không có kết quả ngay lập tức, thử tải lại sau 5 giây
+        setTimeout(async () => {
+          try {
+            const refreshedData = await aiMatchingService.getJobMatchResults(id);
+            if (Array.isArray(refreshedData) && refreshedData.length > 0) {
+              setMatchResults(refreshedData);
+              toast.success(`Đã tải ${refreshedData.length} kết quả phân tích`);
+            }
+          } catch (refreshError) {
+            console.error("Error refreshing match results:", refreshError);
+          }
+        }, 5000);
+      }
     } catch (error) {
       console.error("Error analyzing applications:", error);
-      toast.error("Failed to analyze applications. Please try again.");
+      toast.error("Không thể phân tích hồ sơ ứng viên. Vui lòng thử lại.");
     } finally {
       if (timer) {
         clearInterval(timer);
@@ -105,7 +122,7 @@ export default function ApplicationsMatchingPage() {
       ),
     },
     {
-      accessorKey: "match_score",
+      accessorKey: "match_percentage",
       header: ({ column }) => (
         <div className="flex items-center">
           Match Score
@@ -116,7 +133,7 @@ export default function ApplicationsMatchingPage() {
         </div>
       ),
       cell: ({ row }) => {
-        const score = row.original.match_score;
+        const score = row.original.match_percentage || Math.round(row.original.match_score * 100);
 
         const getScoreColor = (score: number) => {
           if (score >= 70) return "text-green-600";
@@ -132,7 +149,7 @@ export default function ApplicationsMatchingPage() {
 
         return (
           <div className="flex items-center gap-2">
-            <div className={getScoreColor(score)}>{score.toFixed(1)}%</div>
+            <div className={getScoreColor(score)}>{score}%</div>
             {getScoreIcon(score)}
           </div>
         );
@@ -140,54 +157,11 @@ export default function ApplicationsMatchingPage() {
       sortingFn: "basic",
     },
     {
-      accessorKey: "status",
-      header: "Status",
-      cell: ({ row }) => {
-        const status = row.original.status;
-
-        const getStatusBadge = (status: string) => {
-          switch (status) {
-            case "pending":
-              return (
-                <Badge variant="outline" className="border-blue-200 bg-blue-100 text-blue-800">
-                  Pending
-                </Badge>
-              );
-            case "reviewing":
-              return (
-                <Badge
-                  variant="outline"
-                  className="border-purple-200 bg-purple-100 text-purple-800"
-                >
-                  Reviewing
-                </Badge>
-              );
-            case "accepted":
-              return (
-                <Badge variant="outline" className="border-green-200 bg-green-100 text-green-800">
-                  Accepted
-                </Badge>
-              );
-            case "rejected":
-              return (
-                <Badge variant="outline" className="border-red-200 bg-red-100 text-red-800">
-                  Rejected
-                </Badge>
-              );
-            default:
-              return <Badge variant="outline">{status}</Badge>;
-          }
-        };
-
-        return getStatusBadge(status);
-      },
-    },
-    {
-      accessorKey: "key_strengths",
+      accessorKey: "strengths",
       header: "Key Strengths",
       cell: ({ row }) => {
-        const strengths = row.original.key_strengths;
-        if (!strengths || strengths.length === 0) {
+        const strengths = row.original.strengths || [];
+        if (strengths.length === 0) {
           return <span className="text-gray-400 italic">None</span>;
         }
 
@@ -206,14 +180,16 @@ export default function ApplicationsMatchingPage() {
       },
     },
     {
-      accessorKey: "skills_match.match_rate",
-      header: "Skills Match",
+      accessorKey: "detail_scores",
+      header: "Detail Scores",
       cell: ({ row }) => {
-        const skills = row.original.skills_match;
-        if (!skills) return null;
+        const detailScores = row.original.detail_scores || {};
+        if (Object.keys(detailScores).length === 0) return null;
 
-        const matchRate = skills.match_rate;
-        const numericRate = parseFloat(matchRate.replace("%", ""));
+        // Lấy điểm cao nhất từ detail_scores
+        const highestScore = Math.max(
+          ...Object.values(detailScores).map((score) => Math.round(score * 100)),
+        );
 
         const getMatchColor = (rate: number) => {
           if (rate >= 70) return "text-green-600";
@@ -221,7 +197,7 @@ export default function ApplicationsMatchingPage() {
           return "text-red-600";
         };
 
-        return <div className={getMatchColor(numericRate)}>{matchRate}</div>;
+        return <div className={getMatchColor(highestScore)}>{highestScore}%</div>;
       },
     },
     {
@@ -255,6 +231,9 @@ export default function ApplicationsMatchingPage() {
       </div>
     );
   }
+
+  // Đảm bảo matchResults là một mảng
+  const safeMatchResults = Array.isArray(matchResults) ? matchResults : [];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -292,7 +271,7 @@ export default function ApplicationsMatchingPage() {
           <div className="mb-8">
             <BatchMatchingProgress
               elapsedTime={elapsedTime}
-              totalApplications={matchResults.length}
+              totalApplications={safeMatchResults.length}
             />
           </div>
         )}
@@ -303,7 +282,7 @@ export default function ApplicationsMatchingPage() {
             <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-indigo-50 opacity-0 transition-opacity group-hover:opacity-100" />
             <div className="relative">
               <h3 className="text-sm font-medium text-gray-500">Total Applications</h3>
-              <div className="mt-2 text-3xl font-bold text-gray-900">{matchResults.length}</div>
+              <div className="mt-2 text-3xl font-bold text-gray-900">{safeMatchResults.length}</div>
               <div className="mt-2 text-sm text-gray-500">Total candidates analyzed</div>
             </div>
           </div>
@@ -313,10 +292,12 @@ export default function ApplicationsMatchingPage() {
             <div className="relative">
               <h3 className="text-sm font-medium text-gray-500">Average Match Score</h3>
               <div className="mt-2 text-3xl font-bold text-green-600">
-                {matchResults.length > 0
+                {safeMatchResults.length > 0
                   ? (
-                      matchResults.reduce((acc, curr) => acc + curr.match_score, 0) /
-                      matchResults.length
+                      safeMatchResults.reduce((acc, curr) => {
+                        const score = curr.match_percentage || Math.round(curr.match_score * 100);
+                        return acc + score;
+                      }, 0) / safeMatchResults.length
                     ).toFixed(1)
                   : 0}
                 <span className="text-lg">%</span>
@@ -330,7 +311,12 @@ export default function ApplicationsMatchingPage() {
             <div className="relative">
               <h3 className="text-sm font-medium text-gray-500">High Matches</h3>
               <div className="mt-2 text-3xl font-bold text-purple-600">
-                {matchResults.filter((r) => r.match_score >= 70).length}
+                {
+                  safeMatchResults.filter((r) => {
+                    const score = r.match_percentage || Math.round(r.match_score * 100);
+                    return score >= 70;
+                  }).length
+                }
               </div>
               <div className="mt-2 text-sm text-gray-500">Candidates with ≥70% match</div>
             </div>
@@ -382,7 +368,7 @@ export default function ApplicationsMatchingPage() {
           </style>
 
           <div className="overflow-hidden rounded-xl border border-gray-100 bg-white">
-            <DataTable columns={columns} data={matchResults} />
+            <DataTable columns={columns} data={safeMatchResults} />
           </div>
 
           {/* Hiển thị phân tích chi tiết cho hàng được chọn */}
@@ -395,7 +381,7 @@ export default function ApplicationsMatchingPage() {
                 <div className="rounded-lg bg-white p-3 shadow-sm">
                   <h4 className="text-sm font-medium text-gray-500">Key Strengths</h4>
                   <ul className="mt-2 space-y-1">
-                    {selectedRow.key_strengths?.map((strength, i) => (
+                    {selectedRow.strengths?.map((strength, i) => (
                       <li key={i} className="flex items-center text-sm text-gray-700">
                         <span className="mr-2 text-green-500">✓</span> {strength}
                       </li>
@@ -405,7 +391,7 @@ export default function ApplicationsMatchingPage() {
                 <div className="rounded-lg bg-white p-3 shadow-sm">
                   <h4 className="text-sm font-medium text-gray-500">Areas to Improve</h4>
                   <ul className="mt-2 space-y-1">
-                    {selectedRow.areas_to_improve?.map((area, i) => (
+                    {selectedRow.weaknesses?.map((area, i) => (
                       <li key={i} className="flex items-center text-sm text-gray-700">
                         <span className="mr-2 text-amber-500">!</span> {area}
                       </li>
@@ -413,6 +399,17 @@ export default function ApplicationsMatchingPage() {
                   </ul>
                 </div>
               </div>
+              {selectedRow.explanation && (
+                <div className="mt-4 rounded-lg bg-white p-3 shadow-sm">
+                  <h4 className="text-sm font-medium text-gray-500">Analysis</h4>
+                  <p className="mt-2 text-sm text-gray-700">{selectedRow.explanation.overall}</p>
+                  {selectedRow.explanation.note && (
+                    <p className="mt-2 text-xs text-gray-500 italic">
+                      {selectedRow.explanation.note}
+                    </p>
+                  )}
+                </div>
+              )}
             </div>
           )}
         </div>

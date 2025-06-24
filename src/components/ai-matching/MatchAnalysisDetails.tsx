@@ -3,11 +3,16 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface MatchAnalysisDetailsProps {
-  analysis: string;
+  explanation: {
+    overall: string;
+    top_strengths?: string[];
+    key_gaps?: string[];
+    note: string;
+  };
   className?: string;
 }
 
-export function MatchAnalysisDetails({ analysis, className }: MatchAnalysisDetailsProps) {
+export function MatchAnalysisDetails({ explanation, className }: MatchAnalysisDetailsProps) {
   return (
     <Card className={cn("bg-white", className)}>
       <CardHeader className="pb-2">
@@ -16,8 +21,10 @@ export function MatchAnalysisDetails({ analysis, className }: MatchAnalysisDetai
           AI Analysis
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-sm text-gray-700">{analysis}</p>
+      <CardContent className="space-y-3">
+        <p className="text-sm text-gray-700">{explanation.overall}</p>
+
+        {explanation.note && <p className="text-xs text-gray-500 italic">{explanation.note}</p>}
       </CardContent>
     </Card>
   );

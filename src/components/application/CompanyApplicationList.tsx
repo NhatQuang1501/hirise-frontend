@@ -72,9 +72,10 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
   const fetchMatchResults = async () => {
     try {
       const results = await aiMatchingService.getJobMatchResults(jobId);
-      setMatchResults(results);
+      setMatchResults(Array.isArray(results) ? results : []);
     } catch (error) {
       console.error("Error fetching match results:", error);
+      setMatchResults([]);
     }
   };
 
@@ -100,6 +101,9 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
 
   // Update the match score display
   const getMatchScore = (applicationId: string) => {
+    if (!Array.isArray(matchResults)) {
+      return null;
+    }
     const matchResult = matchResults.find((result) => result.application === applicationId);
     return matchResult ? matchResult.match_score : null;
   };
