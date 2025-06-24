@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Replace process.env with import.meta.env
 // const API_URL = import.meta.env.API_BASE_URL || "http://127.0.0.1:8000/api";
-const API_URL = import.meta.env.API_PRODUCTION_URL || "http://128.199.154.39/api";
+const API_URL = import.meta.env.API_PRODUCTION_URL || "https://128.199.154.39/api";
 
 const api = axios.create({
   baseURL: API_URL,
