@@ -1,6 +1,8 @@
 import { ROUTES } from "@/routes/routes";
 import { Link } from "react-router-dom";
-import hiriseLogo from "@/assets/images/hiriseLogo.png";
+
+const hiriseLogo =
+  "https://hirise.sgp1.cdn.digitaloceanspaces.com/media/test_uploads/hiriseLogo.png";
 
 export function Footer() {
   return (

@@ -81,7 +81,7 @@ const BulletTextarea: React.FC<BulletTextareaProps> = ({
     // Xử lý khi component được tải lần đầu và đã có giá trị
     if (initialRenderRef.current && value) {
       initialRenderRef.current = false;
-      
+
       // Format all lines with bullets
       const formattedText = value
         .split("\n")
@@ -97,31 +97,32 @@ const BulletTextarea: React.FC<BulletTextareaProps> = ({
   // Ensure first line always has a bullet when user starts typing
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     let newValue = e.target.value;
-    
+
     // If this is the first input and doesn't start with bullet, add it
     if (newValue.trim() && !newValue.startsWith("- ")) {
       // Check if user is typing at the beginning of the text
       const cursorAtStart = textareaRef.current?.selectionStart === newValue.length;
-      
+
       if (!newValue.includes("\n")) {
         // Only first line exists
         newValue = "- " + newValue;
-        
+
         // Update the value
         onChange(newValue);
-        
+
         // Set cursor position after the bullet if user was typing at the start
         if (cursorAtStart) {
           setTimeout(() => {
             if (textareaRef.current) {
-              textareaRef.current.selectionStart = textareaRef.current.selectionEnd = newValue.length;
+              textareaRef.current.selectionStart = textareaRef.current.selectionEnd =
+                newValue.length;
             }
           }, 0);
         }
         return;
       }
     }
-    
+
     onChange(newValue);
   };
 

@@ -37,7 +37,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import hiriseLogo from "@/assets/images/hiriseLogo.png";
+
+const hiriseLogo =
+  "https://hirise.sgp1.cdn.digitaloceanspaces.com/media/test_uploads/hiriseLogo.png";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
