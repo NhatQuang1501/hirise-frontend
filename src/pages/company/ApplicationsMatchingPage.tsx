@@ -63,16 +63,16 @@ export default function ApplicationsMatchingPage() {
       // Kiểm tra nếu response có results thì cập nhật matchResults
       if (response.results && Array.isArray(response.results)) {
         setMatchResults(response.results);
-        toast.success(`Đã phân tích thành công ${response.results.length} hồ sơ ứng viên`);
+        toast.success(`Analyzed ${response.results.length} applications`);
       } else {
-        toast.info(response.message || "Đã bắt đầu phân tích. Kết quả sẽ sớm có.");
+        toast.info(response.message || "Analyzing applications. Results will be available soon.");
         // Nếu không có kết quả ngay lập tức, thử tải lại sau 5 giây
         setTimeout(async () => {
           try {
             const refreshedData = await aiMatchingService.getJobMatchResults(id);
             if (Array.isArray(refreshedData) && refreshedData.length > 0) {
               setMatchResults(refreshedData);
-              toast.success(`Đã tải ${refreshedData.length} kết quả phân tích`);
+              toast.success(`Loaded ${refreshedData.length} analysis results`);
             }
           } catch (refreshError) {
             console.error("Error refreshing match results:", refreshError);
@@ -81,7 +81,7 @@ export default function ApplicationsMatchingPage() {
       }
     } catch (error) {
       console.error("Error analyzing applications:", error);
-      toast.error("Không thể phân tích hồ sơ ứng viên. Vui lòng thử lại.");
+      toast.error("Cannot analyze applications. Please try again.");
     } finally {
       if (timer) {
         clearInterval(timer);
@@ -136,14 +136,14 @@ export default function ApplicationsMatchingPage() {
         const score = row.original.match_percentage || Math.round(row.original.match_score * 100);
 
         const getScoreColor = (score: number) => {
-          if (score >= 70) return "text-green-600";
-          if (score >= 40) return "text-amber-600";
+          if (score >= 50) return "text-green-600";
+          if (score >= 30) return "text-amber-600";
           return "text-red-600";
         };
 
         const getScoreIcon = (score: number) => {
-          if (score >= 70) return <ArrowUp className="h-4 w-4 text-green-600" />;
-          if (score >= 40) return <ArrowUpDown className="h-4 w-4 text-amber-600" />;
+          if (score >= 50) return <ArrowUp className="h-4 w-4 text-green-600" />;
+          if (score >= 30) return <ArrowUpDown className="h-4 w-4 text-amber-600" />;
           return <ArrowDown className="h-4 w-4 text-red-600" />;
         };
 
@@ -192,8 +192,8 @@ export default function ApplicationsMatchingPage() {
         );
 
         const getMatchColor = (rate: number) => {
-          if (rate >= 70) return "text-green-600";
-          if (rate >= 40) return "text-amber-600";
+          if (rate >= 50) return "text-green-600";
+          if (rate >= 30) return "text-amber-600";
           return "text-red-600";
         };
 
@@ -314,11 +314,11 @@ export default function ApplicationsMatchingPage() {
                 {
                   safeMatchResults.filter((r) => {
                     const score = r.match_percentage || Math.round(r.match_score * 100);
-                    return score >= 70;
+                    return score >= 50;
                   }).length
                 }
               </div>
-              <div className="mt-2 text-sm text-gray-500">Candidates with ≥70% match</div>
+              <div className="mt-2 text-sm text-gray-500">Candidates with ≥50% match</div>
             </div>
           </div>
         </div>

@@ -166,9 +166,9 @@ export function CompanyProfileEditForm() {
         await profileService.updateProfile(user?.id, user?.role, data);
       }
 
-      toast.success("Cập nhật hồ sơ thành công");
+      toast.success("Updated profile successfully");
     } catch (error) {
-      toast.error("Không thể cập nhật hồ sơ");
+      toast.error("Cannot update profile");
       console.error(error);
     } finally {
       setIsSubmitting(false);

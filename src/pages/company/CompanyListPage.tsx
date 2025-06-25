@@ -265,7 +265,6 @@ const CompanyListPage = () => {
                   <SelectValue placeholder="Select location" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">All Locations</SelectItem>
                   {locations.map((loc) => (
                     <SelectItem key={loc.id} value={loc.id}>
                       {loc.address}
@@ -335,7 +334,6 @@ const CompanyListPage = () => {
                           <SelectValue placeholder="Select location" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="all">All Locations</SelectItem>
                           {locations.map((loc) => (
                             <SelectItem key={loc.id} value={loc.id}>
                               {loc.address}

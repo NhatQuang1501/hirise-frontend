@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
 import { Application, applicationService } from "@/services/application";
 import {
-  Award,
+  // Award,
   Briefcase,
   Building,
   Calendar,
-  CheckCircle,
+  // CheckCircle,
   Clock,
   MapPin,
-  Phone,
-  Video,
+  // Phone,
+  // Video,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
@@ -120,14 +120,14 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
           </div>
 
           {/* Thông tin cơ bản dạng form/item */}
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-            <div className="flex items-center gap-2">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2">
+            {/* <div className="flex items-center gap-2">
               <Award className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Experience</p>
                 <p className="font-medium">{job.experience}</p>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-2">
               <Briefcase className="text-secondary/80 h-5 w-5" />
@@ -172,7 +172,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
           </div>
 
           {/* Quy trình phỏng vấn */}
-          <div className="mt-6">
+          {/* <div className="mt-6">
             <p className="mb-3 font-medium text-gray-700">Interview process</p>
             <div className="flex flex-wrap items-center">
               {job.interviewProcess.map((step: string, index: number) => (
@@ -189,7 +189,7 @@ const JobHeader: React.FC<JobHeaderProps> = ({ job, saved, onSaveJob }) => {
                 </React.Fragment>
               ))}
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* CTA Buttons - Chỉ hiển thị khi là applicant */}

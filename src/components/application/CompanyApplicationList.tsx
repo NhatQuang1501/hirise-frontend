@@ -3,22 +3,7 @@ import { ROUTES } from "@/routes/routes";
 import { aiMatchingService } from "@/services/ai-matching";
 import { Application, ApplicationFilter, applicationService } from "@/services/application";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowDown, ArrowUp, ArrowUpDown, BarChart, Download, Eye } from "lucide-react";
-// import { format } from "date-fns";
-// import { BarChart, CheckCircle, ExternalLink, FileText, XCircle } from "lucide-react";
-// import { toast } from "sonner";
-// import { ResponsivePagination } from "@/components/section/ResponsivePagination";
-// // import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-// import { Badge } from "@/components/ui/badge";
-// import { Button } from "@/components/ui/button";
-// import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
+import { ArrowDown, ArrowUp, ArrowUpDown, BarChart, Eye } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ApplicationMatchModal } from "@/components/ai-matching/ApplicationMatchModal";
@@ -109,14 +94,14 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
   };
 
   const getScoreColor = (score: number) => {
-    if (score >= 70) return "text-green-600";
-    if (score >= 40) return "text-amber-600";
+    if (score >= 50) return "text-green-600";
+    if (score >= 30) return "text-amber-600";
     return "text-red-600";
   };
 
   const getScoreIcon = (score: number) => {
-    if (score >= 70) return <ArrowUp className="ml-2 h-4 w-4 text-green-600" />;
-    if (score >= 40) return <ArrowUpDown className="ml-2 h-4 w-4 text-amber-600" />;
+    if (score >= 50) return <ArrowUp className="ml-2 h-4 w-4 text-green-600" />;
+    if (score >= 30) return <ArrowUpDown className="ml-2 h-4 w-4 text-amber-600" />;
     return <ArrowDown className="ml-2 h-4 w-4 text-red-600" />;
   };
 
@@ -145,33 +130,6 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
           <p className="mt-1 text-sm text-gray-500">
             Manage and review all applications for this job
           </p>
-        </div>
-        <div className="flex space-x-2">
-          {/* <Button
-            onClick={() => navigate(ROUTES.COMPANY.JOBS.MATCH_ANALYSIS.replace(":id", jobId))}
-            variant="outline"
-            className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
-          >
-            <BarChart className="h-4 w-4 mr-2" />
-            View All Match Results
-          </Button> */}
-          {/* <Button
-            onClick={async () => {
-              try {
-                toast.loading("Analyzing all applications...");
-                await aiMatchingService.matchAllApplications(jobId);
-                toast.success("Analysis completed for all applications");
-                fetchMatchResults();
-              } catch (error) {
-                console.error("Error analyzing all applications:", error);
-                toast.error("Failed to analyze applications");
-              }
-            }}
-            className="bg-blue-600 hover:bg-blue-700 text-white"
-          >
-            <BarChart className="h-4 w-4 mr-2" />
-            Analyze All Applications
-          </Button> */}
         </div>
       </div>
 
@@ -238,11 +196,11 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
                   {getMatchScore(application.id) ? (
                     <div className="flex items-center">
                       <div
-                        className={`font-medium ${getScoreColor(getMatchScore(application.id))}`}
+                        className={`font-medium ${getScoreColor(Math.round(getMatchScore(application.id) * 100))}`}
                       >
-                        {Number(getMatchScore(application.id)).toFixed(1)}%
+                        {Math.round(getMatchScore(application.id) * 100)}%
                       </div>
-                      {getScoreIcon(getMatchScore(application.id))}
+                      {getScoreIcon(Math.round(getMatchScore(application.id) * 100))}
                     </div>
                   ) : (
                     <span className="text-sm text-gray-400 italic">Not analyzed</span>
@@ -267,7 +225,7 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
                       <Button
                         size="sm"
                         variant="outline"
-                        className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+                        className="border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100 hover:text-blue-800"
                       >
                         <BarChart className="mr-1 h-4 w-4" />
                         Analyze
@@ -287,7 +245,7 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
                       }
                     >
                       <Eye className="mr-1 h-4 w-4" />
-                      View
+                      View details
                     </Button>
 
                     <ApplicationStatusButtons
@@ -296,15 +254,6 @@ export const CompanyApplicationList: React.FC<CompanyApplicationListProps> = ({
                       onStatusChange={fetchApplications}
                       size="sm"
                     />
-
-                    {application.cv_file && (
-                      <Button size="sm" variant="outline" asChild>
-                        <a href={application.cv_file} target="_blank" rel="noopener noreferrer">
-                          <Download className="mr-1 h-4 w-4" />
-                          CV
-                        </a>
-                      </Button>
-                    )}
                   </div>
                 </TableCell>
               </TableRow>

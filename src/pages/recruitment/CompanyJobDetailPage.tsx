@@ -31,6 +31,7 @@ const CompanyJobDetailPage: React.FC = () => {
   const [recentApplications, setRecentApplications] = useState<Application[]>([]);
   const [isLoadingApplications, setIsLoadingApplications] = useState(false);
   const [hasReviewedApplications, setHasReviewedApplications] = useState(false);
+  const [applicationCount, setApplicationCount] = useState(0);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -166,6 +167,7 @@ const CompanyJobDetailPage: React.FC = () => {
           page_size: 3,
         });
         setRecentApplications(response.data);
+        setApplicationCount(response.count);
 
         // Kiểm tra xem có application nào ở trạng thái khác "pending" không
         const hasNonPendingApplications = response.data.some((app) => app.status !== "pending");
@@ -304,7 +306,7 @@ const CompanyJobDetailPage: React.FC = () => {
                   to={ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || "")}
                   className="text-primary hover:text-primary/80 flex items-center text-sm font-medium"
                 >
-                  View all ({job.applicationCount})
+                  View all ({applicationCount})
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Link>
               </div>

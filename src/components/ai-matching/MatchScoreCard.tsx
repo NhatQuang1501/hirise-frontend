@@ -10,15 +10,15 @@ interface MatchScoreCardProps {
 export function MatchScoreCard({ score, className }: MatchScoreCardProps) {
   // Determine color based on score
   const getScoreColor = (score: number) => {
-    if (score >= 70) return "text-green-500";
-    if (score >= 40) return "text-amber-500";
+    if (score >= 50) return "text-green-500";
+    if (score >= 30) return "text-amber-500";
     return "text-red-500";
   };
 
   // Get match level text
   const getMatchLevelText = (score: number) => {
-    if (score >= 70) return "Excellent Match";
-    if (score >= 40) return "Good Match";
+    if (score >= 50) return "Excellent Match";
+    if (score >= 30) return "Good Match";
     return "Low Match";
   };
 
@@ -40,8 +40,8 @@ export function MatchScoreCard({ score, className }: MatchScoreCardProps) {
             text={`${formattedScore}%`}
             styles={buildStyles({
               textSize: "24px",
-              pathColor: score >= 70 ? "#22c55e" : score >= 40 ? "#f59e0b" : "#ef4444",
-              textColor: score >= 70 ? "#22c55e" : score >= 40 ? "#f59e0b" : "#ef4444",
+              pathColor: score >= 50 ? "#22c55e" : score >= 30 ? "#f59e0b" : "#ef4444",
+              textColor: score >= 50 ? "#22c55e" : score >= 30 ? "#f59e0b" : "#ef4444",
               trailColor: "#e6e6e6",
             })}
           />

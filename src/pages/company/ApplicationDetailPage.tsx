@@ -372,7 +372,7 @@ const ApplicationDetailPage: React.FC = () => {
                 </TabsTrigger>
                 <TabsTrigger value="cv" className="gap-2">
                   <FileText className="h-4 w-4" />
-                  <span className="hidden sm:inline">CV & Cover Letter</span>
+                  <span className="hidden sm:inline">CV</span>
                   <span className="sm:hidden">CV</span>
                 </TabsTrigger>
                 <TabsTrigger value="analysis" className="gap-2" disabled={!matchResult}>
@@ -834,14 +834,14 @@ const ApplicationDetailPage: React.FC = () => {
 
 // Helper functions for color classes
 const getScoreColorClass = (score: number) => {
-  if (score >= 70) return "text-green-600";
-  if (score >= 40) return "text-amber-600";
+  if (score >= 50) return "text-green-600";
+  if (score >= 30) return "text-amber-600";
   return "text-red-600";
 };
 
 const getScoreBackgroundClass = (score: number) => {
-  if (score >= 70) return "bg-gradient-to-r from-green-400 to-green-500";
-  if (score >= 40) return "bg-gradient-to-r from-amber-400 to-amber-500";
+  if (score >= 50) return "bg-gradient-to-r from-green-400 to-green-500";
+  if (score >= 30) return "bg-gradient-to-r from-amber-400 to-amber-500";
   return "bg-gradient-to-r from-red-400 to-red-500";
 };
 

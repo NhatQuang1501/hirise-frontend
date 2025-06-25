@@ -7,7 +7,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -63,7 +62,7 @@ export function ApplicationMatchModal({
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">AI Matching Analysis</DialogTitle>
           <DialogDescription className="text-sm text-gray-500">
-            Phân tích độ phù hợp giữa ứng viên và yêu cầu công việc
+            Analyze the compatibility between the candidate and job requirements
           </DialogDescription>
         </DialogHeader>
 
@@ -111,12 +110,6 @@ export function ApplicationMatchModal({
               strengths={matchResult.strengths}
               weaknesses={matchResult.weaknesses}
             />
-
-            <DialogFooter>
-              <Button variant="outline" onClick={() => setIsOpen(false)}>
-                Close
-              </Button>
-            </DialogFooter>
           </div>
         )}
       </DialogContent>

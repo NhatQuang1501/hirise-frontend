@@ -1,7 +1,7 @@
 import React from "react";
 import { ROUTES } from "@/routes/routes";
 import {
-  Award,
+  // Award,
   Briefcase,
   Building,
   Calendar,
@@ -9,7 +9,6 @@ import {
   Edit,
   MapPin,
   Trash2,
-  Users,
   XCircle,
 } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -108,14 +107,14 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({
           </div>
 
           {/* Job details grid */}
-          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
-            <div className="flex items-center gap-2">
+          <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-2">
+            {/* <div className="flex items-center gap-2">
               <Award className="text-secondary/80 h-5 w-5" />
               <div>
                 <p className="text-sm text-gray-500">Experience</p>
                 <p className="font-medium">{job.experience}</p>
               </div>
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-2">
               <Briefcase className="text-secondary/80 h-5 w-5" />
@@ -146,14 +145,6 @@ const CompanyJobHeader: React.FC<CompanyJobHeaderProps> = ({
               <div>
                 <p className="text-sm text-gray-500">Posted</p>
                 <p className="font-medium">{formatDate(job.createdDate)}</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Users className="text-secondary/80 h-5 w-5" />
-              <div>
-                <p className="text-sm text-gray-500">Applications</p>
-                <p className="font-medium">{job.applicantCount || 0} candidates</p>
               </div>
             </div>
           </div>
