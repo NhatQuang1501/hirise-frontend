@@ -780,15 +780,15 @@ const ApplicationDetailPage: React.FC = () => {
                             <ul className="space-y-2 text-sm text-gray-600">
                               <li className="flex items-center gap-2">
                                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                                <span>70%+ indicates excellent match</span>
+                                <span>50%+ indicates excellent match</span>
                               </li>
                               <li className="flex items-center gap-2">
                                 <div className="h-3 w-3 rounded-full bg-amber-500"></div>
-                                <span>40-69% indicates moderate match</span>
+                                <span>30-50% indicates moderate match</span>
                               </li>
                               <li className="flex items-center gap-2">
                                 <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                                <span>Below 40% indicates poor match</span>
+                                <span>Below 30% indicates poor match</span>
                               </li>
                             </ul>
                           </div>

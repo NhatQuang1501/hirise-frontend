@@ -321,10 +321,12 @@ const JobDetailPage: React.FC = () => {
             <CompanyInfo
               company={{
                 id: job.company.id || job.company_name.toLowerCase().replace(/\s+/g, "-"),
+                name: job.company.name,
+                website: job.company.website,
+                founded_year: job.company.founded_year,
+                location_names: job.company.locations,
+                industry_names: job.company.industry_names || []
               }}
-              companyDescription={job.company.description}
-              saved={saved}
-              onSaveJob={handleSaveJob}
             />
 
             <SkillTags skills={job.skills.map((skill) => skill.name)} />

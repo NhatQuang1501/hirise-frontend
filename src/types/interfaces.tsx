@@ -42,10 +42,12 @@ export interface CompanyHeaderProps {
 export interface CompanyInfoProps {
   company: {
     id: string;
+    name?: string;
+    website?: string;
+    founded_year?: number;
+    location_names?: string[];
+    industry_names?: string[];
   };
-  companyDescription: string;
-  saved: boolean;
-  onSaveJob: () => void;
 }
 
 export interface CompanyJobsProps {
