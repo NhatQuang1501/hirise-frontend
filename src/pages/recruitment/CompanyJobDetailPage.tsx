@@ -368,10 +368,11 @@ const CompanyJobDetailPage: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6 lg:col-span-1">
             <CompanyInfo
-              company={{ id: job.companyId || "" }}
-              companyDescription={job.companyDescription}
-              saved={false}
-              onSaveJob={() => {}}
+              company={{ 
+                id: job.companyId || "",
+                name: job.company,
+                // Thêm các thuộc tính khác nếu có
+              }}
             />
             <SkillTags skills={job.skills || []} />
           </div>
