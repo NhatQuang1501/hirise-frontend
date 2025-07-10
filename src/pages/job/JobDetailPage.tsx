@@ -5,6 +5,7 @@ import { format } from "date-fns";
 import { ClipboardList } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { Job } from "@/types/job";
 import CompanyInfo from "@/components/company/CompanyInfo";
 import JobBenefits from "@/components/job/JobBenefits";
 import JobCarousel from "@/components/job/JobCarousel";
@@ -15,7 +16,7 @@ import JobResponsibilities from "@/components/job/JobResponsibilities";
 import SkillTags from "@/components/job/SkillTags";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
-// Interface cho dữ liệu job từ API
+// Interface for job data from API
 interface JobLocation {
   id: string;
   address: string;
@@ -56,9 +57,9 @@ interface JobDetail {
   company: JobCompany;
   company_name: string;
   description: string;
-  responsibilities: string;
+  responsibilities: string | string[];
   requirements: string;
-  benefits: string;
+  benefits: string | string[];
   status: string;
   status_display: string;
   job_type: string;
@@ -98,12 +99,12 @@ const JobDetailPage: React.FC = () => {
         setLoading(true);
         const jobData = await jobService.getJobById(id);
 
-        // Xử lý các trường văn bản có dấu xuống dòng thành mảng
+        // Process text fields with line breaks into arrays
         jobData.responsibilities = jobData.responsibilities
           ? jobData.responsibilities.split("\n").filter((item: string) => item.trim() !== "")
           : [];
 
-        // Xử lý requirements và preferred_skills trực tiếp từ API
+        // Process requirements and preferred_skills directly from API
         const requirements = jobData.requirements || "";
         const preferredSkills = jobData.preferred_skills || "";
 
@@ -120,26 +121,26 @@ const JobDetailPage: React.FC = () => {
         setJob(jobData);
         setSaved(jobData.is_saved);
 
-        // Cập nhật tiêu đề trang và meta tags
+        // Update page title and meta tags
         document.title = `${jobData.title} - ${jobData.company_name} | HiRise`;
 
         const metaDescriptionContent = `Apply for the position of ${jobData.title} at ${jobData.company_name}. ${jobData.description.substring(0, 100)}...`;
 
-        // Tạo meta description
+        // Create meta description
         updateMetaTag(
           "name",
           "description",
           metaDescriptionContent || jobDetailMetadata.description,
         );
 
-        // Tạo meta OG title
+        // Create OG title meta tag
         updateMetaTag(
           "property",
           "og:title",
           `${jobData.title} - ${jobData.company_name} | HiRise`,
         );
 
-        // Tạo meta OG description
+        // Create OG description meta tag
         updateMetaTag(
           "property",
           "og:description",
@@ -185,41 +186,6 @@ const JobDetailPage: React.FC = () => {
     }
   };
 
-  // Chuyển đổi dữ liệu API sang định dạng cần thiết cho các component
-  const formatJobForDisplay = (jobData: JobDetail) => {
-    return {
-      id: jobData.id,
-      title: jobData.title,
-      company: jobData.company_name,
-      logo: jobData.company.logo || "/placeholder-logo.png",
-      salary: jobData.salary_display,
-      location: jobData.locations.length > 0 ? jobData.locations[0].address : "Remote",
-      city: jobData.city || "",
-      city_display: jobData.city_display || "N/A",
-      time: format(new Date(jobData.created_at), "MMM dd, yyyy"),
-      skills: jobData.skills.map((skill) => skill.name),
-      experience: capitalizeFirstLetter(jobData.experience_level),
-      level: formatExperienceLevel(jobData.experience_level),
-      contractType: formatJobType(jobData.job_type),
-      interviewProcess: ["Phone interview", "Technical assessment", "Onsite interview"],
-      companyDescription: jobData.company.description,
-      responsibilities:
-        typeof jobData.responsibilities === "string"
-          ? jobData.responsibilities
-          : String(jobData.responsibilities || ""),
-      requirements:
-        typeof jobData.requirements === "string"
-          ? jobData.requirements
-          : String(jobData.requirements || ""),
-      preferred_skills:
-        typeof jobData.preferred_skills === "string"
-          ? jobData.preferred_skills
-          : String(jobData.preferred_skills || ""),
-      benefits:
-        typeof jobData.benefits === "string" ? jobData.benefits : String(jobData.benefits || ""),
-    };
-  };
-
   const capitalizeFirstLetter = (str: string): string => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
@@ -248,13 +214,15 @@ const JobDetailPage: React.FC = () => {
   const formatJobType = (type: string): string => {
     switch (type.toLowerCase()) {
       case "full time":
-        return "Full time";
+        return "Full-time";
       case "part time":
-        return "Part time";
+        return "Part-time";
       case "contract":
         return "Contract";
       case "freelance":
         return "Freelance";
+      case "internship":
+        return "Internship";
       default:
         return capitalizeFirstLetter(type);
     }
@@ -262,8 +230,11 @@ const JobDetailPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="border-primary h-16 w-16 animate-spin rounded-full border-4 border-t-transparent"></div>
+      <div className="container mx-auto flex min-h-[50vh] items-center justify-center px-4 py-8">
+        <div className="flex flex-col items-center">
+          <div className="border-primary h-12 w-12 animate-spin rounded-full border-b-2"></div>
+          <p className="text-muted-foreground mt-4">Loading job details...</p>
+        </div>
       </div>
     );
   }
@@ -272,72 +243,127 @@ const JobDetailPage: React.FC = () => {
     return (
       <div className="container mx-auto px-4 py-8">
         <Alert variant="destructive">
+          <ClipboardList className="h-4 w-4" />
           <AlertTitle>Error</AlertTitle>
-          <AlertDescription>
-            {error || "The job you're looking for doesn't exist or has been removed."}
-          </AlertDescription>
+          <AlertDescription>{error || "Job not found"}</AlertDescription>
         </Alert>
       </div>
     );
   }
 
-  const formattedJob = formatJobForDisplay(job);
+  // Create job object for JobHeader component
+  const jobForHeader: Job = {
+    id: job.id,
+    title: job.title,
+    company: job.company_name,
+    logo: job.company.logo || "/placeholder-logo.png",
+    salary: job.salary_display,
+    location: job.locations.length > 0 ? job.locations[0].address : "Remote",
+    city: job.city || "",
+    city_display: job.city_display || "N/A",
+    time: format(new Date(job.created_at), "MMM dd, yyyy"),
+    skills: job.skills.map((skill) => skill.name),
+    experience: capitalizeFirstLetter(job.experience_level),
+    level: formatExperienceLevel(job.experience_level),
+    contractType: formatJobType(job.job_type),
+    interviewProcess: ["Phone interview", "Technical assessment", "Onsite interview"],
+    responsibilities: Array.isArray(job.responsibilities)
+      ? job.responsibilities.join("\n")
+      : job.responsibilities,
+    requirements: job.requirements,
+    preferred_skills: job.preferred_skills,
+    benefits: Array.isArray(job.benefits) ? job.benefits.join("\n") : job.benefits,
+    companyDescription: job.company.description,
+    description: job.description,
+  };
+
+  // Mock similar jobs for carousel
+  const similarJobs = [
+    {
+      id: 1,
+      title: "Similar Position 1",
+      company: "Company A",
+      logo: "/placeholder-logo.png",
+      salary: "$80K - $100K",
+      location: "Remote",
+      city_display: "New York",
+      time: "2 days ago",
+      skills: ["React", "TypeScript", "Node.js"],
+    },
+    {
+      id: 2,
+      title: "Similar Position 2",
+      company: "Company B",
+      logo: "/placeholder-logo.png",
+      salary: "$75K - $95K",
+      location: "Remote",
+      city_display: "San Francisco",
+      time: "3 days ago",
+      skills: ["React", "JavaScript", "CSS"],
+    },
+    {
+      id: 3,
+      title: "Similar Position 3",
+      company: "Company C",
+      logo: "/placeholder-logo.png",
+      salary: "$85K - $105K",
+      location: "Remote",
+      city_display: "Boston",
+      time: "1 week ago",
+      skills: ["React", "Redux", "API"],
+    },
+  ];
 
   return (
-    <div className="bg-background py-12">
-      <div className="container mx-auto px-4">
-        {/* 1. Header - Thông tin cơ bản công việc */}
-        <JobHeader job={formattedJob} saved={saved} onSaveJob={handleSaveJob} />
+    <div className="container mx-auto px-4 py-8">
+      <div className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-8">
+          <JobHeader job={jobForHeader} saved={saved} onSaveJob={handleSaveJob} />
 
-        {/* Main content grid */}
-        <div className="grid gap-8 lg:grid-cols-3">
-          {/* 2. Chi tiết công việc */}
-          <div className="lg:col-span-2">
-            <div className="mb-8 rounded-xl bg-white p-6 shadow-md lg:p-8">
-              <h2 className="mb-6 text-2xl font-bold">
-                <ClipboardList className="text-primary mr-2 inline-block" />
-                Job Details
-              </h2>
-
-              {/* Description */}
-              <JobDescription description={job.description} className="mb-8" />
-
-              {/* Responsibilities */}
-              <JobResponsibilities responsibilities={job.responsibilities || []} />
-
-              {/* Requirements */}
-              <JobRequirements
-                basicRequirements={basicRequirements}
-                preferredSkills={preferredSkills}
-              />
-
-              {/* Benefits */}
-              <JobBenefits benefits={job.benefits || []} />
-            </div>
+          <div className="mt-8">
+            <SkillTags skills={job.skills.map((skill) => skill.name)} />
           </div>
 
-          {/* 3. Công ty & Nút CTA */}
-          <div className="lg:col-span-1">
-            <CompanyInfo
-              company={{
-                id: job.company.id || job.company_name.toLowerCase().replace(/\s+/g, "-"),
-              }}
-              companyDescription={job.company.description}
-              saved={saved}
-              onSaveJob={handleSaveJob}
-            />
+          <div className="mt-8">
+            <JobDescription description={job.description} />
+          </div>
 
-            <SkillTags skills={job.skills.map((skill) => skill.name)} />
+          <div className="mt-8">
+            <JobResponsibilities responsibilities={job.responsibilities} />
+          </div>
+
+          <div className="mt-8">
+            <JobRequirements
+              basicRequirements={basicRequirements}
+              preferredSkills={preferredSkills}
+            />
+          </div>
+
+          <div className="mt-8">
+            <JobBenefits benefits={job.benefits} />
+          </div>
+
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold">Similar Jobs</h2>
+            <div className="mt-4">
+              <JobCarousel jobs={similarJobs} />
+            </div>
           </div>
         </div>
 
-        {/* 4. Carousel: Similar jobs section */}
-        <div className="border-primary/10 from-primary/10 to-secondary/20 mt-12 rounded-xl border bg-gradient-to-br px-14 py-8 shadow-lg">
-          <JobCarousel
-            jobs={[]} // Sẽ được thay thế bằng API call để lấy các job liên quan
-            title="Similar Jobs"
-            description="Discover more opportunities that match your profile"
-          />
+        <div className="lg:col-span-4">
+          <div className="sticky top-24">
+            <CompanyInfo
+              company={{
+                id: job.company.id,
+                name: job.company.name,
+                website: job.company.website,
+                founded_year: job.company.founded_year,
+                location_names: job.company.location_names,
+                industry_names: job.company.industry_names || [],
+              }}
+            />
+          </div>
         </div>
       </div>
     </div>

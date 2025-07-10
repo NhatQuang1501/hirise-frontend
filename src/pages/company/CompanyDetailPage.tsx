@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { companyService } from "@/services/company";
+import { formatQuillContent } from "@/utils/formatQuillContent";
 import { motion } from "framer-motion";
-import { AlertCircle, Award, Briefcase, Building, MapPin, Star, Users } from "lucide-react";
+import {
+  AlertCircle,
+  Award,
+  Briefcase,
+  Building,
+  ChevronDown,
+  ChevronUp,
+  MapPin,
+  Star,
+  Users,
+} from "lucide-react";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { CompanyDetails } from "@/types/company";
@@ -12,12 +23,12 @@ import { useAuth } from "@/hooks/useAuth";
 import CompanyHeader from "@/components/company/CompanyHeader";
 import CompanySidebar from "@/components/company/CompanySidebar";
 import CompanyTabs from "@/components/company/CompanyTabs";
-import StickyCompanyInfo from "@/components/company/StickyCompanyInfo";
 import JobListingSection from "@/components/job/JobListingSection";
 import SocialMediaLinks from "@/components/section/SocialMediaLinks";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
 const CompanyDetailPage = () => {
   const { id } = useParams<{ id: string }>();
@@ -29,7 +40,10 @@ const CompanyDetailPage = () => {
   const [activeSection, setActiveSection] = useState("about");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [showStickyHeader, setShowStickyHeader] = useState(false);
+
+  // Thêm state để quản lý việc hiển thị nội dung đầy đủ hoặc rút gọn
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [showFullBenefits, setShowFullBenefits] = useState(false);
 
   const aboutRef = useRef<HTMLDivElement>(null);
   const jobsRef = useRef<HTMLDivElement>(null);
@@ -52,7 +66,7 @@ const CompanyDetailPage = () => {
           id: companyData.id,
           name: companyData.profile.name,
           description: companyData.profile.description,
-          logo: companyData.profile.logo || "/placeholder-company-logo.png",
+          logo: companyData.profile.logo || companyPlaceholder,
           location: companyData.profile.location_names?.[0] || "No location specified",
           website: companyData.profile.website || "",
           foundedYear: companyData.profile.founded_year,
@@ -132,7 +146,7 @@ const CompanyDetailPage = () => {
       const formattedJobs: JobCardItem[] = jobsData.map((job: any) => ({
         id: job.id,
         company: job.company_name || company?.name || "",
-        logo: job.company?.logo || company?.logo || "/placeholder-company-logo.png",
+        logo: job.company?.logo || company?.logo || companyPlaceholder,
         title: job.title,
         salary: job.salary_display || "",
         location:
@@ -164,12 +178,7 @@ const CompanyDetailPage = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (!aboutRef.current || !jobsRef.current) return;
-
-      const headerHeight = 64; // Approximate height of the main header
       const scrollPosition = window.scrollY;
-
-      // Show/hide sticky header based on scroll position
-      setShowStickyHeader(scrollPosition > headerHeight);
 
       // Existing scroll spy logic
       const aboutOffset = aboutRef.current.offsetTop;
@@ -311,19 +320,12 @@ const CompanyDetailPage = () => {
       </div>
 
       <div className="relative">
-        {/* Sticky Company Info */}
-        <StickyCompanyInfo
-          company={company}
-          isVisible={showStickyHeader}
-          className="fixed top-16 right-0 left-0 z-30 bg-white/90 backdrop-blur-sm"
-        />
-
         {/* Navigation Tabs */}
         <div
           className={cn(
             "sticky top-16 z-20 transition-all duration-300",
-            showStickyHeader ? "top-32" : "top-16",
-            "bg-background shadow-sm", // Add subtle shadow
+            "top-16",
+            "bg-background shadow-sm",
           )}
         >
           <div className="container mx-auto px-4">
@@ -403,9 +405,42 @@ const CompanyDetailPage = () => {
                 </h2>
 
                 <div className="prose max-w-none">
-                  <p className="leading-relaxed">
-                    {company.description || "No description provided."}
-                  </p>
+                  <div
+                    className={cn(
+                      "relative leading-relaxed",
+                      !showFullDescription && "max-h-[200px] overflow-hidden",
+                    )}
+                    dangerouslySetInnerHTML={{
+                      __html: formatQuillContent(company.description) || "No description provided.",
+                    }}
+                  ></div>
+
+                  {/* Gradient overlay when content is collapsed */}
+                  {!showFullDescription && (
+                    <div className="absolute right-0 bottom-0 left-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
+                  )}
+
+                  {/* See more/less button */}
+                  <div className="mt-4 text-center">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowFullDescription(!showFullDescription)}
+                      className="text-primary hover:text-primary/80 mx-auto flex items-center"
+                    >
+                      {showFullDescription ? (
+                        <>
+                          <ChevronUp className="mr-1 h-4 w-4" />
+                          See less
+                        </>
+                      ) : (
+                        <>
+                          <ChevronDown className="mr-1 h-4 w-4" />
+                          See more
+                        </>
+                      )}
+                    </Button>
+                  </div>
                 </div>
 
                 {company.benefits && (
@@ -416,8 +451,43 @@ const CompanyDetailPage = () => {
                       </span>
                       Benefits & Perks
                     </h3>
-                    <div className="prose max-w-none">
-                      <p className="leading-relaxed">{company.benefits}</p>
+                    <div className="prose relative max-w-none">
+                      <div
+                        className={cn(
+                          "leading-relaxed",
+                          !showFullBenefits && "max-h-[200px] overflow-hidden",
+                        )}
+                        dangerouslySetInnerHTML={{
+                          __html: formatQuillContent(company.benefits),
+                        }}
+                      />
+
+                      {/* Gradient overlay when content is collapsed */}
+                      {!showFullBenefits && (
+                        <div className="absolute right-0 bottom-0 left-0 h-20 bg-gradient-to-t from-white to-transparent"></div>
+                      )}
+
+                      {/* See more/less button */}
+                      <div className="mt-4 text-center">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => setShowFullBenefits(!showFullBenefits)}
+                          className="text-primary hover:text-primary/80 mx-auto flex items-center"
+                        >
+                          {showFullBenefits ? (
+                            <>
+                              <ChevronUp className="mr-1 h-4 w-4" />
+                              See less
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown className="mr-1 h-4 w-4" />
+                              See more
+                            </>
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 )}

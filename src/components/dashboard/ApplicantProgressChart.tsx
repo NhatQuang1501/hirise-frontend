@@ -29,8 +29,7 @@ const ApplicantProgressChart: React.FC<ApplicantProgressChartProps> = ({ applica
             </div>
             <Progress
               value={(newApplicants / applicants.length) * 100}
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-blue-500"
+              className="h-2 bg-gray-100 [&>div]:bg-blue-500"
             />
           </div>
 
@@ -44,8 +43,7 @@ const ApplicantProgressChart: React.FC<ApplicantProgressChartProps> = ({ applica
             </div>
             <Progress
               value={(reviewing / applicants.length) * 100}
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-yellow-500"
+              className="h-2 bg-gray-100 [&>div]:bg-yellow-500"
             />
           </div>
 
@@ -59,8 +57,7 @@ const ApplicantProgressChart: React.FC<ApplicantProgressChartProps> = ({ applica
             </div>
             <Progress
               value={(interviewed / applicants.length) * 100}
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-purple-500"
+              className="h-2 bg-gray-100 [&>div]:bg-purple-500"
             />
           </div>
         </div>

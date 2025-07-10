@@ -1,6 +1,6 @@
 import React from "react";
 import { Bookmark, Briefcase, DollarSign, MapPin } from "lucide-react";
-import { JobCardItem } from "@/components/job/JobCard";
+import { JobCardItem } from "@/types/job";
 import { Button } from "@/components/ui/button";
 
 interface FeaturedJobsProps {
@@ -69,7 +69,7 @@ const FeaturedJobs: React.FC<FeaturedJobsProps> = ({ jobs, onSaveJob, onViewJob 
 
                 {/* Skills */}
                 <div className="mb-4 flex flex-wrap gap-1">
-                  {job.skills.slice(0, 2).map((skill, index) => (
+                  {job.skills.slice(0, 2).map((skill: string, index: number) => (
                     <span
                       key={index}
                       className="bg-primary/10 text-primary rounded-full px-2 py-1 text-xs"

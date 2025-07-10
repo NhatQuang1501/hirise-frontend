@@ -19,7 +19,7 @@ import CompanyJobHeader from "@/components/recruitment/CompanyJobHeader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 const CompanyJobDetailPage: React.FC = () => {
   const navigate = useNavigate();
@@ -30,6 +30,8 @@ const CompanyJobDetailPage: React.FC = () => {
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
   const [recentApplications, setRecentApplications] = useState<Application[]>([]);
   const [isLoadingApplications, setIsLoadingApplications] = useState(false);
+  const [hasReviewedApplications, setHasReviewedApplications] = useState(false);
+  const [applicationCount, setApplicationCount] = useState(0);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -165,6 +167,11 @@ const CompanyJobDetailPage: React.FC = () => {
           page_size: 3,
         });
         setRecentApplications(response.data);
+        setApplicationCount(response.count);
+
+        // Kiểm tra xem có application nào ở trạng thái khác "pending" không
+        const hasNonPendingApplications = response.data.some((app) => app.status !== "pending");
+        setHasReviewedApplications(hasNonPendingApplications);
       } catch (error) {
         console.error("Error fetching recent applications:", error);
       } finally {
@@ -267,6 +274,7 @@ const CompanyJobDetailPage: React.FC = () => {
           onEdit={handleEdit}
           onClose={handleClose}
           onDelete={handleDelete}
+          hasReviewedApplications={hasReviewedApplications}
         />
 
         <div className="grid gap-8 lg:grid-cols-3">
@@ -298,7 +306,7 @@ const CompanyJobDetailPage: React.FC = () => {
                   to={ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || "")}
                   className="text-primary hover:text-primary/80 flex items-center text-sm font-medium"
                 >
-                  View all ({job.applicationCount})
+                  View all ({applicationCount})
                   <ChevronRight className="ml-1 h-4 w-4" />
                 </Link>
               </div>
@@ -344,10 +352,9 @@ const CompanyJobDetailPage: React.FC = () => {
                     <Button
                       variant="outline"
                       className="w-full"
-                      // onClick={() =>
-                      //   navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
-                      // }
-                      onClick={() => navigate(ROUTES.COMPANY.APPLICATIONS.LIST)}
+                      onClick={() =>
+                        navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
+                      }
                     >
                       View All Applications
                       <ArrowRight className="ml-2 h-4 w-4" />
@@ -361,39 +368,13 @@ const CompanyJobDetailPage: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6 lg:col-span-1">
             <CompanyInfo
-              company={{ id: job.companyId }}
-              companyDescription={job.companyDescription}
-              showActions={false}
-              saved={false}
-              onSaveJob={() => {}}
+              company={{
+                id: job.companyId || "",
+                name: job.company,
+                // Thêm các thuộc tính khác nếu có
+              }}
             />
             <SkillTags skills={job.skills || []} />
-
-            {/* Application Stats Card */}
-            <Card className="border-primary/20">
-              <CardHeader className="bg-primary/5 pb-3">
-                <CardTitle className="flex items-center text-lg">
-                  <Users className="text-primary mr-2 h-5 w-5" />
-                  Application Statistics
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="pt-4">
-                <div className="mb-2 text-3xl font-bold">{job.applicationCount}</div>
-                <p className="text-sm text-gray-500">Total applications received</p>
-
-                <div className="mt-4">
-                  <Button
-                    className="w-full"
-                    onClick={() =>
-                      navigate(ROUTES.COMPANY.JOBS.APPLICATIONS.replace(":id", id || ""))
-                    }
-                  >
-                    <Users size={16} className="mr-2" />
-                    Manage Applications
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
 

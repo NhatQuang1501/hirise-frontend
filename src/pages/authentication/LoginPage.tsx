@@ -1,5 +1,7 @@
 import { LoginForm } from "@/components/authentication/LoginForm";
-import hiriseLogo from "@/assets/images/hiriseLogo.png";
+
+const hiriseLogo =
+  "https://hirise.sgp1.cdn.digitaloceanspaces.com/media/test_uploads/hiriseLogo.png";
 
 const LoginPage = () => {
   return (

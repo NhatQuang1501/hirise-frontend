@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { ExternalLink, FileText, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import WithdrawButton from "@/components/application/WithdrawButton";
 import { ResponsivePagination } from "@/components/section/ResponsivePagination";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -61,20 +62,6 @@ export const ApplicantApplicationList: React.FC<ApplicantApplicationListProps> =
   const handleFilterChange = (key: keyof ApplicationFilter, value: string | undefined) => {
     setFilters((prev) => ({ ...prev, [key]: value }));
     setCurrentPage(1);
-  };
-
-  // Handle withdraw application
-  const handleWithdraw = async (applicationId: string) => {
-    if (window.confirm("Are you sure you want to withdraw this application?")) {
-      try {
-        await applicationService.withdrawApplication(applicationId);
-        toast.success("Application withdrawn successfully");
-        fetchApplications();
-      } catch (error) {
-        console.error("Failed to withdraw application:", error);
-        toast.error("Failed to withdraw application");
-      }
-    }
   };
 
   // Get status badge color
@@ -203,14 +190,17 @@ export const ApplicantApplicationList: React.FC<ApplicantApplicationListProps> =
                       View Job
                     </Button>
                   </div>
-                  <Button
-                    variant="destructive"
+
+                  <WithdrawButton
+                    applicationId={application.id}
+                    status={application.status}
+                    onWithdraw={fetchApplications}
                     size="sm"
-                    onClick={() => handleWithdraw(application.id)}
+                    variant="destructive"
                   >
                     <Trash2 size={16} className="mr-2" />
                     Withdraw
-                  </Button>
+                  </WithdrawButton>
                 </CardFooter>
               </Card>
             ))}

@@ -3,14 +3,14 @@ import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface StrengthsWeaknessesSectionProps {
-  keyStrengths: string[];
-  areasToImprove: string[];
+  strengths: string[];
+  weaknesses: string[];
   className?: string;
 }
 
 export function StrengthsWeaknessesSection({
-  keyStrengths,
-  areasToImprove,
+  strengths,
+  weaknesses,
   className,
 }: StrengthsWeaknessesSectionProps) {
   return (
@@ -23,9 +23,9 @@ export function StrengthsWeaknessesSection({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {keyStrengths.length > 0 ? (
+          {strengths.length > 0 ? (
             <ul className="space-y-2">
-              {keyStrengths.map((strength, index) => (
+              {strengths.map((strength, index) => (
                 <li key={index} className="flex items-start gap-2 text-sm">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-500" />
                   <span>{strength}</span>
@@ -46,9 +46,9 @@ export function StrengthsWeaknessesSection({
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {areasToImprove.length > 0 ? (
+          {weaknesses.length > 0 ? (
             <ul className="space-y-2">
-              {areasToImprove.map((area, index) => (
+              {weaknesses.map((area, index) => (
                 <li key={index} className="flex items-start gap-2 text-sm">
                   <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-500" />
                   <span>{area}</span>

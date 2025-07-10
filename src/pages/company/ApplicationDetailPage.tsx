@@ -25,7 +25,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { ApplicationStatusButtons } from "@/components/application/ApplicationStatusButtons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const ApplicationDetailPage: React.FC = () => {
@@ -167,7 +167,7 @@ const ApplicationDetailPage: React.FC = () => {
       <div className="container mx-auto space-y-6 px-4 py-8">
         {/* Header Section */}
         <div className="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white shadow-lg">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div className="flex items-center space-x-4">
               <Button
                 variant="ghost"
@@ -178,13 +178,15 @@ const ApplicationDetailPage: React.FC = () => {
                 <ArrowLeft className="h-5 w-5" />
               </Button>
               <div>
-                <h1 className="text-3xl font-bold">
+                <h1 className="text-2xl font-bold sm:text-3xl">
                   {application.applicant_profile?.full_name || "Anonymous"}
                 </h1>
-                <div className="mt-1 flex items-center gap-2 text-blue-100">
-                  <p>{application.job_details?.title || "Job Application"}</p>
-                  <span>•</span>
-                  <p>
+                <div className="mt-1 flex flex-wrap items-center gap-2 text-blue-100">
+                  <p className="font-medium">
+                    {application.job_details?.title || "Job Application"}
+                  </p>
+                  <span className="hidden sm:inline">•</span>
+                  <p className="text-sm">
                     Applied{" "}
                     {formatDistanceToNow(new Date(application.created_at), { addSuffix: true })}
                   </p>
@@ -192,7 +194,7 @@ const ApplicationDetailPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex w-full justify-end gap-2 sm:w-auto">
               {application.status === "pending" || application.status === "reviewing" ? (
                 <ApplicationStatusButtons
                   applicationId={applicationId as string}
@@ -214,114 +216,77 @@ const ApplicationDetailPage: React.FC = () => {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-4">
           {/* Sidebar */}
           <div className="space-y-6 lg:col-span-1">
-            {/* Applicant Card */}
-            <Card className="overflow-hidden shadow-md transition-shadow hover:shadow-lg">
-              <div className="flex justify-center bg-gradient-to-r from-blue-50 to-indigo-50 p-6">
-                <div className="flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-indigo-500 text-3xl font-bold text-white">
-                  {application.applicant_profile?.full_name
-                    ? application.applicant_profile.full_name
-                        .split(" ")
-                        .map((n: string) => n[0])
-                        .join("")
-                        .toUpperCase()
-                        .substring(0, 2)
-                    : "A"}
-                </div>
-              </div>
-              <CardContent className="p-6">
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="text-lg font-medium">
-                      {application.applicant_profile?.full_name || "Anonymous"}
-                    </h3>
-                    {application.applicant_profile?.email && (
-                      <div className="mt-1 flex items-center gap-2 text-gray-500">
-                        <Mail className="h-4 w-4" />
-                        <span>{application.applicant_profile.email}</span>
-                      </div>
-                    )}
-                    {application.applicant_profile?.phone && (
-                      <div className="mt-1 flex items-center gap-2 text-gray-500">
-                        <Phone className="h-4 w-4" />
-                        <span>{application.applicant_profile.phone}</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="border-t border-gray-100 pt-4">
-                    <h4 className="mb-2 text-sm font-medium text-gray-500">Application Details</h4>
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <Calendar className="h-4 w-4 text-blue-500" />
-                        <span>
-                          Applied on {format(new Date(application.created_at), "MMM d, yyyy")}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-gray-700">
-                        <Briefcase className="h-4 w-4 text-blue-500" />
-                        <span>{application.job_details?.title || "Job Position"}</span>
-                      </div>
-                      {application.job_details?.city_display && (
-                        <div className="flex items-center gap-2 text-gray-700">
-                          <MapPin className="h-4 w-4 text-blue-500" />
-                          <span>{application.job_details.city_display}</span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {application.cv_file && (
-                    <div className="pt-4">
-                      <Button className="w-full gap-2" asChild>
-                        <a href={application.cv_file} target="_blank" rel="noopener noreferrer">
-                          <Download className="h-4 w-4" />
-                          Download CV
-                        </a>
-                      </Button>
-                    </div>
-                  )}
-                </div>
-              </CardContent>
-            </Card>
-
             {/* Match Score Card */}
-            <Card className="overflow-hidden shadow-md transition-shadow hover:shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4">
-                <CardTitle className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <BarChart2 className="h-5 w-5 text-blue-500" />
-                    <span>Match Score</span>
+            <Card className="relative overflow-hidden border-0 bg-white shadow-lg">
+              <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+              <div className="relative ml-4 border-b border-gray-100 p-5">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                      <BarChart2 className="h-5 w-5" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-gray-800">Match Score</h3>
                   </div>
                   {matchResult ? (
                     <div
-                      className={`text-2xl font-bold ${getScoreColorClass(matchResult.match_score)}`}
+                      className={`flex items-center gap-2 rounded-full ${
+                        getScoreColorClass(
+                          matchResult.match_percentage || Math.round(matchResult.match_score * 100),
+                        ) === "text-green-600"
+                          ? "bg-green-100"
+                          : getScoreColorClass(
+                                matchResult.match_percentage ||
+                                  Math.round(matchResult.match_score * 100),
+                              ) === "text-amber-600"
+                            ? "bg-amber-100"
+                            : "bg-red-100"
+                      } px-3 py-1`}
                     >
-                      {matchResult.match_score.toFixed(1)}%
+                      <span
+                        className={`text-2xl font-bold ${getScoreColorClass(
+                          matchResult.match_percentage || Math.round(matchResult.match_score * 100),
+                        )}`}
+                      >
+                        {matchResult.match_percentage || Math.round(matchResult.match_score * 100)}%
+                      </span>
                     </div>
                   ) : (
                     <span className="text-sm text-gray-500 italic">Not analyzed</span>
                   )}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="p-6">
+                </div>
+              </div>
+              <div className="p-6">
                 {matchResult ? (
                   <div className="space-y-4">
                     <div>
                       <h4 className="mb-2 text-sm font-medium text-gray-500">Analysis Summary</h4>
-                      <p className="text-sm text-gray-700">{matchResult.analysis}</p>
+                      <p className="text-sm text-gray-700">
+                        {matchResult.explanation?.overall ||
+                          `Candidate matches ${matchResult.match_percentage || Math.round(matchResult.match_score * 100)}% of job requirements.`}
+                      </p>
                     </div>
 
-                    <div>
-                      <h4 className="mb-2 text-sm font-medium text-gray-500">Skills Match</h4>
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-gray-700">Match Rate</span>
-                        <span
-                          className={`font-medium ${getScoreColorClass(parseFloat(matchResult.skills_match.match_rate))}`}
-                        >
-                          {matchResult.skills_match.match_rate}
-                        </span>
+                    {/* Display key strengths */}
+                    {matchResult.strengths && matchResult.strengths.length > 0 && (
+                      <div>
+                        <h4 className="mb-2 text-sm font-medium text-gray-500">Key Strengths</h4>
+                        <ul className="space-y-1">
+                          {matchResult.strengths
+                            .slice(0, 2)
+                            .map((strength: string, index: number) => (
+                              <li key={index} className="flex items-center text-sm text-gray-700">
+                                <span className="mr-2 text-green-500">✓</span>
+                                {strength.replace("Candidate has experience with ", "")}
+                              </li>
+                            ))}
+                          {matchResult.strengths.length > 2 && (
+                            <li className="text-xs text-gray-500">
+                              +{matchResult.strengths.length - 2} more strengths
+                            </li>
+                          )}
+                        </ul>
                       </div>
-                    </div>
+                    )}
 
                     <Button
                       variant="outline"
@@ -352,7 +317,46 @@ const ApplicationDetailPage: React.FC = () => {
                     </Button>
                   </div>
                 )}
-              </CardContent>
+              </div>
+            </Card>
+
+            {/* Application Status Card */}
+            <Card className="relative overflow-hidden border-0 bg-white shadow-lg">
+              <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+              <div className="relative ml-4 border-b border-gray-100 p-5">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                    <Clock className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-800">Application Status</h3>
+                </div>
+              </div>
+              <div className="p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-gray-700">Current Status</span>
+                    <div>{getStatusBadge(application.status)}</div>
+                  </div>
+
+                  <div className="text-sm text-gray-500">
+                    Applied{" "}
+                    {formatDistanceToNow(new Date(application.created_at), { addSuffix: true })}
+                  </div>
+
+                  {(application.status === "pending" || application.status === "reviewing") && (
+                    <div className="pt-4">
+                      <ApplicationStatusButtons
+                        applicationId={applicationId as string}
+                        status={application.status}
+                        onStatusChange={() => {
+                          fetchData();
+                        }}
+                        size="default"
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
             </Card>
           </div>
 
@@ -363,27 +367,33 @@ const ApplicationDetailPage: React.FC = () => {
               <TabsList className="mb-6 grid w-full grid-cols-3">
                 <TabsTrigger value="profile" className="gap-2">
                   <User className="h-4 w-4" />
-                  <span>Profile</span>
+                  <span className="hidden sm:inline">Profile</span>
+                  <span className="sm:hidden">Profile</span>
                 </TabsTrigger>
                 <TabsTrigger value="cv" className="gap-2">
                   <FileText className="h-4 w-4" />
-                  <span>CV & Cover Letter</span>
+                  <span className="hidden sm:inline">CV</span>
+                  <span className="sm:hidden">CV</span>
                 </TabsTrigger>
                 <TabsTrigger value="analysis" className="gap-2" disabled={!matchResult}>
                   <BarChart2 className="h-4 w-4" />
-                  <span>AI Analysis</span>
+                  <span className="hidden sm:inline">AI Analysis</span>
+                  <span className="sm:hidden">Analysis</span>
                 </TabsTrigger>
               </TabsList>
 
               {/* Profile Tab */}
               <TabsContent value="profile" className="space-y-6">
-                <Card className="shadow-md transition-shadow hover:shadow-lg">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4">
-                    <CardTitle className="flex items-center gap-2">
-                      <User className="h-5 w-5 text-blue-500" />
-                      Applicant Profile
-                    </CardTitle>
-                  </CardHeader>
+                <Card className="relative overflow-hidden border-0 bg-white shadow-lg">
+                  <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+                  <div className="relative ml-4 border-b border-gray-100 p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                        <User className="h-5 w-5" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-800">Applicant Profile</h3>
+                    </div>
+                  </div>
                   <CardContent className="p-6">
                     <div className="space-y-4">
                       <div>
@@ -450,71 +460,20 @@ const ApplicationDetailPage: React.FC = () => {
                     </div>
                   </CardContent>
                 </Card>
-
-                {/* Thêm thông tin về trạng thái ứng dụng */}
-                <Card className="shadow-md transition-shadow hover:shadow-lg">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4">
-                    <CardTitle className="flex items-center gap-2">
-                      <Clock className="h-5 w-5 text-blue-500" />
-                      Application Status
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <span className="text-gray-700">Current Status</span>
-                        <div>{getStatusBadge(application.status)}</div>
-                      </div>
-
-                      <div className="border-t border-gray-100 pt-4">
-                        <h4 className="mb-2 text-sm font-medium text-gray-500">Timeline</h4>
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-2 text-gray-700">
-                            <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                            <span>
-                              Applied on {format(new Date(application.created_at), "MMM d, yyyy")}
-                            </span>
-                          </div>
-                          {application.updated_at &&
-                            application.updated_at !== application.created_at && (
-                              <div className="flex items-center gap-2 text-gray-700">
-                                <div className="h-2 w-2 rounded-full bg-blue-500"></div>
-                                <span>
-                                  Last updated on{" "}
-                                  {format(new Date(application.updated_at), "MMM d, yyyy")}
-                                </span>
-                              </div>
-                            )}
-                        </div>
-                      </div>
-
-                      {(application.status === "pending" || application.status === "reviewing") && (
-                        <div className="border-t border-gray-100 pt-4">
-                          <ApplicationStatusButtons
-                            applicationId={applicationId as string}
-                            status={application.status}
-                            onStatusChange={() => {
-                              // Refresh application data after status change
-                              fetchData();
-                            }}
-                            size="default"
-                          />
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
               </TabsContent>
 
               {/* CV Tab */}
               <TabsContent value="cv">
-                <Card className="shadow-md transition-shadow hover:shadow-lg">
-                  <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4">
-                    <CardTitle className="flex items-center gap-2">
-                      <FileText className="h-5 w-5 text-blue-500" />
-                      CV & Cover Letter
-                    </CardTitle>
-                  </CardHeader>
+                <Card className="relative overflow-hidden border-0 bg-white shadow-lg">
+                  <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+                  <div className="relative ml-4 border-b border-gray-100 p-5">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                        <FileText className="h-5 w-5" />
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-800">CV & Cover Letter</h3>
+                    </div>
+                  </div>
                   <CardContent className="p-6">
                     {application.cv_file ? (
                       <div className="space-y-6">
@@ -561,23 +520,52 @@ const ApplicationDetailPage: React.FC = () => {
                 {matchResult ? (
                   <div className="space-y-6">
                     {/* Match Score Overview */}
-                    <Card className="shadow-md transition-shadow hover:shadow-lg">
-                      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4">
-                        <CardTitle className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <BarChart2 className="h-5 w-5 text-blue-500" />
-                            <span>Match Score Overview</span>
+                    <Card className="relative overflow-hidden border-0 bg-white shadow-lg">
+                      <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+                      <div className="relative ml-4 border-b border-gray-100 p-5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                              <BarChart2 className="h-5 w-5" />
+                            </div>
+                            <h3 className="text-lg font-semibold text-gray-800">
+                              Match Score Overview
+                            </h3>
                           </div>
                           <div
-                            className={`text-2xl font-bold ${getScoreColorClass(matchResult.match_score)}`}
+                            className={`flex items-center gap-2 rounded-full ${
+                              getScoreColorClass(
+                                matchResult.match_percentage ||
+                                  Math.round(matchResult.match_score * 100),
+                              ) === "text-green-600"
+                                ? "bg-green-100"
+                                : getScoreColorClass(
+                                      matchResult.match_percentage ||
+                                        Math.round(matchResult.match_score * 100),
+                                    ) === "text-amber-600"
+                                  ? "bg-amber-100"
+                                  : "bg-red-100"
+                            } px-3 py-1`}
                           >
-                            {matchResult.match_score.toFixed(1)}%
+                            <span
+                              className={`text-2xl font-bold ${getScoreColorClass(
+                                matchResult.match_percentage ||
+                                  Math.round(matchResult.match_score * 100),
+                              )}`}
+                            >
+                              {matchResult.match_percentage ||
+                                Math.round(matchResult.match_score * 100)}
+                              %
+                            </span>
                           </div>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-6">
+                        </div>
+                      </div>
+                      <div className="p-6">
                         <div className="space-y-6">
-                          <p className="text-gray-700">{matchResult.analysis}</p>
+                          <p className="text-gray-700">
+                            {matchResult.explanation?.overall ||
+                              `Candidate matches ${matchResult.match_percentage || Math.round(matchResult.match_score * 100)}% of job requirements.`}
+                          </p>
 
                           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             {/* Strengths */}
@@ -587,16 +575,26 @@ const ApplicationDetailPage: React.FC = () => {
                                 Key Strengths
                               </h3>
                               <ul className="space-y-2">
-                                {matchResult.key_strengths?.map(
-                                  (strength: string, index: number) => (
-                                    <li
-                                      key={index}
-                                      className="flex items-center text-sm text-gray-700"
-                                    >
-                                      <span className="mr-2 text-green-500">✓</span> {strength}
-                                    </li>
-                                  ),
-                                )}
+                                {matchResult.strengths?.map((strength: string, index: number) => (
+                                  <li
+                                    key={index}
+                                    className="flex items-center text-sm text-gray-700"
+                                  >
+                                    <span className="mr-2 text-green-500">✓</span>{" "}
+                                    {strength.replace("Candidate has experience with ", "")}
+                                  </li>
+                                )) ||
+                                  matchResult.explanation?.top_strengths?.map(
+                                    (strength: string, index: number) => (
+                                      <li
+                                        key={index}
+                                        className="flex items-center text-sm text-gray-700"
+                                      >
+                                        <span className="mr-2 text-green-500">✓</span>{" "}
+                                        {strength.replace("Candidate has experience with ", "")}
+                                      </li>
+                                    ),
+                                  )}
                               </ul>
                             </div>
 
@@ -607,59 +605,73 @@ const ApplicationDetailPage: React.FC = () => {
                                 Areas to Improve
                               </h3>
                               <ul className="space-y-2">
-                                {matchResult.areas_to_improve?.map(
-                                  (area: string, index: number) => (
-                                    <li
-                                      key={index}
-                                      className="flex items-center text-sm text-gray-700"
-                                    >
-                                      <span className="mr-2 text-amber-500">!</span> {area}
-                                    </li>
-                                  ),
-                                )}
+                                {matchResult.weaknesses?.map((weakness: string, index: number) => (
+                                  <li
+                                    key={index}
+                                    className="flex items-center text-sm text-gray-700"
+                                  >
+                                    <span className="mr-2 text-amber-500">!</span>{" "}
+                                    {weakness
+                                      .replace("Job requires ", "")
+                                      .replace(" which was not found in the CV", "")}
+                                  </li>
+                                )) ||
+                                  matchResult.explanation?.key_gaps?.map(
+                                    (gap: string, index: number) => (
+                                      <li
+                                        key={index}
+                                        className="flex items-center text-sm text-gray-700"
+                                      >
+                                        <span className="mr-2 text-amber-500">!</span>{" "}
+                                        {gap
+                                          .replace("Job requires ", "")
+                                          .replace(" which was not found in the CV", "")}
+                                      </li>
+                                    ),
+                                  )}
                               </ul>
                             </div>
                           </div>
+
+                          {matchResult.explanation?.note && (
+                            <div className="mt-4 rounded-lg border border-gray-100 bg-gray-50 p-3">
+                              <p className="text-xs text-gray-500 italic">
+                                {matchResult.explanation.note}
+                              </p>
+                            </div>
+                          )}
                         </div>
-                      </CardContent>
+                      </div>
                     </Card>
 
                     {/* Skills Match */}
-                    <Card className="shadow-md transition-shadow hover:shadow-lg">
-                      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4">
-                        <CardTitle className="flex items-center gap-2">
-                          <FileText className="h-5 w-5 text-blue-500" />
-                          Skills Match
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-6">
-                        <div className="space-y-6">
-                          <div className="flex items-center justify-between">
-                            <span className="text-gray-700">Match Rate</span>
-                            <span
-                              className={`font-medium ${getScoreColorClass(parseFloat(matchResult.skills_match.match_rate))}`}
-                            >
-                              {matchResult.skills_match.match_rate}
-                            </span>
+                    <Card className="relative overflow-hidden border-0 bg-white shadow-lg">
+                      <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+                      <div className="relative ml-4 border-b border-gray-100 p-5">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                            <FileText className="h-5 w-5" />
                           </div>
-
+                          <h3 className="text-lg font-semibold text-gray-800">Skills Match</h3>
+                        </div>
+                      </div>
+                      <div className="p-6">
+                        <div className="space-y-6">
                           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                             {/* Matching Skills */}
                             <div>
                               <h3 className="mb-3 font-medium text-gray-700">Matching Skills</h3>
-                              {matchResult.skills_match.matching_skills.length > 0 ? (
+                              {matchResult.strengths && matchResult.strengths.length > 0 ? (
                                 <div className="flex flex-wrap gap-2">
-                                  {matchResult.skills_match.matching_skills.map(
-                                    (skill: string, index: number) => (
-                                      <Badge
-                                        key={index}
-                                        variant="outline"
-                                        className="border-green-200 bg-green-50 text-green-700"
-                                      >
-                                        {skill}
-                                      </Badge>
-                                    ),
-                                  )}
+                                  {matchResult.strengths.map((strength: string, index: number) => (
+                                    <Badge
+                                      key={index}
+                                      variant="outline"
+                                      className="border-green-200 bg-green-50 text-green-700"
+                                    >
+                                      {strength.replace("Candidate has experience with ", "")}
+                                    </Badge>
+                                  ))}
                                 </div>
                               ) : (
                                 <p className="text-gray-500 italic">No matching skills found</p>
@@ -669,19 +681,19 @@ const ApplicationDetailPage: React.FC = () => {
                             {/* Missing Skills */}
                             <div>
                               <h3 className="mb-3 font-medium text-gray-700">Missing Skills</h3>
-                              {matchResult.skills_match.missing_skills.length > 0 ? (
+                              {matchResult.weaknesses && matchResult.weaknesses.length > 0 ? (
                                 <div className="flex flex-wrap gap-2">
-                                  {matchResult.skills_match.missing_skills.map(
-                                    (skill: string, index: number) => (
-                                      <Badge
-                                        key={index}
-                                        variant="outline"
-                                        className="border-amber-200 bg-amber-50 text-amber-700"
-                                      >
-                                        {skill}
-                                      </Badge>
-                                    ),
-                                  )}
+                                  {matchResult.weaknesses.map((weakness: string, index: number) => (
+                                    <Badge
+                                      key={index}
+                                      variant="outline"
+                                      className="border-amber-200 bg-amber-50 text-amber-700"
+                                    >
+                                      {weakness
+                                        .replace("Job requires ", "")
+                                        .replace(" which was not found in the CV", "")}
+                                    </Badge>
+                                  ))}
                                 </div>
                               ) : (
                                 <p className="text-gray-500 italic">No missing skills</p>
@@ -689,48 +701,78 @@ const ApplicationDetailPage: React.FC = () => {
                             </div>
                           </div>
                         </div>
-                      </CardContent>
+                      </div>
                     </Card>
 
-                    {/* Detailed Scores */}
-                    <Card className="shadow-md transition-shadow hover:shadow-lg">
-                      <CardHeader className="bg-gradient-to-r from-blue-50 to-indigo-50 pb-4">
-                        <CardTitle className="flex items-center gap-2">
-                          <BarChart2 className="h-5 w-5 text-blue-500" />
-                          Detailed Scores
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="p-6">
+                    {/* Detailed Scores - Thiết kế mới */}
+                    <Card className="relative overflow-hidden border-0 bg-white shadow-lg">
+                      {/* Thanh màu bên trái */}
+                      <div className="absolute top-0 left-0 h-full w-1.5 bg-gradient-to-b from-blue-400 to-indigo-600"></div>
+
+                      {/* Header với thiết kế mới */}
+                      <div className="relative ml-4 border-b border-gray-100 p-5">
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow-md">
+                            <BarChart2 className="h-5 w-5" />
+                          </div>
+                          <h3 className="text-xl font-semibold text-gray-800">Detailed Scores</h3>
+                        </div>
+                      </div>
+
+                      {/* Nội dung */}
+                      <div className="p-6">
                         <div className="space-y-6">
                           <div className="grid grid-cols-1 gap-4">
-                            {Object.entries(matchResult.detailed_scores).map(
-                              ([key, value]: [string, any]) => {
-                                const score = value * 100;
-                                const formattedKey = key
-                                  .split("_")
-                                  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                                  .join(" ");
+                            {matchResult.detail_scores &&
+                              Object.entries(matchResult.detail_scores).map(
+                                ([key, value]: [string, any]) => {
+                                  const score = value * 100;
+                                  let formattedKey = key
+                                    .split("_")
+                                    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                    .join(" ");
 
-                                return (
-                                  <div key={key} className="space-y-1">
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-sm text-gray-700">{formattedKey}</span>
-                                      <span
-                                        className={`text-sm font-medium ${getScoreColorClass(score)}`}
-                                      >
-                                        {score.toFixed(1)}%
-                                      </span>
+                                  // Improve display of criteria names
+                                  switch (key) {
+                                    case "job_requirements_cv_skills":
+                                      formattedKey = "Job Requirements - CV Skills";
+                                      break;
+                                    case "job_skills_cv_skills":
+                                      formattedKey = "Job Skills - CV Skills";
+                                      break;
+                                    case "job_title_cv_summary":
+                                      formattedKey = "Job Title - CV Summary";
+                                      break;
+                                    case "combined_text":
+                                      formattedKey = "Combined Text";
+                                      break;
+                                    case "context_match":
+                                      formattedKey = "Context Match";
+                                      break;
+                                  }
+
+                                  return (
+                                    <div key={key} className="space-y-1">
+                                      <div className="flex items-center justify-between">
+                                        <span className="text-sm text-gray-700">
+                                          {formattedKey}
+                                        </span>
+                                        <span
+                                          className={`text-sm font-medium ${getScoreColorClass(score)}`}
+                                        >
+                                          {score.toFixed(1)}%
+                                        </span>
+                                      </div>
+                                      <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
+                                        <div
+                                          className={`h-full ${getScoreBackgroundClass(score)}`}
+                                          style={{ width: `${score}%` }}
+                                        />
+                                      </div>
                                     </div>
-                                    <div className="h-2 w-full overflow-hidden rounded-full bg-gray-100">
-                                      <div
-                                        className={`h-full ${getScoreBackgroundClass(score)}`}
-                                        style={{ width: `${score}%` }}
-                                      />
-                                    </div>
-                                  </div>
-                                );
-                              },
-                            )}
+                                  );
+                                },
+                              )}
                           </div>
 
                           <div className="border-t border-gray-100 pt-4">
@@ -738,20 +780,20 @@ const ApplicationDetailPage: React.FC = () => {
                             <ul className="space-y-2 text-sm text-gray-600">
                               <li className="flex items-center gap-2">
                                 <div className="h-3 w-3 rounded-full bg-green-500"></div>
-                                <span>70%+ indicates excellent match</span>
+                                <span>50%+ indicates excellent match</span>
                               </li>
                               <li className="flex items-center gap-2">
                                 <div className="h-3 w-3 rounded-full bg-amber-500"></div>
-                                <span>40-69% indicates moderate match</span>
+                                <span>30-50% indicates moderate match</span>
                               </li>
                               <li className="flex items-center gap-2">
                                 <div className="h-3 w-3 rounded-full bg-red-500"></div>
-                                <span>Below 40% indicates poor match</span>
+                                <span>Below 30% indicates poor match</span>
                               </li>
                             </ul>
                           </div>
                         </div>
-                      </CardContent>
+                      </div>
                     </Card>
                   </div>
                 ) : (
@@ -792,14 +834,14 @@ const ApplicationDetailPage: React.FC = () => {
 
 // Helper functions for color classes
 const getScoreColorClass = (score: number) => {
-  if (score >= 70) return "text-green-600";
-  if (score >= 40) return "text-amber-600";
+  if (score >= 50) return "text-green-600";
+  if (score >= 30) return "text-amber-600";
   return "text-red-600";
 };
 
 const getScoreBackgroundClass = (score: number) => {
-  if (score >= 70) return "bg-gradient-to-r from-green-400 to-green-500";
-  if (score >= 40) return "bg-gradient-to-r from-amber-400 to-amber-500";
+  if (score >= 50) return "bg-gradient-to-r from-green-400 to-green-500";
+  if (score >= 30) return "bg-gradient-to-r from-amber-400 to-amber-500";
   return "bg-gradient-to-r from-red-400 to-red-500";
 };
 

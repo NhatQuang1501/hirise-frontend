@@ -1,4 +1,3 @@
-import React from "react";
 import { ROUTES } from "@/routes/routes";
 import { Building2, ChevronRight, MapPin, MoveRight, Users } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -15,6 +14,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Skeleton } from "@/components/ui/skeleton";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
 const CompanyCarousel = ({
   companies,
@@ -62,12 +62,12 @@ const CompanyCarousel = ({
     >
       <div className="mb-4 flex items-start justify-between">
         <img
-          src={company.logo || "../assets/images/companyPlaceholder.png"}
+          src={company.logo || companyPlaceholder}
           alt={company.name}
           className="h-16 w-16 rounded-lg object-contain"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = "../assets/images/companyPlaceholder.png";
+            target.src = companyPlaceholder;
           }}
         />
         {company.newJobsToday > 0 && (

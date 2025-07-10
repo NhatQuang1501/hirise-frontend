@@ -6,6 +6,7 @@ import { CompanyDetails } from "@/types/company";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { Badge } from "@/components/ui/badge";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 import { FollowButton } from "./FollowButton";
 
 interface CompanyHeaderProps {
@@ -96,7 +97,7 @@ export default function CompanyHeader({
             <div className="flex-shrink-0">
               <div className="h-24 w-24 overflow-hidden rounded-xl border bg-white p-1 shadow-md transition-transform duration-300 hover:scale-105 md:h-28 md:w-28">
                 <img
-                  src={company.logo || "/placeholder-company-logo.png"}
+                  src={company.logo || companyPlaceholder}
                   alt={`${company.name} logo`}
                   className="h-full w-full object-contain"
                 />

@@ -6,66 +6,80 @@ export interface MatchingResult {
   job_title: string;
   application: string;
   applicant_name: string;
-  applicant_id: string;
   match_score: number;
-  detailed_scores: {
-    combined_text: number;
-    job_skills_cv_skills: number;
-    job_title_cv_summary: number;
-    job_preferred_cv_skills: number;
-    job_requirements_cv_skills: number;
-    job_requirements_cv_experience: number;
-    job_responsibilities_cv_experience: number;
+  match_percentage: number;
+  detail_scores: Record<string, number>;
+  strengths: string[];
+  weaknesses: string[];
+  explanation: {
+    overall: string;
+    top_strengths: string[];
+    key_gaps: string[];
+    note: string;
   };
-  status: string;
-  cv_file: string;
-  application_date: string;
   created_at: string;
   updated_at: string;
-  analysis: string;
-  skills_match: {
-    match_rate: string;
-    matching_skills: string[];
-    missing_skills: string[];
-    total_job_skills: number;
-    total_cv_skills: number;
-  };
-  key_strengths: string[];
-  areas_to_improve: string[];
+}
+
+export interface MatchResponse {
+  detail: string;
+  match_data: MatchingResult;
 }
 
 export const aiMatchingService = {
-  // Match a single application with a job
-  matchSingleApplication: async (jobId: string, applicationId: string): Promise<MatchingResult> => {
-    try {
-      const response = await axiosInstance.post(
-        `/api/match/job/${jobId}/application/${applicationId}/`,
-      );
-      return response.data;
-    } catch (error) {
-      console.error("Error matching application:", error);
-      throw error;
-    }
-  },
-
-  // Match all applications for a job
-  matchAllApplications: async (jobId: string): Promise<MatchingResult[]> => {
-    try {
-      const response = await axiosInstance.post(`/api/match/job/${jobId}/all-applications/`);
-      return response.data;
-    } catch (error) {
-      console.error("Error matching all applications:", error);
-      throw error;
-    }
-  },
-
-  // Get match results for a job
+  // Lấy kết quả đánh giá của job với tất cả CV
   getJobMatchResults: async (jobId: string): Promise<MatchingResult[]> => {
     try {
       const response = await axiosInstance.get(`/api/match/job/${jobId}/results/`);
-      return response.data;
+      console.log("API response:", response.data);
+
+      // Kiểm tra cấu trúc response và trả về mảng kết quả
+      if (response.data && response.data.results && Array.isArray(response.data.results)) {
+        return response.data.results;
+      } else if (Array.isArray(response.data)) {
+        return response.data;
+      }
+
+      // Trả về mảng rỗng nếu không có dữ liệu hợp lệ
+      console.warn("API response format is not as expected:", response.data);
+      return [];
     } catch (error) {
-      console.error("Error getting match results:", error);
+      console.error("Error getting job match results:", error);
+      return [];
+    }
+  },
+
+  // Đánh giá job với một CV cụ thể
+  matchSingleApplication: async (
+    jobId: string,
+    applicationId: string,
+  ): Promise<MatchingResult | null> => {
+    try {
+      const response = await axiosInstance.post<MatchResponse>(
+        `/api/match/job/${jobId}/application/${applicationId}/`,
+      );
+      return response.data.match_data;
+    } catch (error) {
+      console.error("Error matching single application:", error);
+      return null;
+    }
+  },
+
+  // Đánh giá job với tất cả CV
+  matchAllApplications: async (jobId: string): Promise<any> => {
+    try {
+      const response = await axiosInstance.post(`/api/match/job/${jobId}/all-applications/`);
+
+      // Trả về toàn bộ response để frontend có thể truy cập các trường khác
+      return {
+        message: response.data.detail,
+        status: response.data.status,
+        total_applications: response.data.total_applications,
+        processed_applications: response.data.processed_applications,
+        results: Array.isArray(response.data.results) ? response.data.results : [],
+      };
+    } catch (error) {
+      console.error("Error analyzing all applications:", error);
       throw error;
     }
   },

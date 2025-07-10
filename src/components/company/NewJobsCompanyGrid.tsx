@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { ROUTES } from "@/routes/routes";
 import { MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
 interface NewJobsCompanyGridProps {
   searchQuery: string;
@@ -88,12 +89,12 @@ const NewJobsCompanyGrid = ({ searchQuery, industry, location }: NewJobsCompanyG
                 >
                   <div className="mb-4 flex items-start justify-between">
                     <img
-                      src={company.logo || "/company-logos/default-logo.png"}
+                      src={company.logo || companyPlaceholder}
                       alt={company.name}
                       className="size-12 rounded-lg object-contain"
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
-                        target.src = "/company-logos/default-logo.png";
+                        target.src = companyPlaceholder;
                       }}
                     />
                     <Badge variant="secondary" className="bg-green-100 text-green-800">

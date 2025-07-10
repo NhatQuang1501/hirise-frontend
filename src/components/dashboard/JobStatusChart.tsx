@@ -29,8 +29,7 @@ const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {
             </div>
             <Progress
               value={(publishedJobs / jobs.length) * 100}
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-green-500"
+              className="h-2 bg-gray-100 [&>div]:bg-green-500"
             />
           </div>
 
@@ -44,8 +43,7 @@ const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {
             </div>
             <Progress
               value={(draftJobs / jobs.length) * 100}
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-gray-500"
+              className="h-2 bg-gray-100 [&>div]:bg-gray-500"
             />
           </div>
 
@@ -59,8 +57,7 @@ const JobStatusChart: React.FC<JobStatusChartProps> = ({ jobs }) => {
             </div>
             <Progress
               value={(closedJobs / jobs.length) * 100}
-              className="h-2 bg-gray-100"
-              indicatorClassName="bg-red-500"
+              className="h-2 bg-gray-100 [&>div]:bg-red-500"
             />
           </div>
         </div>

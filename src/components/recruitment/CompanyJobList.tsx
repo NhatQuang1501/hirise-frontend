@@ -10,38 +10,46 @@ import CompanyJobFilters from "@/components/recruitment/CompanyJobFilters";
 import { ResponsivePagination } from "@/components/section/ResponsivePagination";
 import { Button } from "@/components/ui/button";
 
+interface JobFilterState {
+  jobLevel: string[];
+  contractType: string[];
+  city: string[];
+}
+
+interface PaginationState {
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
+}
+
 export const CompanyJobList: React.FC = () => {
   const navigate = useNavigate();
-  const [filteredJobs, setFilteredJobs] = useState<any[]>([]);
+  const [filteredJobs, setFilteredJobs] = useState<CompanyJob[]>([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [activeStatus, setActiveStatus] = useState<JobStatus | "All">("All");
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [pagination, setPagination] = useState({
+  const [pagination, setPagination] = useState<PaginationState>({
     currentPage: 1,
     totalPages: 1,
     totalItems: 0,
   });
 
-  // Xử lý dialog xóa job
+  // Job deletion dialog state
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [jobToDelete, setJobToDelete] = useState<string | null>(null);
 
-  // Xử lý dialog đóng job
+  // Job closure dialog state
   const [closeDialogOpen, setCloseDialogOpen] = useState(false);
   const [jobToClose, setJobToClose] = useState<string | null>(null);
 
-  const [activeFilters, setActiveFilters] = useState<{
-    jobLevel: string[];
-    contractType: string[];
-    city: string[];
-  }>({
+  const [activeFilters, setActiveFilters] = useState<JobFilterState>({
     jobLevel: [],
     contractType: [],
     city: [],
   });
 
-  // Fetch jobs
+  // Fetch jobs with filters
   const fetchJobs = async (page = 1) => {
     setIsLoading(true);
     setError(null);
@@ -52,29 +60,29 @@ export const CompanyJobList: React.FC = () => {
         page_size: 10,
       };
 
-      // Thêm filter theo trạng thái
+      // Add status filter
       if (activeStatus !== "All") {
         filters.status = activeStatus.toLowerCase();
       }
 
-      // Thêm filter theo từ khóa tìm kiếm
+      // Add search keyword filter
       if (searchKeyword) {
         filters.search = searchKeyword;
       }
 
-      // Thêm các filter bổ sung nếu có
+      // Add additional filters if available
       if (activeFilters) {
-        // Filter theo loại hợp đồng
+        // Filter by contract type
         if (activeFilters.contractType && activeFilters.contractType.length > 0) {
           filters.job_type = activeFilters.contractType.join(",");
         }
 
-        // Filter theo cấp độ công việc
+        // Filter by job level
         if (activeFilters.jobLevel && activeFilters.jobLevel.length > 0) {
           filters.experience_level = activeFilters.jobLevel.join(",");
         }
 
-        // Filter theo thành phố
+        // Filter by city
         if (activeFilters.city && activeFilters.city.length > 0) {
           filters.city = activeFilters.city.join(",");
         }
@@ -82,7 +90,7 @@ export const CompanyJobList: React.FC = () => {
 
       const response = await jobService.getMyJobs(filters);
 
-      setFilteredJobs(response.data);
+      setFilteredJobs(response.data.map(formatJobForCard));
       setPagination({
         currentPage: response.current_page,
         totalPages: response.total_pages,
@@ -96,33 +104,34 @@ export const CompanyJobList: React.FC = () => {
     }
   };
 
-  // Áp dụng filter và fetch jobs khi thay đổi
+  // Apply filters and fetch jobs when filters change
   useEffect(() => {
     fetchJobs(1);
   }, [searchKeyword, activeStatus]);
 
-  // Xử lý tìm kiếm
+  // Handle search
   const handleSearch = (keyword: string) => {
     setSearchKeyword(keyword);
     fetchJobs(1);
   };
 
-  const handleFilterChange = (filters: any) => {
+  // Handle filter changes
+  const handleFilterChange = (filters: JobFilterState) => {
     setActiveFilters(filters);
     fetchJobs(1);
   };
 
-  // Xử lý thay đổi filter status
+  // Handle status filter change
   const handleStatusChange = (status: JobStatus | "All") => {
     setActiveStatus(status);
   };
 
-  // Xử lý phân trang
+  // Handle pagination
   const handlePageChange = (page: number) => {
     fetchJobs(page);
   };
 
-  // Các hàm xử lý action cho job
+  // Job action handlers
   const handleViewJob = (id: string) => {
     navigate(ROUTES.COMPANY.JOBS.DETAIL.replace(":id", id));
   };
@@ -135,13 +144,13 @@ export const CompanyJobList: React.FC = () => {
     navigate(ROUTES.COMPANY.JOBS.CREATE);
   };
 
-  // Hiển thị dialog xóa
+  // Show delete dialog
   const showDeleteDialog = (id: string) => {
     setJobToDelete(id);
     setDeleteDialogOpen(true);
   };
 
-  // Xử lý xóa job
+  // Handle job deletion
   const confirmDeleteJob = async () => {
     if (jobToDelete) {
       try {
@@ -158,17 +167,17 @@ export const CompanyJobList: React.FC = () => {
     }
   };
 
-  // Hiển thị dialog đóng job
+  // Show close job dialog
   const showCloseDialog = (id: string) => {
     setJobToClose(id);
     setCloseDialogOpen(true);
   };
 
-  // Xử lý đóng job
+  // Handle job closure
   const confirmCloseJob = async () => {
     if (jobToClose) {
       try {
-        await jobService.updateJobStatus(jobToClose, "closed");
+        await jobService.closeJob(jobToClose);
         toast.success("Job closed successfully");
         fetchJobs(pagination.currentPage);
       } catch (error) {
@@ -181,9 +190,10 @@ export const CompanyJobList: React.FC = () => {
     }
   };
 
+  // Handle job publication
   const handlePublishJob = async (id: string) => {
     try {
-      await jobService.updateJobStatus(id, "published");
+      await jobService.publishJob(id);
       toast.success("Job published successfully");
       fetchJobs(pagination.currentPage);
     } catch (error) {
@@ -269,54 +279,41 @@ export const CompanyJobList: React.FC = () => {
           filteredJobs.map((job) => (
             <CompanyJobCard
               key={job.id}
-              job={formatJobForCard(job)}
-              onDelete={showDeleteDialog}
-              onClose={showCloseDialog}
-              onView={handleViewJob}
-              onEdit={handleEditJob}
-              onPublish={handlePublishJob}
+              job={job}
+              onView={() => handleViewJob(job.id)}
+              onEdit={() => handleEditJob(job.id)}
+              onDelete={() => showDeleteDialog(job.id)}
+              onClose={() => showCloseDialog(job.id)}
+              onPublish={() => handlePublishJob(job.id)}
             />
           ))
         ) : (
-          <div className="rounded-lg border border-dashed p-8 text-center">
-            <h3 className="mb-2 text-xl font-semibold">No jobs found</h3>
-            <p className="text-muted-foreground">
-              Try searching with different keywords or adjusting the filters.
-            </p>
-            <Button
-              onClick={handleCreateJob}
-              className="bg-primary hover:bg-primary/90 mt-4 text-white"
-            >
-              Create Your First Job
+          <div className="rounded-lg border border-gray-200 bg-gray-50 p-8 text-center">
+            <h3 className="mb-2 text-xl font-semibold text-gray-800">No jobs found</h3>
+            <p className="text-gray-600">Try changing your filters or create a new job</p>
+            <Button className="mt-4" onClick={handleCreateJob}>
+              Create New Job
             </Button>
           </div>
         )}
-      </div>
 
-      {/* Pagination - Using ResponsivePagination component */}
-      {!isLoading && !error && pagination.totalPages > 1 && (
-        <div className="mt-8">
+        {!isLoading && !error && filteredJobs.length > 0 && pagination.totalPages > 1 && (
           <ResponsivePagination
             currentPage={pagination.currentPage}
             totalPages={pagination.totalPages}
             onPageChange={handlePageChange}
-            className="py-2"
           />
-          <p className="text-muted-foreground mt-2 text-center text-sm">
-            Showing {(pagination.currentPage - 1) * 10 + 1}-
-            {Math.min(pagination.currentPage * 10, pagination.totalItems)} of{" "}
-            {pagination.totalItems} jobs
-          </p>
-        </div>
-      )}
+        )}
+      </div>
 
       {/* Delete job confirmation dialog */}
       <CustomDialog
         open={deleteDialogOpen}
         onClose={handleDeleteDialogClose}
-        title="Are you sure you want to delete this job?"
-        description="This action cannot be undone. The job will be permanently removed from the system."
+        title="Delete Job"
+        description="Are you sure you want to delete this job? This action cannot be undone."
         confirmText="Delete"
+        cancelText="Cancel"
         onConfirm={confirmDeleteJob}
         confirmButtonClassName="bg-red-600 hover:bg-red-700"
       />
@@ -325,9 +322,10 @@ export const CompanyJobList: React.FC = () => {
       <CustomDialog
         open={closeDialogOpen}
         onClose={handleCloseDialogClose}
-        title="Are you sure you want to close this job?"
-        description="Once closed, candidates will no longer be able to apply for this job, but you can still view existing applications."
+        title="Close Job"
+        description="Are you sure you want to close this job? Closed jobs will no longer accept applications."
         confirmText="Close Job"
+        cancelText="Cancel"
         onConfirm={confirmCloseJob}
       />
     </>

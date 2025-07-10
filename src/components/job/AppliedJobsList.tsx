@@ -3,18 +3,8 @@ import { Application, ApplicationFilter, applicationService } from "@/services/a
 import { Eye, Loader2, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
+import WithdrawButton from "@/components/application/WithdrawButton";
 import { ResponsivePagination } from "@/components/section/ResponsivePagination";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -73,17 +63,6 @@ export function AppliedJobsList() {
   const handleOrderChange = (value: string) => {
     setOrderBy(value);
     setCurrentPage(1);
-  };
-
-  const handleWithdraw = async (id: string) => {
-    try {
-      await applicationService.withdrawApplication(id);
-      toast.success("Application withdrawn successfully");
-      fetchApplications(currentPage);
-    } catch (error) {
-      console.error("Error withdrawing application:", error);
-      toast.error("Failed to withdraw application");
-    }
   };
 
   const getStatusBadgeClass = (status: string) => {
@@ -161,9 +140,9 @@ export function AppliedJobsList() {
                 <CardHeader className="pb-2">
                   <div className="flex items-start justify-between">
                     <div className="flex gap-4">
-                      {application.company_logo ? (
+                      {application.job_details.company_logo ? (
                         <img
-                          src={application.company_logo}
+                          src={application.job_details.company_logo}
                           alt={application.company_name}
                           className="h-12 w-12 rounded-md border border-gray-200 object-contain p-1"
                         />
@@ -208,28 +187,14 @@ export function AppliedJobsList() {
                       </Button>
                     </Link>
 
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button variant="destructive" size="sm" className="flex items-center gap-1">
-                          <X className="h-4 w-4" /> Withdraw
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            This will permanently withdraw your application. You can apply again
-                            later if you change your mind.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleWithdraw(application.id)}>
-                            Withdraw
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
+                    <WithdrawButton
+                      applicationId={application.id}
+                      status={application.status}
+                      onWithdraw={() => fetchApplications(currentPage)}
+                      size="sm"
+                    >
+                      <X className="mr-1 h-4 w-4" /> Withdraw
+                    </WithdrawButton>
                   </div>
                 </CardFooter>
               </Card>

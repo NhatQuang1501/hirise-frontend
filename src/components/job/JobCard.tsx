@@ -16,9 +16,9 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
   const { user } = useAuth();
   const isApplicant = user?.role === "applicant";
 
-  // Xử lý sự kiện lưu job - ngăn không cho lan truyền sự kiện đến thẻ cha
+  // Handle save job event - prevent propagation to parent element
   const handleSaveJob = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Ngăn sự kiện lan truyền lên thẻ cha
+    e.stopPropagation();
     onSaveJob();
   };
 
@@ -30,7 +30,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, onSaveJob, onClick, layout = "gr
         layout === "grid" ? "h-full flex-col p-5" : "flex-row items-center gap-4 p-4",
       )}
     >
-      {/* Save Button - Chỉ hiển thị nếu là applicant */}
+      {/* Save Button - Only display for applicant users */}
       {isApplicant && <JobCardSaveButton saved={job.is_saved} onSaveJob={handleSaveJob} />}
 
       {/* Card content */}

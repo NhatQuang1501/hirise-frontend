@@ -9,11 +9,11 @@ import CompanyCarousel from "@/components/company/CompanyCarousel";
 import BenefitsSection from "@/components/home/BenefitsSection";
 import HeroSection from "@/components/home/HeroSection";
 import JobList from "@/components/home/JobList";
-import NewsletterSection from "@/components/home/NewsletterSection";
+// import NewsletterSection from "@/components/home/NewsletterSection";
 import { Badge } from "@/components/ui/badge";
-import placeholderLogo from "@/assets/images/companyPlaceholder.png";
+import companyPlaceholder from "@/assets/images/companyPlaceholder.png";
 
-const DEFAULT_LOGO = placeholderLogo;
+const DEFAULT_LOGO = companyPlaceholder;
 
 const HomePage: React.FC = () => {
   const [jobs, setJobs] = useState<JobCardData[]>([]);
@@ -195,7 +195,7 @@ const HomePage: React.FC = () => {
       <BenefitsSection />
 
       {/* Enhanced newsletter section */}
-      <NewsletterSection />
+      {/* <NewsletterSection /> */}
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ROUTES } from "@/routes/routes";
+import { jobService } from "@/services/job";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Eye, Save, Send } from "lucide-react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -30,6 +31,12 @@ const CompanyJobCreatePage: React.FC = () => {
       return;
     }
 
+    if (!user) {
+      toast.error("User information not available");
+      navigate(ROUTES.AUTH.LOGIN);
+      return;
+    }
+
     if (user.role !== "company") {
       toast.error("Only companies can create new jobs");
       navigate(ROUTES.PUBLIC.HOME);
@@ -52,6 +59,9 @@ const CompanyJobCreatePage: React.FC = () => {
 
       // Log dữ liệu trước khi gửi (để debug)
       console.log("Submitting job data:", data);
+
+      // Gọi API để tạo job
+      await jobService.createJob(data);
 
       if (data.status === "Published") {
         toast.success("Job published successfully!");

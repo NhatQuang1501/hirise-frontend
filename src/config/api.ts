@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// Replace process.env with import.meta.env
-const API_URL = import.meta.env.API_BASE_URL || "http://127.0.0.1:8000/api";
+// const API_URL = import.meta.env.API_BASE_URL || "http://127.0.0.1:8000/api";
+const API_URL = import.meta.env.API_PRODUCTION_URL || "https://hirise.space/api";
 
 const api = axios.create({
   baseURL: API_URL,
@@ -10,7 +10,6 @@ const api = axios.create({
   },
 });
 
-// Interceptor để thêm token vào header
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("accessToken");
@@ -22,13 +21,12 @@ api.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-// Interceptor để xử lý refresh token
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
 
-    if (error.response.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem("refreshToken");
@@ -43,7 +41,6 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (error) {
         console.error("Error refreshing token:", error);
-        // Nếu refresh token cũng hết hạn, logout user
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
         window.location.href = "/login";

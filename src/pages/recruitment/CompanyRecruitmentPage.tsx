@@ -8,27 +8,29 @@ import { CompanyJobList } from "@/components/recruitment/CompanyJobList";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
+type TabValue = "jobs" | "applications";
+
 const CompanyRecruitmentPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Xác định tab hiện tại từ URL
-  const getTabFromPath = () => {
+  // Determine current tab from URL
+  const getTabFromPath = (): TabValue => {
     if (location.pathname.includes("/recruitment-management/applications")) return "applications";
     return "jobs";
   };
 
-  const [activeTab, setActiveTab] = useState(getTabFromPath());
+  const [activeTab, setActiveTab] = useState<TabValue>(getTabFromPath());
 
-  // Cập nhật activeTab khi URL thay đổi
+  // Update activeTab when URL changes
   useEffect(() => {
     setActiveTab(getTabFromPath());
   }, [location.pathname]);
 
-  // Thay đổi tab và cập nhật URL
+  // Change tab and update URL
   const handleTabChange = (value: string) => {
-    setActiveTab(value);
+    setActiveTab(value as TabValue);
 
     switch (value) {
       case "jobs":

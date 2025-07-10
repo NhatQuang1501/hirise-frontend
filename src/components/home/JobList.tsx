@@ -111,7 +111,14 @@ const JobList: React.FC<JobListProps> = ({
               ))
           ) : currentJobs.length > 0 ? (
             // Hiển thị danh sách công việc
-            currentJobs.map((job) => <JobCard key={job.id} job={job} />)
+            currentJobs.map((job) => (
+              <JobCard
+                key={job.id}
+                job={{ ...job, id: String(job.id) }}
+                onSaveJob={() => {}}
+                onClick={() => {}}
+              />
+            ))
           ) : (
             // Hiển thị khi không có công việc
             <div className="col-span-4 py-10 text-center">

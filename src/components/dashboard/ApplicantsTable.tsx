@@ -65,14 +65,13 @@ const ApplicantsTable: React.FC<ApplicantsTableProps> = ({ applicants }) => {
                         <span className="mr-2 text-sm font-medium">{applicant.matchingScore}%</span>
                         <Progress
                           value={applicant.matchingScore}
-                          className="h-2 w-24"
-                          indicatorClassName={
+                          className={`h-2 w-24 [&>div]:${
                             applicant.matchingScore >= 80
                               ? "bg-green-500"
                               : applicant.matchingScore >= 60
                                 ? "bg-yellow-500"
                                 : "bg-red-500"
-                          }
+                          }`}
                         />
                       </div>
                     )}

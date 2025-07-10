@@ -37,7 +37,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import hiriseLogo from "@/assets/images/hiriseLogo.png";
+
+const hiriseLogo =
+  "https://hirise.sgp1.cdn.digitaloceanspaces.com/media/test_uploads/hiriseLogo.png";
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -173,13 +175,13 @@ export function Header() {
                       asChild
                       className="hover:bg-primary/10 hover:text-primary focus:bg-primary/10 focus:text-primary rounded-sm p-2"
                     >
-                      <Link
+                      {/* <Link
                         to={ROUTES.COMPANY.APPLICATIONS.LIST}
                         className="flex w-full items-center"
                       >
                         <Users className="text-primary mr-2.5 size-4" />
                         <span>Manage Applications</span>
-                      </Link>
+                      </Link> */}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       asChild
