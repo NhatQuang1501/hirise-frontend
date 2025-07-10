@@ -31,6 +31,12 @@ const CompanyJobCreatePage: React.FC = () => {
       return;
     }
 
+    if (!user) {
+      toast.error("User information not available");
+      navigate(ROUTES.AUTH.LOGIN);
+      return;
+    }
+
     if (user.role !== "company") {
       toast.error("Only companies can create new jobs");
       navigate(ROUTES.PUBLIC.HOME);

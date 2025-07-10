@@ -13,12 +13,20 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 
+interface JobItem {
+  id: number;
+  title: string;
+  location: string;
+  type: string;
+  postedAt: string;
+}
+
 const CompanyJobs = ({ openPositions }: CompanyJobsProps) => {
   const [currentPage, setCurrentPage] = useState(1);
   const jobsPerPage = 5;
 
-  // Mock jobs data - replace with API call
-  const jobs = Array.from({ length: openPositions }, (_, i) => ({
+  // Generate mock jobs data
+  const jobs: JobItem[] = Array.from({ length: openPositions }, (_, i) => ({
     id: i + 1,
     title: `Senior Software Engineer ${i + 1}`,
     location: "Remote",
@@ -75,7 +83,7 @@ const CompanyJobs = ({ openPositions }: CompanyJobsProps) => {
                 className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
               />
             </PaginationItem>
-            {[...Array(totalPages)].map((_, i) => (
+            {Array.from({ length: totalPages }).map((_, i) => (
               <PaginationItem key={i}>
                 <PaginationLink
                   onClick={() => setCurrentPage(i + 1)}

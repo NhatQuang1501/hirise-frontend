@@ -368,7 +368,7 @@ const CompanyJobDetailPage: React.FC = () => {
           {/* Sidebar */}
           <div className="space-y-6 lg:col-span-1">
             <CompanyInfo
-              company={{ 
+              company={{
                 id: job.companyId || "",
                 name: job.company,
                 // Thêm các thuộc tính khác nếu có

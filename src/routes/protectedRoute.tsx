@@ -26,6 +26,12 @@ const ProtectedRoute = ({
       return;
     }
 
+    if (!user) {
+      toast.error("User information not available");
+      navigate(redirectPath);
+      return;
+    }
+
     if (!allowedRoles.includes(user.role)) {
       toast.error("You don't have permission to access this page");
       navigate(user.role === "applicant" ? ROUTES.PUBLIC.HOME : ROUTES.COMPANY.JOBS.LIST);
@@ -33,7 +39,7 @@ const ProtectedRoute = ({
     }
   }, [isAuthenticated, user, allowedRoles, navigate, redirectPath]);
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !user) {
     return <Loading fullScreen size="lg" />;
   }
 

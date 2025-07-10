@@ -16,9 +16,39 @@ import {
 } from "@/components/ui/select";
 import { ApplicantProfileModal } from "./ApplicantProfileModal";
 
+interface ApplicantProfile {
+  id: string;
+  full_name: string;
+  email: string;
+  phone?: string;
+  avatar?: string;
+  resume?: string;
+  skills?: string[];
+  experience?: string;
+  education?: string;
+}
+
+interface Application {
+  id: string;
+  job_id: string;
+  applicant_id: string;
+  status: string;
+  status_display: string;
+  created_at: string;
+  updated_at: string;
+  cv_filename: string;
+  match_score: number | null;
+  applicant_profile: ApplicantProfile;
+  job_details?: {
+    company_name?: string;
+    company_logo?: string;
+    job_title?: string;
+  };
+}
+
 interface ApplicationsListProps {
   isLoading: boolean;
-  applications: any[];
+  applications: Application[];
   searchTerm: string;
   statusFilter: string;
   processingId: string | null;
@@ -29,8 +59,8 @@ interface ApplicationsListProps {
   handleStatusFilterChange: (value: string) => void;
   fetchApplications: () => void;
   handleAnalyzeCV: (applicationId: string) => void;
-  handleAcceptApplication: (applicationId: string) => void;
-  handleRejectApplication: (applicationId: string) => void;
+  handleAcceptApplication?: (applicationId: string) => void;
+  handleRejectApplication?: (applicationId: string) => void;
   getStatusColor: (status: string) => string;
   handlePageChange: (page: number) => void;
 }
@@ -52,9 +82,9 @@ export const ApplicationsList: React.FC<ApplicationsListProps> = ({
   handlePageChange,
 }) => {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
-  const [selectedProfile, setSelectedProfile] = useState<any>(null);
+  const [selectedProfile, setSelectedProfile] = useState<ApplicantProfile | null>(null);
 
-  const handleViewProfile = (profile: any) => {
+  const handleViewProfile = (profile: ApplicantProfile) => {
     setSelectedProfile(profile);
     setProfileModalOpen(true);
   };

@@ -4,22 +4,30 @@ import { LoginCredentials, RegisterData, authService, getAccessToken } from "@/s
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
+interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: "applicant" | "company" | string;
+  profile?: Record<string, any>;
+}
+
 interface AuthContextType {
-  user: any | null;
+  user: User | null;
   isAuthenticated: boolean;
   login: (credentials: LoginCredentials) => Promise<void>;
   register: (data: RegisterData) => Promise<void>;
   logout: () => Promise<void>;
   verifyOTP: (email: string, otp: string) => Promise<void>;
   resendOTP: (email: string) => Promise<void>;
-  updateProfile: (userId: string, data: any) => Promise<void>;
+  updateProfile: (userId: string, data: Record<string, any>) => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<any | null>(() => {
-    // Khởi tạo giá trị ban đầu từ localStorage để tránh render lại
+  const [user, setUser] = useState<User | null>(() => {
+    // Initialize value from localStorage to avoid re-rendering
     const storedUser = localStorage.getItem("user");
     return storedUser ? JSON.parse(storedUser) : null;
   });
@@ -32,12 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (token && storedUser) {
         try {
-          // Thiết lập người dùng từ localStorage
           setUser(JSON.parse(storedUser));
-
-          // Tùy chọn: Xác thực token bằng cách gọi API
-          // const response = await authService.validateToken();
-          // setUser(response.user);
         } catch (error) {
           console.error("Failed to initialize auth:", error);
           localStorage.removeItem("accessToken");
@@ -60,13 +63,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     setUser(user);
 
-    // Điều hướng dựa trên role
+    // Navigate based on role
     if (user.role === "applicant") {
       navigate(ROUTES.PUBLIC.HOME);
     } else if (user.role === "company") {
       navigate(ROUTES.COMPANY.JOBS.LIST);
     } else {
-      // Role khác (nếu có)
       navigate(ROUTES.PUBLIC.HOME);
     }
   };
@@ -97,7 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const updateProfile = async (userId: string, data: any) => {
+  const updateProfile = async (userId: string, data: Record<string, any>) => {
     try {
       const response = await fetch(`/api/users/companies/${userId}/`, {
         method: "PUT",
@@ -113,16 +115,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       const updatedData = await response.json();
-      // Cập nhật user state nếu cần
-      setUser((prev: any) => ({
-        ...prev,
-        profile: updatedData.profile,
-      }));
+      setUser((prev) =>
+        prev
+          ? {
+              ...prev,
+              profile: updatedData.profile,
+            }
+          : null,
+      );
     } catch (error) {
       console.error("Error updating profile:", error);
       throw error;
     }
   };
+
   const isAuthenticated = !!user || !!localStorage.getItem("accessToken");
 
   return (

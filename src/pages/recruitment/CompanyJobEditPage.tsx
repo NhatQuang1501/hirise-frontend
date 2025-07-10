@@ -39,6 +39,12 @@ const CompanyJobEditPage: React.FC = () => {
       return;
     }
 
+    if (!user) {
+      toast.error("User information not available");
+      navigate(ROUTES.AUTH.LOGIN);
+      return;
+    }
+
     if (user.role !== "company") {
       toast.error("Only companies can edit jobs");
       navigate(ROUTES.PUBLIC.HOME);
